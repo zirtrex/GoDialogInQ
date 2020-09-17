@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Modulo = require('../models/moduloModel').Modulo;
+var Modulo = require('../models/prestamoModel').Modulo;
 var log4js = require('log4js');
 log4js.configure({
   appenders: { cheese: { type: 'file', filename: 'cheese.log' } },

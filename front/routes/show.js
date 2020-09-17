@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Modulo = require('../models/moduloModel').Modulo;
+var Modulo = require('../models/prestamoModel').Modulo;
 var path    = require("path");
 var log4js = require('log4js');
 log4js.configure({
