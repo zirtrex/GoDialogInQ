@@ -1,4 +1,34 @@
-const mysqldb = require('mysql');
+'user strict';
+var sql = require('./db.js');
+
+var Task = function(task){
+  this.task = task.task;
+  this.status = task.status;
+  this.created_at = new Date();
+};
+
+
+
+Task.getAllTask = function (result) {
+  sql.query("Select * from tasks", function (err, res) {
+
+          if(err) {
+              console.log("error: ", err);
+              result(null, err);
+          }
+          else{
+            console.log('tasks : ', res);  
+
+           result(null, res);
+          }
+      });   
+};
+
+module.exports= Task;
+
+
+/* 
+
 
 function prestamo(sql) {
 
@@ -64,6 +94,6 @@ function prestamo(sql) {
 
   });
 
-}
+} */
 
-module.exports.prestamo = prestamo;
+//module.exports.prestamo = prestamo;

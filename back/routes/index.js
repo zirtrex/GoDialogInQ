@@ -14,20 +14,6 @@ const dialogflow = require('@google-cloud/dialogflow');
 const uuid = require('uuid');
 const { WebhookClient } = require("dialogflow-fulfillment");
 
-const mysql = require('mysql');
-
-const con = mysql.createConnection({
-	host: "localhost",
-	user: "godialoginq",
-	password: "godialoginq",
-	database: 'godialoginq'
-});
-
-con.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-});
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

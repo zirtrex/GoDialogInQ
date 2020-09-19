@@ -1,7 +1,9 @@
 require('events').EventEmitter.prototype._maxListeners = 0;
 var express = require('express');
 var http = require('http');
-var router = express.Router();
+
+//var router = express.Router();
+
 var session = require('express-session');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -16,14 +18,15 @@ log4js.configure({
 
 const logger = log4js.getLogger('cheese');
 
-
+/* 
 const index = require('./routes/index');
 var modulo = require('./routes/modulo');
 var show = require('./routes/show');
+ */
 
 var app = express();
-var server = http.Server(app); //createServer
-var debug = require('debug')('myapp:server');
+//var server = http.Server(app); //createServer
+//var debug = require('debug')('myapp:server');
 
 
 // view engine setup
@@ -43,9 +46,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/', index);
-app.use('/modulo', modulo);
-app.use('/show', show);
+//app.use('/', index);
+//app.use('/modulo', modulo);
+//app.use('/show', show);
 
 
 // catch 404 and forward to error handler
@@ -70,9 +73,10 @@ app.use(function(err, req, res, next) {
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+
+//server.listen(port);
+//server.on('error', onError);
+//server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -135,5 +139,11 @@ function onListening() {
     debug('Listening on ' + bind);
 }
 
+app.listen(port);
 
-module.exports = app;
+var routes = require('./routes/prestamoRoutes.js'); //importing route
+routes(app); //register the route
+
+
+
+//module.exports = app;
