@@ -30,6 +30,8 @@ var debug = require('debug')('myapp:server');
 
 app.use(methodOverride("_method"));
 
+//Comentario para conflicto
+
 var COOKIE_SECRET = 'secretencode';
 var COOKIE_NAME = 'sid';
 
