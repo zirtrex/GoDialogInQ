@@ -2,12 +2,10 @@
 
 module.exports = function(app) {
   
-  var prestamoController = require('../controllers/prestamoController.js');
+  var prestamoController = require('../controllers/prestamoController');
 
   // todoList Routes
-  app.route('/dialogflow')
-  
-    .get(prestamoController.list_all_tasks);
+  app.route('/dialogflow').get(prestamoController.list_all_tasks);
    
-    };
+};
     

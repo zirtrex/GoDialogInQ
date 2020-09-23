@@ -7,17 +7,15 @@ var Task = function(task){
   this.created_at = new Date();
 };
 
-
-
 Task.getAllTask = function (result) {
-  sql.query("Select * from tasks", function (err, res) {
+  sql.query("select * from prestamos", function (err, res) {
 
           if(err) {
               console.log("error: ", err);
               result(null, err);
           }
           else{
-            console.log('tasks : ', res);  
+            console.log('prestamos : ', res);  
 
            result(null, res);
           }
