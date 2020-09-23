@@ -34,6 +34,7 @@ app.use(methodOverride("_method"));
 //Cambio de prueba de conflicto scordova
 
 
+//Comentario para conflicto
 
 var COOKIE_SECRET = 'secretencode';
 var COOKIE_NAME = 'sid';
