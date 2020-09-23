@@ -30,6 +30,11 @@ var debug = require('debug')('myapp:server');
 
 app.use(methodOverride("_method"));
 
+
+//Cambio de prueba de conflicto scordova
+
+
+
 var COOKIE_SECRET = 'secretencode';
 var COOKIE_NAME = 'sid';
 
