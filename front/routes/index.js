@@ -14,20 +14,6 @@ const dialogflow = require('@google-cloud/dialogflow');
 const uuid = require('uuid');
 const { WebhookClient } = require("dialogflow-fulfillment");
 
-const mysql = require('mysql');
-
-const con = mysql.createConnection({
-	host: "localhost",
-	user: "godialoginq",
-	password: "godialoginq",
-	database: 'godialoginq'
-});
-
-con.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-});
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -189,7 +175,7 @@ async function runInQSalesAgent(message) {
 	  queryInput: {
 		text: {
 		  text: message,
-		  languageCode: 'en-US',
+		  languageCode: 'es-ES',
 		},
 	  },
 	};
@@ -199,10 +185,13 @@ async function runInQSalesAgent(message) {
 	console.log('Detected intent');
 	const result = responses[0].queryResult;
 	console.log(`  Query: ${result.queryText}`);
-	console.log(`  Response: ${result.fulfillmentText}`);
-	return result.fulfillmentText;
-	if (result.intent) {
+
+	if (result.fulfillmentText) {
+		console.log(`  Response: ${result.fulfillmentText}`);
+		return result.fulfillmentText;
+	} else if (result.intent) {
 	  console.log(`  Intent: ${result.intent.displayName}`);
+	  return result.intent.displayName;
 	} else {
 	  console.log(`  No intent matched.`);
 	}
