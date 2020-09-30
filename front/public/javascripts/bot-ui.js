@@ -89,8 +89,8 @@ function serverMessage(response2) {
 
 function fetchmsg(){
 
-    //var url = 'http://localhost:3000/send-msg'; 
-    var url = 'https://662dfdc8223a.ngrok.io/send-msg';
+    var url = 'http://localhost:8080/send-message'; 
+    //var url = 'https://662dfdc8223a.ngrok.io/send-msg';
       
     const data = new URLSearchParams();
     for (const pair of new FormData(document.getElementById("mymsg"))) {

@@ -3,3 +3,6 @@
 
 #otros
 ngrok-stable-windows-amd64.zip
+
+#Modules
+*/node_modules

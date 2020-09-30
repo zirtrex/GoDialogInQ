@@ -5,7 +5,7 @@ var router = express.Router();
 var session = require('express-session');
 var path = require('path');
 var bodyParser = require('body-parser');
-//var methodOverride = require('method-override');
+var methodOverride = require('method-override');
 var Modulo = require('./models/prestamoModel').Modulo;
 var log4js = require('log4js');
 
@@ -30,7 +30,7 @@ var debug = require('debug')('myapp:server');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-//app.use(methodOverride("_method"));
+app.use(methodOverride("_method"));
 
 var COOKIE_SECRET = 'secretencode';
 var COOKIE_NAME = 'sid';
