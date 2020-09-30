@@ -1,8 +1,7 @@
 var $messages = $('.messages-content');
-//var serverResponse = "wala";
 
 var suggession;
-//speech reco
+
 try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
@@ -19,7 +18,7 @@ if(typeof recognition !== 'undefined'){
     
     recognition.onresult = (event) => {
         const speechToText = event.results[0][0].transcript;
-        document.getElementById("MSG").value= speechToText;
+        document.getElementById("query").value= speechToText;
         console.log(speechToText)
         insertMessage();
     }
@@ -28,12 +27,12 @@ if(typeof recognition !== 'undefined'){
 function listendom(no){
     console.log(no)
     //console.log(document.getElementById(no))
-    document.getElementById("MSG").value = no.innerHTML;
+    document.getElementById("query").value = no.innerHTML;
     insertMessage();
 }
 
 $(window).load(function() {
-    $messages.scrollbar();
+    //$messages.scrollbar();
     setTimeout(function() {
         serverMessage("Hola, soy GoDialogInQ, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
     }, 100);
@@ -59,7 +58,7 @@ function insertMessage() {
     fetchmsg();
   
     $('.message-input').val(null);
-    updateScrollbar();
+    //updateScrollbar();
 
 }
 
@@ -77,12 +76,12 @@ function serverMessage(response2) {
         return false;
     }
     $('<div class="message loading new"><span></span></div>').appendTo($('.scroll-content'));
-    updateScrollbar();  
+    //updateScrollbar();  
 
     setTimeout(function() {
         $('.message.loading').remove();
         $('<div class="message new">' + response2 + '</div>').appendTo($('.scroll-content')).addClass('new');
-        updateScrollbar();
+        //updateScrollbar();
     }, 100 + (Math.random() * 20) * 100);
 
 }

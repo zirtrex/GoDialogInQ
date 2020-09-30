@@ -16,10 +16,7 @@ log4js.configure({
 
 const logger = log4js.getLogger('cheese');
 
-
 const index = require('./routes/index');
-var modulo = require('./routes/modulo');
-var show = require('./routes/show');
 
 var app = express();
 var server = http.Server(app); //createServer
@@ -44,9 +41,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', index);
-app.use('/modulo', modulo);
-app.use('/show', show);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

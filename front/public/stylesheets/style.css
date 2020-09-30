@@ -22,19 +22,10 @@ h3{
   font-weight: bold;
 }
 
-
-
-
 .uk-container-2{
     background-color: rgba(255,255,255,0.9);
     padding: 30px 40px;
     border-radius: 50px;
-}
-
-.container{
-    /*width: 100%;
-    position: absolute;
-    bottom: 0;*/
 }
 
 #contenedor div{
@@ -71,15 +62,6 @@ h3{
   font-weight: bold;
 }
 
-.oficina{
-    
-    text-align: left;
-}
-
-.oficina h3{
-    color: #fff;
-}
-
 .uk-button-secundary, .uk-button-primary{
     color: #000;
     border: 1px solid transparent;
@@ -98,24 +80,6 @@ h3{
 
 .uk-select{
   border-radius: 10px !important;
-}
-
-.contador{
-  background-color: #000;
-  color: #fff;
-  text-shadow: 2px 1px 1px #fff;
-  padding-left: 0;
-  padding-top: 20px;
-  text-align: center;
-  border-left: 1px solid #fff;
-}
-
-.contador span{
-  width: 60px;
-  display: block;
-  font-size: 48px;
-  text-shadow: 2px 1px 1px #5c5c5c;
-  padding: 10px 10px;
 }
 
 .uk-card-body{
@@ -138,224 +102,6 @@ h3{
 
 .uk-card-default .oficina h3{
   margin: 0;
-}
-
-.TARJETAS .uk-card-body{
-  background-color: #0294D1;
-}
-
-.TARJETAS .uk-card-body .title{
-  color: #fff;
-}
-
-.TARJETAS .contador{
-  background-color: #0294D1;
-  color: #fff;
-}
-
-.TARJETAS .oficina{
-    background-color: #055AAF;
-    color: #fff;
-}
-
-
-.PODERES .uk-card-body{
-  background-color: #098D31;
-}
-
-.PODERES .uk-card-body .title{
-  color: #fff;
-}
-
-.PODERES .contador{
-  background-color: #098D31;
-  color: #fff;
-}
-
-.PODERES .oficina{
-    background-color: #06561E;
-    color: #fff;
-}
-
-.REGISTRO .uk-card-body{
-  background-color: #72480A;
-}
-
-.REGISTRO .uk-card-body .title{
-  color: #fff;
-}
-
-.REGISTRO .contador{
-  background-color: #72480A;
-  color: #fff;
-}
-
-.REGISTRO .oficina{
-    background-color: #5E3C08;
-    color: #fff;
-}
-
-
-.VISAS .uk-card-body{
-  background-color: #1281E8;
-}
-
-.VISAS .uk-card-body .title{
-  color: #fff;
-}
-
-.VISAS .contador{
-  background-color: #1281E8;
-  color: #fff;
-}
-
-.VISAS .oficina{
-    background-color: #1073D0;
-    color: #fff;
-}
-
-
-.EMPADRONAMIENTO .uk-card-body{
-  background-color: #5C6284;
-}
-
-.EMPADRONAMIENTO .uk-card-body .title{
-  color: #fff;
-}
-
-.EMPADRONAMIENTO .contador{
-  background-color: #5C6284;
-  color: #fff;
-}
-
-.EMPADRONAMIENTO .oficina{
-    background-color: #3C4056;
-    color: #fff;
-}
-
-
-.PARTIDAS .uk-card-body{
-  background-color: #024959;
-}
-
-.PARTIDAS .uk-card-body .title{
-  color: #fff;
-}
-
-.PARTIDAS .contador{
-  background-color: #024959;
-  color: #fff;
-}
-
-.PARTIDAS .oficina{
-    background-color: #092140;
-    color: #fff;
-}
-
-
-.CEDULAS .uk-card-body{
-  background-color: #51652E;
-}
-
-.CEDULAS .uk-card-body .title{
-  color: #fff;
-}
-
-.CEDULAS .contador{
-  background-color: #51652E;
-  color: #fff;
-}
-
-.CEDULAS .oficina{
-    background-color: #323E1C;
-    color: #fff;
-}
-
-
-.VARIOS .uk-card-body{
-  background-color: #FF530D;
-}
-
-.VARIOS .uk-card-body .title{
-  color: #fff;
-}
-
-.VARIOS .contador{
-  background-color: #FF530D;
-  color: #fff;
-}
-
-.VARIOS .oficina{
-    background-color: #E82C0C;
-    color: #fff;
-}
-
-
-.CAJA .uk-card-body{
-  background-color: #FAE862;
-}
-
-.CAJA .uk-card-body .title{
-  color: #000;
-}
-
-.CAJA .contador{
-  background-color: #FAE862;
-  color: #000;
-}
-
-.CAJA .oficina{
-    background-color: #C4AE06;
-    color: #000;
-}
-
-
-.CAJA .oficina h3{
-    color: #000 !important;
-}
-
-
-.INFORMACIÓN .uk-card-body{
-  background-color: #104CCC;
-}
-
-.INFORMACIÓN .uk-card-body .title{
-  color: #fff;
-}
-
-.INFORMACIÓN .contador{
-  background-color: #104CCC;
-  color: #fff;
-}
-
-.INFORMACIÓN .oficina{
-    background-color: #0C3898;
-    color: #fff;
-}
-
-
-.PASAPORTES .uk-card-body{
-  background-color: #253B56;
-}
-
-.PASAPORTES .uk-card-body .title{
-  color: #fff;
-}
-
-.PASAPORTES .contador{
-  background-color: #253B56;
-  color: #fff;
-}
-
-.PASAPORTES .oficina{
-    background-color: #182C41;
-    color: #fff;
-}
-
-.btn-terminar{
-  position: absolute;
-  right: 0;
-  top:0;
 }
 
 .uk-navbar-center h2{
