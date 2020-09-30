@@ -1,23 +1,22 @@
 'user strict';
 var db_connect = require('./db');
 
-var cliente = {};
+var Cliente = {};
 
 
-cliente.ObtenerPorDocumento = async function (req, res) {
+Cliente.obtenerPorDocumento = async function (Documento) {
     try {
-        var Documento = req.params.Documento;
         var query = 'select * from cliente where Documento=:Documento';
-        var clientes = await db_connect.query(query,{
+        var cliente = await db_connect.query(query, {
             Documento:Documento
         });
-        res.send(clientes);
+        return cliente;
     } catch(err) {
         throw new Error(err);
     }
 }
 
-cliente.Crear = async function (req, res) {
+Cliente.crear = async function (req, res) {
     try {
         var cliente = req.body;
         var query = `insert into cliente (
@@ -31,8 +30,7 @@ cliente.Crear = async function (req, res) {
             Correo,
             Movil,
             Direccion,
-            RazonSocial
-           
+            RazonSocial           
         ) values (
             :Apellidos,
             :Nombres,
@@ -71,4 +69,4 @@ cliente.Crear = async function (req, res) {
 }
 
 
-module.exports = cliente;
+module.exports = Cliente;

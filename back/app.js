@@ -106,19 +106,13 @@ function onListening() {
 module.exports = app; */
 
 
-
-
-
-
 const express = require('express');
 const app = express();
 
 //imports
-const tipoprestamoRoutes = require('./routes/tipoprestamoRoutes');
-const requisitoRoutes = require('./routes/requisitoRoutes');
-const clienteRoutes = require('./routes/clienteRoutes');
-
-
+//const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
+//const requisitoRoutes = require('./routes/requisitoRoutes');
+const index = require('./routes/index');
 
 
 //settings
@@ -126,12 +120,10 @@ app.set('port', 8081);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
-
 //routes
-app.use(tipoprestamoRoutes);
-app.use(requisitoRoutes);
-app.use(clienteRoutes);
+//app.use(tipoPrestamoRoutes);
+//app.use(requisitoRoutes);
+app.use(index);
 
 
 //run

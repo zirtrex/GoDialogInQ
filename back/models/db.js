@@ -2,10 +2,11 @@
 
 var mysql = require('mysql');
 var util = require('util');
+
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'godialoginq',
-  password : 'godialoginq123',
+  password : 'godialoginq',
   database : 'godialoginq'
 });
 
