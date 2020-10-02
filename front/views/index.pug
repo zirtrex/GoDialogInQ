@@ -29,7 +29,7 @@ block content
 
 					form(action="", name="elegir-modulo", method="POST", id="mymsg" class="message-box uk-grid-small" uk-grid="")
 						div(class="uk-width-1-1@s")
-							input(type="text", id="query" name="query" placeholder="Ingrese mensaje" class="message-input uk-input" )
+							input(type="text", id="message" name="message" placeholder="Ingrese mensaje" class="message-input uk-input" )
 									
 						div(id="start-record-btn" class="uk-width-1-2@s")
 							span(class="uk-icon" uk-icon="microphone") Graba tu voz
@@ -39,5 +39,5 @@ block content
 
 					h4(class="no-browser-support") Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo In Google Chrome.
 	
-	//script(src="/javascripts/jquery.scrollbar.js")
+	script(src="/javascripts/autoScroll.js")
 	script(src="/javascripts/bot-ui.js")

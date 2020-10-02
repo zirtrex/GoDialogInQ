@@ -26,14 +26,13 @@ router.get('/', function(req, res, next) {
 
 router.post('/send-message', async function(req, res, next) {	
 
-	if(typeof req.body.MSG !== 'undefined'){
+	if(typeof req.body.message !== 'undefined'){
 		try{
-			const response = await runInQSalesAgent(req.body.MSG);
+			const response = await runInQSalesAgent(req.body.message);
 			res.json({Reply: response});
 		}catch (error) {
 			console.log(error);
-		}
-		
+		}		
 	}	
 
 });
@@ -76,9 +75,9 @@ async function executeQueries(projectId, sessionId, query, languageCode) {
 		console.log(
 			`Fulfillment Text: ${intentResponse.queryResult.fulfillmentText}`
 		);
-		console.log(
+		/*console.log(
 			`Intent: ${intentResponse.intent.displayName}`
-		);		
+		);*/		
 		// Use the context from this response for next queries
 		context = intentResponse.queryResult.outputContexts;
 		

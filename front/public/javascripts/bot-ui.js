@@ -18,7 +18,7 @@ if(typeof recognition !== 'undefined'){
     
     recognition.onresult = (event) => {
         const speechToText = event.results[0][0].transcript;
-        document.getElementById("query").value= speechToText;
+        document.getElementById("message").value= speechToText;
         console.log(speechToText)
         insertMessage();
     }
@@ -27,12 +27,12 @@ if(typeof recognition !== 'undefined'){
 function listendom(no){
     console.log(no)
     //console.log(document.getElementById(no))
-    document.getElementById("query").value = no.innerHTML;
+    document.getElementById("message").value = no.innerHTML;
     insertMessage();
 }
 
 $(window).load(function() {
-    //$messages.scrollbar();
+    autoScroll(".messages");
     setTimeout(function() {
         serverMessage("Hola, soy GoDialogInQ, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
     }, 100);
@@ -40,13 +40,7 @@ $(window).load(function() {
 });
 
 function updateScrollbar() {
-    $messages.scrollbar({
-        "onScroll": function(y, x){
-            if(y.scroll == y.maxScroll){
-                console.log('Scrolled to bottom');
-            }
-        }
-    });
+    autoScroll(".messages");
 }
 
 function insertMessage() {
@@ -54,11 +48,11 @@ function insertMessage() {
 
     if ($.trim(msg) == '') { return false; }
 
-    $('<div class="message message-personal">' + msg + '</div>').appendTo($('.scroll-content')).addClass('new');
+    $('<div class="message message-personal">' + msg + '</div>').appendTo($('.messages-content')).addClass('new');
     fetchmsg();
   
     $('.message-input').val(null);
-    //updateScrollbar();
+    updateScrollbar();
 
 }
 
@@ -75,13 +69,13 @@ function serverMessage(response2) {
     if ($('.message-input').val() != '') {
         return false;
     }
-    $('<div class="message loading new"><span></span></div>').appendTo($('.scroll-content'));
-    //updateScrollbar();  
+    $('<div class="message loading new"><span></span></div>').appendTo($('.messages-content'));
+    updateScrollbar();  
 
     setTimeout(function() {
         $('.message.loading').remove();
-        $('<div class="message new">' + response2 + '</div>').appendTo($('.scroll-content')).addClass('new');
-        //updateScrollbar();
+        $('<div class="message new">' + response2 + '</div>').appendTo($('.messages-content')).addClass('new');
+        updateScrollbar();
     }, 100 + (Math.random() * 20) * 100);
 
 }
