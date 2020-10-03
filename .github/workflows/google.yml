@@ -18,10 +18,10 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
-  GKE_ZONE: us-central1-c   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
-  IMAGE: static-site
+  GKE_CLUSTER: cluster-godialoginq    # TODO: update to cluster name
+  GKE_ZONE: us-central1-a   # TODO: update to cluster zone
+  DEPLOYMENT_NAME: godialoginq-front # TODO: update to deployment name
+  IMAGE: godialoginq-front
 
 jobs:
   setup-build-publish-deploy:
@@ -50,7 +50,7 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |-
-        docker build \
+        docker build -f front/Dockerfile \
           --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
