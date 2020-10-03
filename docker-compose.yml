@@ -1,0 +1,102 @@
+version: '3.7'
+
+services:
+
+  users-db:
+    container_name: users-db
+    build: 
+      context: ./omdb-app-backend/services/users/src/db
+      network: gcloud_example_pipeline
+    ports:
+      - '5433:5432' # expose ports - HOST:CONTAINER
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  movies-db:
+    container_name: movies-db
+    build: 
+      context: ./omdb-app-backend/services/movies/src/db
+      network: gcloud_example_pipeline
+    ports:
+      - '5434:5432' # expose ports - HOST:CONTAINER
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  users-service:
+    container_name: users-service
+    build: 
+      context: ./omdb-app-backend/services/users/
+      network: gcloud_example_pipeline
+    volumes:
+      - './omdb-app-backend/services/users:/usr/src/app'
+      - './omdb-app-backend/services/users/package.json:/usr/src/package.json'
+    ports:
+      - '3000:3000' # expose ports - HOST:CONTAINER
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
+      - NODE_ENV=${NODE_ENV}
+      - TOKEN_SECRET=changeme
+    depends_on:
+      - users-db
+    links:
+      - users-db
+
+  movies-service:
+    container_name: movies-service
+    build: 
+      context: ./omdb-app-backend/services/movies/
+      network: gcloud_example_pipeline
+    volumes:
+      - './omdb-app-backend/services/movies:/usr/src/app'
+      - './omdb-app-backend/services/movies/package.json:/usr/src/package.json'
+    ports:
+      - '3001:3000' # expose ports - HOST:CONTAINER
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@movies-db:5432/movies_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@movies-db:5432/movies_test
+      - NODE_ENV=${NODE_ENV}
+      - TOKEN_SECRET=changeme
+    depends_on:
+      - movies-db
+      - users-service
+    links:
+      - movies-db
+      - users-service
+
+  web-service:
+    container_name: web-service
+    build:
+      context: ./omdb-app-frontend
+      network: gcloud_example_pipeline
+    volumes:
+      - './omdb-app-frontend:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - '3007:3006' # expose ports - HOST:CONTAINER
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - REACT_APP_USERS_SERVICE_URL=${USERS_SERVICE_URL}
+      - REACT_APP_MOVIES_SERVICE_URL=${MOVIES_SERVICE_URL}
+      - REACT_APP_OMDB_API_KEY=${OMDB_API_KEY}
+    depends_on:
+      - movies-service
+      - users-service
+
+networks:
+  default:
+      external:
+          name: gcloud_example_pipeline
+      

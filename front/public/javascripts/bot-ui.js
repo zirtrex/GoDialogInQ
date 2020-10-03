@@ -1,8 +1,7 @@
 var $messages = $('.messages-content');
-//var serverResponse = "wala";
 
 var suggession;
-//speech reco
+
 try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
@@ -19,7 +18,7 @@ if(typeof recognition !== 'undefined'){
     
     recognition.onresult = (event) => {
         const speechToText = event.results[0][0].transcript;
-        document.getElementById("MSG").value= speechToText;
+        document.getElementById("message").value= speechToText;
         console.log(speechToText)
         insertMessage();
     }
@@ -28,12 +27,12 @@ if(typeof recognition !== 'undefined'){
 function listendom(no){
     console.log(no)
     //console.log(document.getElementById(no))
-    document.getElementById("MSG").value = no.innerHTML;
+    document.getElementById("message").value = no.innerHTML;
     insertMessage();
 }
 
 $(window).load(function() {
-    $messages.scrollbar();
+    autoScroll(".messages");
     setTimeout(function() {
         serverMessage("Hola, soy GoDialogInQ, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
     }, 100);
@@ -41,13 +40,7 @@ $(window).load(function() {
 });
 
 function updateScrollbar() {
-    $messages.scrollbar({
-        "onScroll": function(y, x){
-            if(y.scroll == y.maxScroll){
-                console.log('Scrolled to bottom');
-            }
-        }
-    });
+    autoScroll(".messages");
 }
 
 function insertMessage() {
@@ -55,7 +48,7 @@ function insertMessage() {
 
     if ($.trim(msg) == '') { return false; }
 
-    $('<div class="message message-personal">' + msg + '</div>').appendTo($('.scroll-content')).addClass('new');
+    $('<div class="message message-personal">' + msg + '</div>').appendTo($('.messages-content')).addClass('new');
     fetchmsg();
   
     $('.message-input').val(null);
@@ -76,12 +69,12 @@ function serverMessage(response2) {
     if ($('.message-input').val() != '') {
         return false;
     }
-    $('<div class="message loading new"><span></span></div>').appendTo($('.scroll-content'));
+    $('<div class="message loading new"><span></span></div>').appendTo($('.messages-content'));
     updateScrollbar();  
 
     setTimeout(function() {
         $('.message.loading').remove();
-        $('<div class="message new">' + response2 + '</div>').appendTo($('.scroll-content')).addClass('new');
+        $('<div class="message new">' + response2 + '</div>').appendTo($('.messages-content')).addClass('new');
         updateScrollbar();
     }, 100 + (Math.random() * 20) * 100);
 
@@ -89,8 +82,8 @@ function serverMessage(response2) {
 
 function fetchmsg(){
 
-    //var url = 'http://localhost:3000/send-msg'; 
-    var url = 'https://662dfdc8223a.ngrok.io/send-msg';
+    var url = 'http://localhost:8080/send-message'; 
+    //var url = 'https://662dfdc8223a.ngrok.io/send-msg';
       
     const data = new URLSearchParams();
     for (const pair of new FormData(document.getElementById("mymsg"))) {
