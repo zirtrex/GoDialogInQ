@@ -180,10 +180,8 @@ Messages
 Message Box
 --------------------*/
 .message-box {
-  flex: 0 1 40px;
-  width: 100%;
   background: rgba(0, 0, 0, 0.9);
-  padding: 10px;
+  padding-bottom: 20px !important;
   position: relative;
 }
 .message-box .message-input {
@@ -210,13 +208,14 @@ Message Box
   color: #fff;
   border: none;
   background: #248A52;
-  font-size: 10px;
+  font-size: 13px;
   text-transform: uppercase;
   line-height: 1;
   padding: 11px 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   outline: none !important;
   transition: background .2s ease;
+  margin-top: 0;
 }
 .message-box .message-submit:hover {
   background: #1D7745;
