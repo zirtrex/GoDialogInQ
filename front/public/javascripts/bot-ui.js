@@ -82,7 +82,9 @@ function serverMessage(response2) {
 
 function fetchmsg(){
 
-    var url = 'http://localhost:8080/send-message'; 
+    //var url = 'http://localhost:8080/send-message';
+    //var url = window.location.hostname + '/send-message'; 
+    var url = window.location.protocol + "//" + window.location.host + "/send-message";
     //var url = 'https://662dfdc8223a.ngrok.io/send-msg';
       
     const data = new URLSearchParams();
