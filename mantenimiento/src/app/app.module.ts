@@ -14,7 +14,6 @@ import { NavbarComponent } from './navbar.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
 import { TipoPrestamoFormComponent } from './tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
-import { EliminarTipoPrestamoComponent } from './tipo_prestamo/eliminar-tipo_prestamo/eliminar-tipo_prestamo.component';
 /*import { VentaComponent } from './venta/venta.component';
 import { CrearVentaComponent } from './venta/crear-venta/crear-venta.component';
 import { EditarVentaComponent } from './venta/editar-venta/editar-venta.component';
@@ -33,7 +32,6 @@ import { MaterialModule } from './material/material.module';
     InicioComponent,
     TipoPrestamoComponent,
     TipoPrestamoFormComponent,
-    EliminarTipoPrestamoComponent
     /*VentaComponent,
     CrearVentaComponent,
     EditarVentaComponent,
@@ -60,7 +58,6 @@ import { MaterialModule } from './material/material.module';
   bootstrap: [AppComponent],
   entryComponents: [
     TipoPrestamoFormComponent,
-    EliminarTipoPrestamoComponent
     /*EditarVentaComponent,
     EliminarVentaComponent,
     EditarProduccionComponent*/
