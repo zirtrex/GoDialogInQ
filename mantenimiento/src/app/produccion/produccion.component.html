@@ -1,0 +1,88 @@
+<div class="container-fluid mt-3">
+  <div>
+    <div>
+      <p class="alert alert-warning">Para agregar una nueva producción, primero debes seleccionar un producto. <a [routerLink]="['/productos']" class="btn btn-dark">Ver productos</a></p>
+    </div>
+    <div class="row">
+      <div class="col-6 col-md-8 col-lg-10">
+        <mat-form-field >
+          <mat-label>Buscar</mat-label>
+          <input matInput [(ngModel)]="teclaPresionada" (keyup)="aplicarFiltro()" placeholder="Dijite una letra para filtrar" autocomplete="off">
+          <button mat-button matSuffix mat-icon-button aria-label="Limpiar" *ngIf="teclaPresionada" (click)="limpiarBusqueda()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="col-2 col-md-4 col-lg-2">
+        <button mat-raised-button color="accent" (click)="exportarAExcel()">
+          <mat-icon>description</mat-icon>Exportar a Excel
+        </button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <ng-container matColumnDef="idProduccion" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.idProduccion}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="trabajador">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Trabajador </th>
+        <td mat-cell *matCellDef="let element"> {{element.trabajador}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cantidad">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Cant. </th>
+        <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaProduccion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de producción </th>
+        <td mat-cell *matCellDef="let element"> {{element.fechaProduccion | date:'yyyy-MM-dd'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="observaciones">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Observaciones </th>
+        <td mat-cell *matCellDef="let element"> {{element.observaciones}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="producto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Cod - Producto </th>
+        <td mat-cell *matCellDef="let element"> {{element.producto.nombreProducto}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button (click)="editarProduccion(row)" matTooltip="Editar producción">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cargando">
+        <th mat-footer-cell *matFooterCellDef colspan="5"> Cargando datos... </th>
+      </ng-container>
+
+      <ng-container matColumnDef="sinDatos">
+        <th mat-footer-cell *matFooterCellDef colspan="5"> Sin datos </th>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['cargando']" [ngClass]="{'hide': dataSource!=null}"></tr>
+      <tr mat-footer-row *matFooterRowDef="['sinDatos']" [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0)}"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[25,50,100,200]" [pageSize]="25" showFirstLastButtons>Filter</mat-paginator>
+
+  </div>
+  <div>
+    <h2>Leyenda de iconos:</h2>
+    <ul class="list-group">
+      <li class="list-group-item"><mat-icon>edit</mat-icon> | Editar producción actual</li>
+    </ul>
+  </div>
+</div>

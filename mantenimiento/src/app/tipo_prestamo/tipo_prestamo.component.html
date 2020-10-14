@@ -1,0 +1,117 @@
+<div class="container-fluid mt-3">
+  <!--<div>
+    <a [routerLink]="['/productos/create']" class="btn btn-success">Agregar nuevo producto</a>
+  </div>
+  <div class="table-responsive mt-3">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <td>Id</td>
+                <td>Código</td>
+                <td>Nombre</td>
+                <td>Stock</td>
+                <td>Acciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let producto of productos | async" >
+              <td>{{producto.idProducto}}</td>
+              <td>{{producto.codigoProducto}}</td>
+              <td>{{producto.nombreProducto}}</td>
+              <td>{{producto.stock}}</td>
+              <td>
+                <a [routerLink]="['/ventas/create', producto.idProducto]" class="btn btn-primary">Vender</a>
+                <a [routerLink]="['/producciones/create', producto.idProducto]" class="btn btn-secondary">Producir</a>
+                <a [routerLink]="['/productos/edit', producto.idProducto]" class="btn btn-warning">Editar</a>
+                <a [routerLink]="['/productos/delete', producto.idProducto]" class="btn btn-danger">Borrar</a>
+              </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>-->
+  <div>
+    <div class="row">
+      <div class="col-2 col-md-3">
+        <button mat-raised-button color="primary" (click)="crearProducto()">Crear nuevo producto</button>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field >
+          <mat-label>Buscar</mat-label>
+          <input matInput [(ngModel)]="teclaPresionada" (keyup)="aplicarFiltro()" placeholder="Dijite una letra para filtrar" autocomplete="off">
+          <button mat-button matSuffix mat-icon-button aria-label="Limpiar" *ngIf="teclaPresionada" (click)="limpiarBusqueda()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <button mat-raised-button color="accent" (click)="exportarAExcel()">
+          <mat-icon>description</mat-icon>Exportar a Excel
+        </button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <ng-container matColumnDef="idProducto" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.idProducto}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="codigoProducto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Código Producto </th>
+        <td mat-cell *matCellDef="let element"> {{element.codigoProducto}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreProducto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Producto </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombreProducto}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Stock </th>
+        <td mat-cell *matCellDef="let element"> {{element.stock}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="accent" [routerLink]="['/ventas/create', row.idProducto]" matTooltip="Vender producto">
+            <mat-icon>add_shopping_cart</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" [routerLink]="['/producciones/create', row.idProducto]" matTooltip="Producir producto">
+            <mat-icon>store</mat-icon>
+          </button>
+          <button mat-icon-button (click)="editarProducto(row)" matTooltip="Editar producto">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="eliminarProducto(row)" matTooltip="Eliminar producto">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cargando">
+        <th mat-footer-cell *matFooterCellDef colspan="5"> Cargando datos... </th>
+      </ng-container>
+
+      <ng-container matColumnDef="sinDatos">
+        <th mat-footer-cell *matFooterCellDef colspan="5"> Sin datos </th>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['cargando']" [ngClass]="{'hide': dataSource!=null}"></tr>
+      <tr mat-footer-row *matFooterRowDef="['sinDatos']" [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0)}"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[25,50,100,200]" [pageSize]="25" showFirstLastButtons>Filter</mat-paginator>
+  </div>
+  <div>
+    <h2>Leyenda de iconos:</h2>
+    <ul class="list-group">
+      <li class="list-group-item"><mat-icon>add_shopping_cart</mat-icon> | Agregar una venta</li>
+      <li class="list-group-item"><mat-icon>store</mat-icon> | Agregar una producción</li>
+      <li class="list-group-item"><mat-icon>edit</mat-icon> | Editar producto actual</li>
+      <li class="list-group-item"><mat-icon>delete_outline</mat-icon> | Eliminar producto actual</li>
+    </ul>
+  </div>
+</div>

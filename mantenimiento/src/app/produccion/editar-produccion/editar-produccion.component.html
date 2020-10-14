@@ -1,0 +1,45 @@
+<div class="container mt-3">
+  <div class="col-md-12">
+    <div class="well well bs-component">
+      <form novalidate class="form-horizontal" (ngSubmit)="editarProduccion(produccion)" #editarProduccionForm="ngForm">
+        <fieldset>
+          <legend>Editar producción con ID: {{produccion.idProduccion}}, y producto: {{nombreProducto}}</legend>
+
+          <input type="hidden" name="idProducto" [(ngModel)]="produccion.idProducto" #idProducto="ngModel">
+
+          <mat-form-field>
+            <input matInput id="trabajador" name="trabajador" placeholder="Nombre del trabajador" [(ngModel)]="produccion.trabajador" #trabajador="ngModel"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="number" id="cantidad" name="cantidad" placeholder="Cantidad" min="0" step="1" [(ngModel)]="produccion.cantidad" #cantidad="ngModel" required minlength="0"/>
+            <mat-hint align="end">Stock: {{maxVenta}}</mat-hint>
+            <mat-error *ngIf="cantidad.errors?.required && cantidad.touched">
+              La cantidad es obligatoria
+            </mat-error>
+            <mat-error *ngIf="cantidad.errors?.minlength && cantidad.touched">
+              Minimo 0
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="date" id="fechaProduccion" name="fechaProduccion" placeholder="Fecha de producción" min="2020-01-01" [ngModel]="produccion.fechaProduccion | date:'yyyy-MM-dd'" (ngModelChange)="produccion.fechaProduccion=$event" #fechaProduccion="ngModel" required />
+            <mat-error *ngIf="fechaProduccion.errors?.required && fechaProduccion.touched">
+              La fecha es obligatoria
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <textarea matInput rows="2" id="observaciones" name="observaciones" placeholder="Observaciones" [(ngModel)]="produccion.observaciones" #observaciones="ngModel" ></textarea>
+          </mat-form-field>
+
+          <div class="form-group">
+              <a class="btn btn-dark" [routerLink]="" (click)="cerrarDialog()">Cancelar</a>
+              &nbsp;
+              <button type="submit" class="btn btn-primary" [disabled]="editarProduccionForm.invalid">Editar Producción</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
