@@ -110,9 +110,9 @@ const express = require('express');
 const app = express();
 
 //imports
-//const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
+const tipoprestamoRoutes = require('./routes/tipoprestamoRoutes');
 //const requisitoRoutes = require('./routes/requisitoRoutes');
-const index = require('./routes/index');
+//const index = require('./routes/index');
 
 
 //settings
@@ -121,9 +121,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //routes
-//app.use(tipoPrestamoRoutes);
+app.use(tipoprestamoRoutes);
 //app.use(requisitoRoutes);
-app.use(index);
+//app.use(index);
 
 
 //run
