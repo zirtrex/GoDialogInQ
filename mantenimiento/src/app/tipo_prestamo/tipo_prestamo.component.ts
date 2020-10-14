@@ -1,11 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Producto } from '../models/tipo_prestamo';
+import { TipoPrestamo } from '../models/tipo_prestamo';
 import { TipoPrestamoService } from '../services/tipo_prestamo.service';
-import { CrearTipoPrestamoComponent } from './crear-tipo_prestamo/crear-tipo_prestamo.component';
-import { EditarTipoPrestamoComponent } from './editar-tipo_prestamo/editar-tipo_prestamo.component';
+import { TipoPrestamoFormComponent } from '../tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
 import { EliminarTipoPrestamoComponent } from './eliminar-tipo_prestamo/eliminar-tipo_prestamo.component';
-import { ExporterService } from '../services/exporter.service';
 import {
   MatTableDataSource,
   MatSort,
@@ -24,26 +22,25 @@ export class TipoPrestamoComponent implements OnInit {
 
   //productos: Observable<Producto[]>;
 
-  displayedColumns: string[] = ['idProducto', 'codigoProducto', 'nombreProducto', 'stock', 'acciones'];
-  dataSource: MatTableDataSource<Producto>;
+  displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'estado', 'acciones'];
+  dataSource: MatTableDataSource<TipoPrestamo>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  teclaPresionada: string;
+  keyPressed: string;
 
   constructor(
-    private productoService:ProductoService,
+    private tipoPrestamoService:TipoPrestamoService,
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
-    private snackBar: MatSnackBar,
-    private exporter: ExporterService
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    this.obtenerDatos();
+    this.getData();
   }
 
-  obtenerDatos() {
-    this.productoService.getProductos().subscribe(
+  getData() {
+    this.tipoPrestamoService.getAll().subscribe(
       data => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
@@ -59,62 +56,42 @@ export class TipoPrestamoComponent implements OnInit {
     );
   }
 
-  aplicarFiltro() {
-    this.dataSource.filter = this.teclaPresionada.trim().toLowerCase();
+  filterApply() {
+    this.dataSource.filter = this.keyPressed.trim().toLowerCase();
   }
 
-  limpiarBusqueda(){
-    this.teclaPresionada = "";
-    this.aplicarFiltro();
+  searchClean(){
+    this.keyPressed = "";
+    this.filterApply();
   }
 
-  crearProducto(){
+  create(){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    this.dialog.open(CrearProductoComponent, dialogConfig)
-      .afterClosed().subscribe(result => this.obtenerDatos());
+    dialogConfig.data = {action: 0};
+    this.dialog.open(TipoPrestamoFormComponent, dialogConfig)
+      .afterClosed().subscribe(result => this.getData());
   }
 
-  editarProducto(producto){
+  edit(tipoPrestamo){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = producto;
-    this.dialog.open(EditarProductoComponent, dialogConfig)
-      .afterClosed().subscribe(result => this.obtenerDatos());
+    dialogConfig.data = {action: 1, tipoPrestamo};
+    this.dialog.open(TipoPrestamoFormComponent, dialogConfig)
+      .afterClosed().subscribe(result => this.getData());
   }
 
-  eliminarProducto(producto){
-    /*if(confirm('¿Estás seguro que deseas eliminar el producto: ' + producto.nombreProducto)){
-      this.productoService.eliminarProducto(producto.idProducto)
-        .subscribe(
-          response => {
-              console.log(response);
-              this.snackBar.open(response.message, null, {
-                duration: 10000,
-                horizontalPosition: 'right',
-                verticalPosition: 'top',
-                panelClass: ['text-warning']
-              });
-              this.obtenerDatos();
-          },
-          error => console.log(<any> error)
-        )
-    }*/
+  delete(tipoPrestamo){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = producto;
-    this.dialog.open(EliminarProductoComponent, dialogConfig)
-      .afterClosed().subscribe(result => this.obtenerDatos());
+    dialogConfig.data = {action: 2, tipoPrestamo};
+    this.dialog.open(TipoPrestamoFormComponent, dialogConfig)
+      .afterClosed().subscribe(result => this.getData());
   }
-
-  exportarAExcel(){
-    this.exporter.exportToExcel(this.dataSource.filteredData, 'productos')
-  }
-
 }

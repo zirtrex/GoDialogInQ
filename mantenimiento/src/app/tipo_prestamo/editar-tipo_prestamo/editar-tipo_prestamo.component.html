@@ -1,19 +1,9 @@
 <div class="container mt-3">
   <div class="col-md-12">
     <div class="well well bs-component">
-      <form novalidate class="form-horizontal" (ngSubmit)="editarProducto(producto)" #editarProductoForm="ngForm">
+      <form novalidate class="form-horizontal" (ngSubmit)="editTipoPrestamo(tipoPrestamo)" #editTipoPrestamoForm="ngForm">
         <fieldset>
-          <legend>Editando: {{ producto.nombreProducto }}</legend>
-
-          <div class="form-group">
-            <label for="codigoProducto" class="control-label">Código del producto</label>
-            <div class="col-lg-12">
-              <input type="number" class="form-control" rows="3" id="codigoProducto" name="codigoProducto" placeholder="Código del producto" min="0" step="1" [(ngModel)]="producto.codigoProducto" #codigoProducto="ngModel" required />
-              <div *ngIf="codigoProducto.errors?.required && codigoProducto.touched" class="alert alert-danger mt-2">
-                El código es obligatorio
-              </div>
-            </div>
-          </div>
+          <legend>Editando: {{ tipoPrestamo.nombreTipoPrestamo }}</legend>
 
           <div class="form-group">
             <label for="title" class="control-label">Nombre del producto</label>
@@ -43,9 +33,9 @@
 
           <div class="form-group">
             <div class="col-lg-12 col-lg-offset-2">
-              <a class="btn btn-dark" [routerLink]="" (click)="cerrarDialog()">Cancelar</a>
+              <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
               &nbsp;
-              <button type="submit" class="btn btn-primary" [disabled]="editarProductoForm.invalid">Editar</button>
+              <button type="submit" class="btn btn-primary" [disabled]="editTipoPrestamoForm.invalid">Editar</button>
             </div>
           </div>
         </fieldset>

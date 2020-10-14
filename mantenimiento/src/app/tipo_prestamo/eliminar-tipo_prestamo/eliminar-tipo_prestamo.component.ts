@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProductoService } from '../../services/tipo_prestamo.service';
-import { Producto } from '../../models/tipo_prestamo';
+import { TipoPrestamoService } from '../../services/tipo_prestamo.service';
+import { TipoPrestamo } from '../../models/tipo_prestamo';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
@@ -15,32 +15,31 @@ import {
 })
 export class EliminarTipoPrestamoComponent implements OnInit, OnDestroy {
 
-  idProducto: any;
+  idTipoPrestamo: any;
   params: any;
 
-  producto = new Producto(0, 0, '', 0);
+  tipoPrestamo = new TipoPrestamo(0, '', 0);
 
   constructor(
-    private productoService:ProductoService,
+    private tipoPrestamoService:TipoPrestamoService,
     private activatedRoute: ActivatedRoute,
     private router:Router,
     private dialogRef: MatDialogRef<EliminarTipoPrestamoComponent>,
     @Inject(MAT_DIALOG_DATA) data,
     private snackBar: MatSnackBar,
   ) {
-    this.producto = data;
+    this.tipoPrestamo = data;
   }
 
   ngOnInit() {
     //this.params = this.activatedRoute.params.subscribe(params => this.idProducto = params['idProducto']);
-    this.productoService.obtenerProducto(this.producto.idProducto.toString())
+    this.tipoPrestamoService.get(this.tipoPrestamo.idTipoPrestamo.toString())
       .subscribe(
         data => {
           console.log(data);
-          this.producto.idProducto = data['idProducto'];
-          this.producto.codigoProducto = data['codigoProducto'];
-          this.producto.nombreProducto = data['nombreProducto'];
-          this.producto.stock = data['stock'];
+          this.tipoPrestamo.idTipoPrestamo = data['idTipoPrestamo'];
+          this.tipoPrestamo.nombreTipoPrestamo = data['nombreTipoPrestamo'];
+          this.tipoPrestamo.estado = data['estado'];
         },
         error => {
           console.log(<any> error);
@@ -53,8 +52,8 @@ export class EliminarTipoPrestamoComponent implements OnInit, OnDestroy {
     //this.params.unsubscribe();
   }
 
-  eliminarProducto(producto){
-    this.productoService.eliminarProducto(producto)
+  eliminarProducto(tipoPrestamo){
+    this.tipoPrestamoService.delete(tipoPrestamo)
       .subscribe(
         response => {
             console.log(response);
@@ -73,6 +72,6 @@ export class EliminarTipoPrestamoComponent implements OnInit, OnDestroy {
   }
 
   cerrarDialog(){
-    this.dialogRef.close(this.producto);
+    this.dialogRef.close(this.tipoPrestamo);
   }
 }
