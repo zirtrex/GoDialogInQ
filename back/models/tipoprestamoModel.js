@@ -44,11 +44,17 @@ TipoPrestamo.crear = async function (req, res) {
 
         res.send({
             status:'success',
-            result
+            result,
+            message: "Tipo de préstamo creado correctamente"
         });
 
     } catch(err) {
-        throw new Error(err);
+        //throw new Error(err);
+        res.send({
+            status:'failed',
+            err,
+            message: "Ha fallado la inserción"
+        });
     }
 }
 

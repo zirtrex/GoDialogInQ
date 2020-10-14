@@ -24,6 +24,14 @@ app.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
+router.get("/", (req, res) => {
+	
+	res.json({
+		"godialoginq": "v1.0.0"
+	});
+    
+});
+
 router.post("/dialogflow2", (req, res) => {
 	if (req.body.queryResult.action == "suma") {
         let num1 = parseFloat(req.body.queryResult.parameters.number1);
