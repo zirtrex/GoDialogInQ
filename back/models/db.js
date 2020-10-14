@@ -5,8 +5,9 @@ var util = require('util');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
+  port     : '3305',
   user     : 'godialoginq',
-  password : 'godialoginq123',
+  password : 'godialoginq',
   database : 'godialoginq'
 });
 
