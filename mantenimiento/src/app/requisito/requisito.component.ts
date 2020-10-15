@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TipoPrestamo } from '../models/tipo_prestamo';
-import { TipoPrestamoService } from '../services/tipo_prestamo.service';
-import { TipoPrestamoFormComponent } from '../tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
+import { Requisito } from '../models/requisito';
+import { RequisitoService } from '../services/requisito.service';
+import { RequisitoFormComponent } from '../requisito/requisito_form/requisito_form.component';
+
 import {
   MatTableDataSource,
   MatSort,
@@ -13,22 +14,22 @@ import {
 } from '@angular/material';
 
 @Component({
-  selector: 'app-tipo_prestamo',
-  templateUrl: './tipo_prestamo.component.html',
+  selector: 'app-requisito',
+  templateUrl: './requisito.component.html',
   styleUrls: []
 })
-export class TipoPrestamoComponent implements OnInit {
+export class RequisitoComponent implements OnInit {
 
   //productos: Observable<Producto[]>;
 
-  displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'estado', 'acciones'];
-  dataSource: MatTableDataSource<TipoPrestamo>;
+  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'estado', 'Tipo Prestamo', 'acciones'];
+  dataSource: MatTableDataSource<Requisito>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   keyPressed: string;
 
   constructor(
-    private tipoPrestamoService:TipoPrestamoService,
+    private requisitoService:RequisitoService,
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
     private snackBar: MatSnackBar
@@ -39,7 +40,7 @@ export class TipoPrestamoComponent implements OnInit {
   }
 
   getData() {
-    this.tipoPrestamoService.getAll().subscribe(
+    this.requisitoService.getAll().subscribe(
       data => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
@@ -70,27 +71,27 @@ export class TipoPrestamoComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
     dialogConfig.data = {action: 0};
-    this.dialog.open(TipoPrestamoFormComponent, dialogConfig)
+    this.dialog.open(RequisitoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }
 
-  edit(tipoPrestamo){
+  edit(requisito){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = {action: 1, tipoPrestamo};
-    this.dialog.open(TipoPrestamoFormComponent, dialogConfig)
+    dialogConfig.data = {action: 1, requisito};
+    this.dialog.open(RequisitoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }
 
-  delete(tipoPrestamo){
+  delete(requisito){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = {action: 2, tipoPrestamo};
-    this.dialog.open(TipoPrestamoFormComponent, dialogConfig)
+    dialogConfig.data = {action: 2, requisito};
+    this.dialog.open(RequisitoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }
 }

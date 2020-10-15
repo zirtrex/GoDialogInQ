@@ -5,23 +5,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { routes } from './app.routes';
 
 import { TipoPrestamoService } from './services/tipo_prestamo.service';
-/*import { VentaService } from './services/venta.service';
-import { ProduccionService } from './services/produccion.service';
-import { ExporterService } from './services/exporter.service';*/
+import { RequisitoService } from './services/requisito.service';
+import { ClienteService } from './services/cliente.service';
+
+/*import { ExporterService } from './services/exporter.service';*/
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
 import { TipoPrestamoFormComponent } from './tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
-import { EliminarTipoPrestamoComponent } from './tipo_prestamo/eliminar-tipo_prestamo/eliminar-tipo_prestamo.component';
-/*import { VentaComponent } from './venta/venta.component';
-import { CrearVentaComponent } from './venta/crear-venta/crear-venta.component';
-import { EditarVentaComponent } from './venta/editar-venta/editar-venta.component';
-import { EliminarVentaComponent } from './venta/eliminar-venta/eliminar-venta.component';
-import { ProduccionComponent } from './produccion/produccion.component';
-import { CrearProduccionComponent } from './produccion/crear-produccion/crear-produccion.component';
-import { EditarProduccionComponent } from './produccion/editar-produccion/editar-produccion.component';*/
+import { RequisitoComponent } from './requisito/requisito.component';
+import { RequisitoFormComponent } from './requisito/requisito_form/requisito_form.component';
+import { ClienteComponent } from './cliente/cliente.component';
+import { ClienteFormComponent } from './cliente/cliente_form/cliente_form.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
@@ -33,14 +30,10 @@ import { MaterialModule } from './material/material.module';
     InicioComponent,
     TipoPrestamoComponent,
     TipoPrestamoFormComponent,
-    EliminarTipoPrestamoComponent
-    /*VentaComponent,
-    CrearVentaComponent,
-    EditarVentaComponent,
-    EliminarVentaComponent,
-    ProduccionComponent,
-    CrearProduccionComponent,
-    EditarProduccionComponent*/
+    RequisitoComponent,
+    RequisitoFormComponent,
+    ClienteComponent,
+    ClienteFormComponent
   ],
   imports: [
     BrowserModule,
@@ -53,17 +46,15 @@ import { MaterialModule } from './material/material.module';
   ],
   providers: [
     TipoPrestamoService,
-    /*VentaService,
-    ProduccionService,
-    ExporterService*/
+    RequisitoService,
+    ClienteService,
+     /*ExporterService*/
   ],
   bootstrap: [AppComponent],
   entryComponents: [
     TipoPrestamoFormComponent,
-    EliminarTipoPrestamoComponent
-    /*EditarVentaComponent,
-    EliminarVentaComponent,
-    EditarProduccionComponent*/
+    RequisitoFormComponent,
+    ClienteFormComponent
   ]
 })
 export class AppModule { }
