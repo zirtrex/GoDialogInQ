@@ -1,0 +1,65 @@
+<div class="container mt-2">
+  <div class="col-md-12">
+    <div class="well well bs-component">
+      <form *ngIf="action == 0 || action == 1" novalidate class="form-horizontal" (ngSubmit)="actionTipoPrestamo(TipoPrestamoForm.value)" #TipoPrestamoForm="ngForm">
+        <fieldset>
+          <legend>{{ textForm }} Requisito</legend>
+
+          <input type="hidden" id="idTipoPrestamo" name="idTipoPrestamo" [(ngModel)]="tipoPrestamo.idTipoPrestamo" #idTipoPrestamo="ngModel"/>
+
+          <div class="form-group">
+            <label for="nombreTipoPrestamo" class="control-label">Nombre del Requisito</label>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" id="nombreTipoPrestamo" name="nombreTipoPrestamo" placeholder="Nombre del Préstamo" [(ngModel)]="tipoPrestamo.nombreTipoPrestamo" #nombreTipoPrestamo="ngModel" required minlength="2"/>
+              <div *ngIf="nombreTipoPrestamo.errors?.required && nombreTipoPrestamo.touched" class="alert alert-danger mt-2">
+                El nombre del préstamo es obligatorio
+              </div>
+              <div *ngIf="nombreTipoPrestamo.errors?.minlength && nombreTipoPrestamo.touched" class="alert alert-danger mt-2">
+                Minimo 2 caracteres
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="estado" class="control-label">Estado</label>
+            <div class="col-lg-12">
+              <input type="number" class="form-control" rows="3" id="estado" name="estado" placeholder="Estado" min="0" step="1" max="1" [(ngModel)]="tipoPrestamo.estado" #estado="ngModel" required minlength="0"/>
+              <div *ngIf="estado.errors?.required && estado.touched" class="alert alert-danger mt-2">
+                El estado es obligatorio
+              </div>
+              <div *ngIf="estado.errors?.minlength && estado.touched" class="alert alert-danger mt-2">
+                Minimo 0
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-12 col-lg-offset-2">
+              <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
+              &nbsp;
+              <button type="submit" class="btn btn-primary" [disabled]="TipoPrestamoForm.invalid">{{ textForm }}</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+      <form  *ngIf="action == 2" novalidate class="form-horizontal" (ngSubmit)="actionTipoPrestamo(tipoPrestamo.idTipoPrestamo)" #eliminarProductoForm="ngForm">
+        <fieldset>
+          <legend>¿Eliminar: {{ tipoPrestamo.nombreTipoPrestamo }}?</legend>
+          <div class="form-group">
+            <label class="control-label">Id: {{tipoPrestamo.idTipoPrestamo}}</label>
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-12">
+              <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
+              &nbsp;
+              <button type="submit" class="btn btn-primary">Eliminar</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 
 import { TipoPrestamoService } from './services/tipo_prestamo.service';
 import { RequisitoService } from './services/requisito.service';
+import { ClienteService } from './services/cliente.service';
 
 /*import { ExporterService } from './services/exporter.service';*/
 
@@ -16,6 +17,8 @@ import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
 import { TipoPrestamoFormComponent } from './tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
 import { RequisitoComponent } from './requisito/requisito.component';
 import { RequisitoFormComponent } from './requisito/requisito_form/requisito_form.component';
+import { ClienteComponent } from './cliente/cliente.component';
+import { ClienteFormComponent } from './cliente/cliente_form/cliente_form.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
@@ -28,8 +31,9 @@ import { MaterialModule } from './material/material.module';
     TipoPrestamoComponent,
     TipoPrestamoFormComponent,
     RequisitoComponent,
-    RequisitoFormComponent
-    
+    RequisitoFormComponent,
+    ClienteComponent,
+    ClienteFormComponent
   ],
   imports: [
     BrowserModule,
@@ -43,12 +47,14 @@ import { MaterialModule } from './material/material.module';
   providers: [
     TipoPrestamoService,
     RequisitoService,
+    ClienteService,
      /*ExporterService*/
   ],
   bootstrap: [AppComponent],
   entryComponents: [
     TipoPrestamoFormComponent,
-    RequisitoFormComponent
+    RequisitoFormComponent,
+    ClienteFormComponent
   ]
 })
 export class AppModule { }
