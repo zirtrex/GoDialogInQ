@@ -1,7 +1,7 @@
 'user strict';
 var db_connect = require('./db');
 
-var TipoPrestamo = {};
+var TipoPrestamo = {}; 
 
 
 TipoPrestamo.ObtenerTodo = async function (req, res) {
