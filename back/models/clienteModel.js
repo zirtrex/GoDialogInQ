@@ -3,6 +3,16 @@ var db_connect = require('./db');
 
 var Cliente = {};
 
+Cliente.getAll = async function (req, res) {
+    try {       
+        var query = 'select * from cliente'; 
+        var clientes = await db_connect.query(query);
+        res.send(clientes);
+    } catch(err) {
+        throw new Error(err);
+    }
+}
+
 
 Cliente.obtenerPorDocumento = async function (Documento) {
     try {
