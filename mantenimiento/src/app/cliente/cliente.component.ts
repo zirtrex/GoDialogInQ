@@ -20,7 +20,7 @@ import {
 })
 export class ClienteComponent implements OnInit {
 
-  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'estado', 'Tipo Prestamo', 'acciones'];
+  displayedColumns: string[] = ['idCliente', 'apellidos', 'nombres', 'tipoDocumento', 'documento', 'acciones'];
   dataSource: MatTableDataSource<Cliente>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
