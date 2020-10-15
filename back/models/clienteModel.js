@@ -55,17 +55,17 @@ Cliente.crear = async function (req, res) {
             :RazonSocial
         )`; 
         var result = await db_connect.query(query, {
-            Apellidos:cliente.Apellidos,
-            Nombres:cliente.Nombres,
-            TipoDocumento:cliente.TipoDocumento,
-            Documento:cliente.Documento,
-            FechaNacimiento:cliente.FechaNacimiento,
-            Sexo:cliente.Sexo,
-            Telefono:cliente.Telefono,
-            Correo:cliente.Correo,
-            Movil:cliente.Movil,
-            Direccion:cliente.Direccion,
-            RazonSocial:cliente.RazonSocial
+            Apellidos:cliente.apellidos,
+            Nombres:cliente.nombres,
+            TipoDocumento:cliente.tipoDocumento,
+            Documento:cliente.documento,
+            FechaNacimiento:cliente.fechaNacimiento,
+            Sexo:cliente.sexo,
+            Telefono:cliente.telefono,
+            Correo:cliente.correo,
+            Movil:cliente.movil,
+            Direccion:cliente.direccion,
+            RazonSocial:cliente.razonSocial
         });
 
         res.send({
