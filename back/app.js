@@ -43,11 +43,13 @@ app.use((req, res, next) => {
 const index = require('./routes/index');
 const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
 const requisitoRoutes = require('./routes/requisitoRoutes');
+const clienteRoutes = require('./routes/clienteRoutes');
 
 //routes
 app.use(index);
 app.use(tipoPrestamoRoutes);
 app.use(requisitoRoutes);
+app.use(clienteRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
