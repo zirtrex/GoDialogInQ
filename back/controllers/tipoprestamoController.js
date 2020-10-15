@@ -3,7 +3,7 @@
 var modelo = require('../models/tipoPrestamoModel');
 
 exports.ObtenerTodo = async function (req, res) {
-  res.send(modelo);
+  res.send(modelo); 
 };
 
 exports.obtenerIDPorNombre = async function (req, res) {

@@ -1,7 +1,7 @@
 'user strict';
 var db_connect = require('./db');
 
-var TipoPrestamo = {};
+var TipoPrestamo = {}; 
 
 
 TipoPrestamo.ObtenerTodo = async function (req, res) {
@@ -63,7 +63,7 @@ TipoPrestamo.actualizar = async function (req, res) {
         var idTipoPrestamo = req.params.idTipoPrestamo;
         var tipoprestamo = req.body;
         var query = `update tipo_prestamo set 
-        nombreTipoPrestamo=:nombreTipoPrestamo
+            nombreTipoPrestamo=:nombreTipoPrestamo
             where idTipoPrestamo=:idTipoPrestamo`; 
         var result = await db_connect.query(query, {
             nombreTipoPrestamo:tipoprestamo.nombreTipoPrestamo,
