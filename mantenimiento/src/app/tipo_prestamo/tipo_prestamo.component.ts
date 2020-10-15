@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { TipoPrestamo } from '../models/tipo_prestamo';
 import { TipoPrestamoService } from '../services/tipo_prestamo.service';
 import { TipoPrestamoFormComponent } from '../tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
-import { EliminarTipoPrestamoComponent } from './eliminar-tipo_prestamo/eliminar-tipo_prestamo.component';
 import {
   MatTableDataSource,
   MatSort,

@@ -11,6 +11,7 @@ const appRoutes: Routes = [
   {path: 'tipo_prestamo', component: TipoPrestamoComponent},
   {path: 'tipo_prestamo/create', component: TipoPrestamoFormComponent},
   {path: 'tipo_prestamo/edit/:idProducto', component: TipoPrestamoFormComponent},
+  {path: 'tipo_prestamo/delete/:idProducto', component: TipoPrestamoFormComponent},
   /*{path: 'ventas', component: VentaComponent},
   {path: 'ventas/create/:idProducto', component: CrearVentaComponent},
   {path: 'ventas/edit/:idVentas', component: EditarVentaComponent},
