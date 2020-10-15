@@ -1,12 +1,10 @@
-/* require('events').EventEmitter.prototype._maxListeners = 0;
+require('events').EventEmitter.prototype._maxListeners = 0;
 var express = require('express');
 var http = require('http');
 
 var session = require('express-session');
-var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var Modulo = require('./models/prestamoModel').Modulo;
 var log4js = require('log4js');
 
 log4js.configure({
@@ -31,11 +29,26 @@ app.set('port', port);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 
-var routes = require('./routes/prestamoRoutes'); //importing route
+// Configurar cabeceras y cors
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
 
-routes(app); //register the route
+//imports
+const index = require('./routes/index');
+const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
+const requisitoRoutes = require('./routes/requisitoRoutes');
+
+//routes
+app.use(index);
+app.use(tipoPrestamoRoutes);
+app.use(requisitoRoutes);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -54,7 +67,10 @@ app.use(function(err, req, res, next) {
   res.render('error.pug');
 });
 
-server.listen(port);
+server.listen(port, () => {
+    console.log('Server on Port: ' + port)
+});
+
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -103,14 +119,14 @@ function onListening() {
     debug('Listening on ' + bind);
 }
 
-module.exports = app; */
+module.exports = app;
 
-
+/*
 const express = require('express');
 const app = express();
 
 //imports
-//const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
+const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
 const requisitoRoutes = require('./routes/requisitoRoutes');
 const index = require('./routes/index');
 
@@ -121,7 +137,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //routes
-//app.use(tipoPrestamoRoutes);
+app.use(tipoPrestamoRoutes);
 app.use(requisitoRoutes);
 app.use(index);
 
@@ -130,5 +146,5 @@ app.use(index);
 app.listen(app.get('port'), () => {
     console.log('Server on Port 8081')
 })
-
+*/
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var modelo = require('../models/tipoprestamoModel');
+var modelo = require('../models/tipoPrestamoModel');
 
 exports.ObtenerTodo = async function (req, res) {
   res.send(modelo);
