@@ -7,7 +7,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   port     : '3306',
   user     : 'godialoginq',
-  password : 'godialoginq',
+  password : 'godialoginq123',
   database : 'godialoginq'
 });
 
