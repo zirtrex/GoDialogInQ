@@ -1,26 +1,28 @@
 'use strict';
 
-var modelo = require('../models/tipoPrestamoModel');
+var tipoPrestamoModel = require('../models/tipoPrestamoModel');
 
-exports.ObtenerTodo = async function (req, res) {
-  res.send(modelo); 
-};
 
-exports.obtenerIDPorNombre = async function (req, res) {
+async function obtenerTodo (req, res) {
+  var tiposDePrestamo = tipoPrestamoModel.ObtenerTodo();
+  res.send(tiposDePrestamo);
+}
+
+async function obtenerIDPorNombre (req, res) {
   res.send(modelo);
-};
+}
 
-exports.crear = function(req, res) {
+async function crear (req, res) {
   res.send(modelo);
-};
+}
 
-exports.actualizar = function(req, res) {
+async function actualizar (req, res) {
   res.send(modelo);
-};
+}
 
-exports.borrar = function(req, res) {
+async function borrar (req, res) {
   res.send(modelo);
-};
+}
 
-module.exports = modelo;
+
 

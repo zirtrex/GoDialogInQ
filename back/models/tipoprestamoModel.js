@@ -9,7 +9,7 @@ TipoPrestamo.ObtenerTodo = async function (req, res) {
        
         var query = 'select * from tipo_prestamo'; 
         var prestamos = await db_connect.query(query);
-        res.send(prestamos);
+        return prestamos;
     } catch(err) {
         throw new Error(err);
     }

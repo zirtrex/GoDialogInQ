@@ -2,9 +2,11 @@
 
 var express = require('express');
 var router = express.Router();
-var tipoPrestamo = require('../controllers/tipoPrestamoController');
+var tipoPrestamoController = require('../controllers/tipoPrestamoController');
 
-router.get('/tipo_prestamo', tipoPrestamo.ObtenerTodo);
+router.get('/tipo_prestamo', tipoPrestamoController.obtenerTodo);
+
+
 router.get('/tipo_prestamo/:nombreTipoPrestamo', tipoPrestamo.obtenerIDPorNombre);
 
 router.post('/tipo_prestamo', tipoPrestamo.crear);
