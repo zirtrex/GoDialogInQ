@@ -28,6 +28,7 @@ TipoPrestamo.obtenerIDPorNombre = async function (nombreTipoPrestamo) {
 }
 
 
+
 TipoPrestamo.crear = async function (req, res) {
     try {
         var prestamo = req.body;

@@ -11,7 +11,7 @@ const appRoutes: Routes = [
   {path: '', component: InicioComponent},
   {path: 'tipo_prestamo', component: TipoPrestamoComponent},
   {path: 'requisito', component: RequisitoComponent},
-  {path: 'requisito:idTipoPrestamo', component: RequisitoComponent},
+  {path: 'requisito/:idTipoPrestamo', component: RequisitoComponent},
   {path: 'cliente', component: ClienteComponent},
   /*{path: 'ventas/edit/:idVentas', component: EditarVentaComponent},
   {path: 'ventas/delete/:idVentas', component: EliminarVentaComponent},

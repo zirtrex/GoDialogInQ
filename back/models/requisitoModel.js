@@ -4,7 +4,21 @@ var db_connect = require('./db');
 var Requisito = {};
 
 
-Requisito.ObtenerPorId = async function (req, res) {
+Requisito.getAll = async function (req, res) {
+    try {
+        var idRequisito = req.params.idRequisito;
+        var query = 'select * from requisito';
+        var requisitos = await db_connect.query(query,{
+            idRequisito:idRequisito
+        });
+        res.send(requisitos);
+    } catch(err) {
+        throw new Error(err);
+    }
+}
+
+
+Requisito.getById = async function (req, res) {
     try {
         var idRequisito = req.params.idRequisito;
         var query = 'select * from requisito where idRequisito=:idRequisito';
@@ -17,13 +31,14 @@ Requisito.ObtenerPorId = async function (req, res) {
     }
 }
 
-Requisito.obtenerRequisitosPorIdTipoPrestamo = async function (idTipoPrestamo) {
+Requisito.getByIdTipoPrestamo = async function (req, res) {
     try {
-        var query = 'select DescripcionRequisito from requisito where idTipoPrestamo=:idTipoPrestamo';
+        var idTipoPrestamo = req.params.idTipoPrestamo;
+        var query = 'select * from requisito where idTipoPrestamo=:idTipoPrestamo';
         var requisitos = await db_connect.query(query,{
             idTipoPrestamo:idTipoPrestamo
         });
-        return requisitos;
+        res.send(requisitos);
     } catch(err) {
         throw new Error(err);
     }
