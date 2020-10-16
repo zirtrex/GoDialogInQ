@@ -2,16 +2,18 @@
 
 var express = require('express');
 var router = express.Router();
-var tipoPrestamoController = require('../controllers/tipoPrestamoController');
 
-router.get('/tipo_prestamo', tipoPrestamoController.obtenerTodo);
+var controller = require('../controllers/tipoPrestamoController');
 
+router.get('/tipo_prestamo', controller.getAll);
 
-router.get('/tipo_prestamo/:nombreTipoPrestamo', tipoPrestamo.obtenerIDPorNombre);
+router.get('/tipo_prestamo/:nombreTipoPrestamo', controller.getIdTipoPrestamoByNombre);
 
-router.post('/tipo_prestamo', tipoPrestamo.crear);
-router.put('/tipo_prestamo/:idTipoPrestamo', tipoPrestamo.actualizar);
-router.delete('/tipo_prestamo/:idTipoPrestamo', tipoPrestamo.borrar);
+router.post('/tipo_prestamo', controller.create);
+
+router.put('/tipo_prestamo/:idTipoPrestamo', controller.update);
+
+router.delete('/tipo_prestamo/:idTipoPrestamo', controller.delete);
 
 
 module.exports = router;

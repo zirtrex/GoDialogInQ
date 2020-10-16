@@ -1,68 +1,51 @@
 'user strict';
 var db_connect = require('./db');
 
-var TipoPrestamo = {}; 
+var tipoPrestamo = {}; 
 
-
-TipoPrestamo.ObtenerTodo = async function (req, res) {
-    try {
-       
+tipoPrestamo.getAll = async function () {
+    try {       
         var query = 'select * from tipo_prestamo'; 
-        var prestamos = await db_connect.query(query);
-        return prestamos;
+        var result = await db_connect.query(query);
+        return result;
     } catch(err) {
         throw new Error(err);
     }
 }
 
-TipoPrestamo.obtenerIDPorNombre = async function (nombreTipoPrestamo) {
+tipoPrestamo.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     try {
         var query = 'select idTipoPrestamo from tipo_prestamo where nombreTipoPrestamo=:nombreTipoPrestamo';
-        var tipoprestamos = await db_connect.query(query,{
+        var result = await db_connect.query(query,{
             nombreTipoPrestamo:nombreTipoPrestamo
         });
-        return tipoprestamos;
+        return result;
     } catch(err) {
         throw new Error(err);
     }
 }
 
-
-
-TipoPrestamo.crear = async function (req, res) {
-    try {
-        var prestamo = req.body;
+tipoPrestamo.create = async function (tipoPrestamo) {
+    try {        
         var query = `insert into tipo_prestamo (
             nombreTipoPrestamo,
             estado      
         ) values (
             :nombreTipoPrestamo,
             1
-        )`; 
+        )`;
         var result = await db_connect.query(query, {
             nombreTipoPrestamo:prestamo.nombreTipoPrestamo
-        });
-
-        res.send({
-            status:'success',
-            result,
-            message: "Tipo de préstamo creado correctamente"
-        });
+        });        
+        return result;        
 
     } catch(err) {
-        //throw new Error(err);
-        res.send({
-            status:'failed',
-            err,
-            message: "Ha fallado la inserción"
-        });
+        throw new Error(err);        
     }
 }
 
-TipoPrestamo.actualizar = async function (req, res) {
-    try {
-        var idTipoPrestamo = req.params.idTipoPrestamo;
-        var tipoprestamo = req.body;
+tipoPrestamo.update = async function (idTipoPrestamo, tipoprestamo) {
+    try {        
         var query = `update tipo_prestamo set 
             nombreTipoPrestamo=:nombreTipoPrestamo
             where idTipoPrestamo=:idTipoPrestamo`; 
@@ -70,33 +53,22 @@ TipoPrestamo.actualizar = async function (req, res) {
             nombreTipoPrestamo:tipoprestamo.nombreTipoPrestamo,
             idTipoPrestamo:idTipoPrestamo
         });
-        res.send({
-            status:'success',
-            result:result
-        });
+        return result;
     } catch(err) {
         throw new Error(err);
     }
 }
 
-
-TipoPrestamo.borrar = async function (req, res) {
-    try {
-        var idTipoPrestamo = req.params.idTipoPrestamo;
+tipoPrestamo.delete = async function (idTipoPrestamo) {
+    try {        
         var query = `delete from tipo_prestamo where idTipoPrestamo=:idTipoPrestamo`; 
         var result = await db_connect.query(query, {
             idTipoPrestamo:idTipoPrestamo
         });
-        res.send({
-            status:'success',
-            result:result
-        });
+        return result;
     } catch(err) {
         throw new Error(err);
     }
 }
 
-
-
-
-module.exports = TipoPrestamo;
+module.exports = tipoPrestamo;

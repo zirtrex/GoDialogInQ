@@ -20,5 +20,3 @@ exports.Crear = function(req, res) {
 };
 
 
-module.exports = modelo;
-
