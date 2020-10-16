@@ -12,22 +12,15 @@ export class RequisitoService {
 
     constructor(private http:HttpClient) { }
 
-    getAll(): Observable<Requisito[]>{
+    getAll(): Observable<Requisito[]> {
       return this.http
                 .get<Requisito[]>(this.REST_API_SERVER_DEV)
                 .pipe(catchError(this.handleError));
     }
 
-    getAllByTipoPrestamo(idTipoPrestamo: String): Observable<Requisito[]>{
+    getAllByIdTipoPrestamo(idTipoPrestamo: any): Observable<Requisito[]> {
       return this.http
                 .get<Requisito[]>(this.REST_API_SERVER_DEV+ '/' + idTipoPrestamo)
-                .pipe(catchError(this.handleError));
-    }
-
-    //Se cambio Producto[] por any porque aquí no siempre devuelve un producto
-    add(requisito: Requisito): Observable<any>{
-      return this.http
-                .post<any>(this.REST_API_SERVER_DEV, requisito)
                 .pipe(catchError(this.handleError));
     }
 
@@ -36,7 +29,13 @@ export class RequisitoService {
                 .get<any>(this.REST_API_SERVER_DEV + '/' + idRequisito);
     }
 
-    edit(requisito: Requisito): Observable<any>{
+    create(requisito: Requisito): Observable<any> {
+      return this.http
+                .post<any>(this.REST_API_SERVER_DEV, requisito)
+                .pipe(catchError(this.handleError));
+    }
+
+    update(requisito: Requisito): Observable<any> {
       const url = `${this.REST_API_SERVER_DEV}/${requisito["idRequisito"]}`;
       return this.http
                 .put<any>(url, requisito)

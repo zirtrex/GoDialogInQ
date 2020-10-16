@@ -1,24 +1,34 @@
 'user strict';
+
 var db_connect = require('./db');
 
-var Requisito = {};
+var requisito = {};
 
-
-Requisito.getAll = async function (req, res) {
-    try {
-        var idRequisito = req.params.idRequisito;
+requisito.getAll = async function () {
+    try {        
         var query = 'select * from requisito';
-        var requisitos = await db_connect.query(query,{
+        var result = await db_connect.query(query,{
             idRequisito:idRequisito
         });
-        res.send(requisitos);
-    } catch(err) {
-        throw new Error(err);
+        return result;
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
+requisito.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
+    try {
+        var query = 'select * from requisito where idTipoPrestamo=:idTipoPrestamo';
+        var result = await db_connect.query(query,{
+            idTipoPrestamo:idTipoPrestamo
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
 
-Requisito.getById = async function (req, res) {
+requisito.getByIdRequisito = async function (req, res) {
     try {
         var idRequisito = req.params.idRequisito;
         var query = 'select * from requisito where idRequisito=:idRequisito';
@@ -26,29 +36,13 @@ Requisito.getById = async function (req, res) {
             idRequisito:idRequisito
         });
         res.send(requisitos);
-    } catch(err) {
-        throw new Error(err);
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
-Requisito.getByIdTipoPrestamo = async function (req, res) {
-    try {
-        var idTipoPrestamo = req.params.idTipoPrestamo;
-        var query = 'select * from requisito where idTipoPrestamo=:idTipoPrestamo';
-        var requisitos = await db_connect.query(query,{
-            idTipoPrestamo:idTipoPrestamo
-        });
-        res.send(requisitos);
-    } catch(err) {
-        throw new Error(err);
-    }
-}
-
-
-
-Requisito.crear = async function (req, res) {
-    try {
-        var requisito = req.body;
+requisito.create = async function (requisito) {
+    try {        
         var query = `insert into requisito (
             descripcionRequisito,
             idTipoPrestamo,
@@ -62,19 +56,13 @@ Requisito.crear = async function (req, res) {
             descripcionRequisito:requisito.descripcionRequisito,
             idTipoPrestamo:requisito.idTipoPrestamo
         });
-
-        res.send({
-            status:'success',
-            result
-        });
-
-    } catch(err) {
-        throw new Error(err);
+        return result;
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
-
-Requisito.actualizar = async function (req, res) {
+requisito.update = async function (req, res) {
     try {
         var idRequisito = req.params.idRequisito;
         var requisito = req.body;
@@ -91,12 +79,12 @@ Requisito.actualizar = async function (req, res) {
             status:'success',
             result:result
         });
-    } catch(err) {
-        throw new Error(err);
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
-Requisito.borrar = async function (req, res) {
+requisito.delete = async function (req, res) {
     try {
         var idRequisito = req.params.idRequisito;
         var query = `delete from requisito where idRequisito=:idRequisito`; 
@@ -107,12 +95,9 @@ Requisito.borrar = async function (req, res) {
             status:'success',
             result:result
         });
-    } catch(err) {
-        throw new Error(err);
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
-
-
-
-module.exports = Requisito;
+module.exports = requisito;

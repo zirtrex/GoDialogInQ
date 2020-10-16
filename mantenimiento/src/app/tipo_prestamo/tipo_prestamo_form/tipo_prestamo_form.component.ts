@@ -11,8 +11,8 @@ import { TipoPrestamo } from '../../models/tipo_prestamo';
 })
 export class TipoPrestamoFormComponent implements OnInit {
 
-  idTipoPrestamo: any;
   params: any;
+  idTipoPrestamo: any;
   action: number;
   textForm: string;
   tipoPrestamo: TipoPrestamo;
@@ -25,7 +25,7 @@ export class TipoPrestamoFormComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) {
     if (data.action == 0) {
-      this.tipoPrestamo = new TipoPrestamo(0, "", 0);
+      this.tipoPrestamo = new TipoPrestamo();
       this.action = data.action;
     } else {
       this.tipoPrestamo = data.tipoPrestamo;
@@ -34,7 +34,6 @@ export class TipoPrestamoFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
     if (this.action == 0) {
       this.textForm = "Crear";
     } else if (this.action == 1){
@@ -42,29 +41,19 @@ export class TipoPrestamoFormComponent implements OnInit {
     } else {
       this.textForm = "Eliminar";
     }
-
-    /*this.tipoPrestamoService.get(this.idTipoPrestamo.toString()).subscribe(
-      data => {
-        console.log(data);
-        this.tipoPrestamo.idTipoPrestamo = data['idTipoPrestamo'];
-        this.tipoPrestamo.nombreTipoPrestamo = data['nombreTipoPrestamo'];
-        this.tipoPrestamo.estado = data['estado'];
-      },
-      error => console.log(<any> error)
-    );*/
   }
 
-  actionTipoPrestamo(tipoPrestamo){
-    if (this.tipoPrestamo.idTipoPrestamo == 0) {
-      this.addTipoPrestamo(tipoPrestamo);
+  getAction (tipoPrestamo){
+    if (this.action == 0) {
+      this.create(tipoPrestamo);
     } else if (this.action == 1){
-      this.editTipoPrestamo(tipoPrestamo);
+      this.update(tipoPrestamo);
     } else {
-      this.eliminarTipoPrestamo(tipoPrestamo);
+      this.delete(tipoPrestamo);
     }
   }
 
-  addTipoPrestamo(tipoPrestamo){
+  create (tipoPrestamo){
     this.tipoPrestamoService.add(tipoPrestamo)
       .subscribe(
         response => {
@@ -84,7 +73,7 @@ export class TipoPrestamoFormComponent implements OnInit {
       )
   }
 
-  editTipoPrestamo(tipoPrestamo){
+  update(tipoPrestamo){
     this.tipoPrestamoService.edit(tipoPrestamo)
       .subscribe(
         response => {
@@ -104,8 +93,8 @@ export class TipoPrestamoFormComponent implements OnInit {
       )
   }
 
-  eliminarTipoPrestamo(tipoPrestamo){
-    this.tipoPrestamoService.delete(tipoPrestamo)
+  delete (tipoPrestamo){
+    this.tipoPrestamoService.delete(tipoPrestamo.idTipoPrestamo)
       .subscribe(
         response => {
             console.log(response);

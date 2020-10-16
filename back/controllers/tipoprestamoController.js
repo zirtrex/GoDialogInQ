@@ -9,7 +9,7 @@ tipoPrestamoController.getAll = async function (req, res) {
   res.send(tiposPrestamo);
 }
 
-tipoPrestamoController.getIdPrestamoByNombre = async function (req, res) {
+tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
   var nombreTipoPrestamo = req.params.nombreTipoPrestamo;
   var idTipoPrestamo = await model.getIdTipoPrestamoByNombre(nombreTipoPrestamo);
   res.send(idTipoPrestamo);
@@ -27,8 +27,8 @@ tipoPrestamoController.create = async function (req, res) {
   } catch (error) {
     res.send({
       status:'failed',
-      message: "Ha fallado la inserción",
-      err      
+      message: "Ha ocurrido un error",
+      error      
     });  
   }  
 }
@@ -46,8 +46,8 @@ tipoPrestamoController.update = async function (req, res) {
   } catch (error) {
     res.send({
       status:'failed',
-      message: "Ha fallado la inserción",
-      err      
+      message: "Ha ocurrido un error",
+      error      
     });  
   } 
 }
@@ -64,8 +64,8 @@ tipoPrestamoController.delete = async function (req, res) {
   } catch (error) {
     res.send({
       status:'failed',
-      message: "Ha fallado la eliminación",
-      err      
+      message: "Ha ocurrido un error",
+      error      
     });  
   } 
 }

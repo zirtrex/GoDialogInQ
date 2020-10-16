@@ -8,8 +8,8 @@ tipoPrestamo.getAll = async function () {
         var query = 'select * from tipo_prestamo'; 
         var result = await db_connect.query(query);
         return result;
-    } catch(err) {
-        throw new Error(err);
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
@@ -20,8 +20,8 @@ tipoPrestamo.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
             nombreTipoPrestamo:nombreTipoPrestamo
         });
         return result;
-    } catch(err) {
-        throw new Error(err);
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
@@ -35,12 +35,12 @@ tipoPrestamo.create = async function (tipoPrestamo) {
             1
         )`;
         var result = await db_connect.query(query, {
-            nombreTipoPrestamo:prestamo.nombreTipoPrestamo
+            nombreTipoPrestamo:tipoPrestamo.nombreTipoPrestamo
         });        
         return result;        
 
-    } catch(err) {
-        throw new Error(err);        
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
@@ -54,8 +54,8 @@ tipoPrestamo.update = async function (idTipoPrestamo, tipoprestamo) {
             idTipoPrestamo:idTipoPrestamo
         });
         return result;
-    } catch(err) {
-        throw new Error(err);
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
@@ -66,8 +66,8 @@ tipoPrestamo.delete = async function (idTipoPrestamo) {
             idTipoPrestamo:idTipoPrestamo
         });
         return result;
-    } catch(err) {
-        throw new Error(err);
+    } catch(error) {
+        throw new Error(error);
     }
 }
 

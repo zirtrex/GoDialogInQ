@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Requisito } from '../models/requisito';
 import { RequisitoService } from '../services/requisito.service';
@@ -20,15 +21,19 @@ import {
 })
 export class RequisitoComponent implements OnInit {
 
-  //productos: Observable<Producto[]>;
+  params: any;
+  idTipoPrestamo: any;
+  requisito: Requisito = new Requisito();
 
-  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'estado', 'Tipo Prestamo', 'acciones'];
+  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'estado', 'idTipoPrestamo', 'acciones'];
   dataSource: MatTableDataSource<Requisito>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   keyPressed: string;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router:Router,
     private requisitoService:RequisitoService,
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
@@ -36,11 +41,13 @@ export class RequisitoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.params = this.activatedRoute.params.subscribe(params => this.idTipoPrestamo = params['idTipoPrestamo']);
+    this.requisito.idTipoPrestamo = this.idTipoPrestamo;
     this.getData();
   }
 
   getData() {
-    this.requisitoService.getAll().subscribe(
+    this.requisitoService.getAllByIdTipoPrestamo(this.idTipoPrestamo).subscribe(
       data => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
@@ -70,7 +77,7 @@ export class RequisitoComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = {action: 0};
+    dialogConfig.data = {action: 0, idTipoPrestamo: this.idTipoPrestamo};
     this.dialog.open(RequisitoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }
@@ -80,7 +87,7 @@ export class RequisitoComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = {action: 1, requisito};
+    dialogConfig.data = {action: 1, idTipoPrestamo: this.idTipoPrestamo, requisito};
     this.dialog.open(RequisitoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }
@@ -90,7 +97,7 @@ export class RequisitoComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = {action: 2, requisito};
+    dialogConfig.data = {action: 2, idTipoPrestamo: this.idTipoPrestamo, requisito};
     this.dialog.open(RequisitoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }

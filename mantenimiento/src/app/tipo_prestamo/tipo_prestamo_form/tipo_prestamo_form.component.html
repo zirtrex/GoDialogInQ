@@ -43,7 +43,7 @@
         </fieldset>
       </form>
 
-      <form  *ngIf="action == 2" novalidate class="form-horizontal" (ngSubmit)="actionTipoPrestamo(tipoPrestamo.idTipoPrestamo)" #eliminarProductoForm="ngForm">
+      <form  *ngIf="action == 2" novalidate class="form-horizontal" (ngSubmit)="actionTipoPrestamo(tipoPrestamo.idTipoPrestamo)" #TipoPrestamoForm="ngForm">
         <fieldset>
           <legend>¿Eliminar: {{ tipoPrestamo.nombreTipoPrestamo }}?</legend>
           <div class="form-group">
@@ -59,7 +59,6 @@
           </div>
         </fieldset>
       </form>
-
     </div>
   </div>
 </div>

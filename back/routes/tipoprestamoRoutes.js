@@ -15,6 +15,4 @@ router.put('/tipo_prestamo/:idTipoPrestamo', controller.update);
 
 router.delete('/tipo_prestamo/:idTipoPrestamo', controller.delete);
 
-
 module.exports = router;
-

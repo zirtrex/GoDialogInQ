@@ -2,19 +2,20 @@
 
 var express = require('express');
 var router = express.Router();
-var requisito = require('../controllers/requisitoController');
 
+var controller = require('../controllers/requisitoController');
 
-router.get('/requisito/', requisito.getAll);
-//router.get('/requisito/:idRequisito', requisito.getById);
-router.get('/requisito/:idTipoPrestamo', requisito.getByIdTipoPrestamo);
+router.get('/requisito/', controller.getAll);
 
-router.post('/requisito', requisito.crear);
+router.get('/requisito/:idTipoPrestamo', controller.getAllByIdTipoPrestamo);
 
-router.post('/requisito', requisito.crear);
-router.put('/requisito/:idTipoPrestamo', requisito.actualizar);
-router.delete('/requisito/:idTipoPrestamo', requisito.borrar);
+router.get('/requisito/:idRequisito', controller.getByIdRequisito);
+
+router.post('/requisito', controller.create);
+
+router.put('/requisito/:idTipoPrestamo', controller.update);
+
+router.delete('/requisito/:idTipoPrestamo', controller.delete);
 
 
 module.exports = router;
-

@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { Requisito } from '../../models/requisito';
 
 @Component({
-  selector: 'app-crear-requisito',
+  selector: 'app-requisito-form',
   templateUrl: './requisito_form.component.html',
   styleUrls: []
 })
@@ -24,39 +24,40 @@ export class RequisitoFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) data,
     private snackBar: MatSnackBar,
   ) {
-    if (data.action == 0) {
-      this.requisito = new Requisito(0, "", 0,0,null);
+    if (data.action == 0) {      
       this.action = data.action;
+      this.idTipoPrestamo = data.idTipoPrestamo;
+      this.requisito = new Requisito();
     } else {
-      this.requisito = data.requisito;
       this.action = data.action;
+      this.idTipoPrestamo = data.idTipoPrestamo;
+      this.requisito = data.requisito;      
     }
   }
 
   ngOnInit() {
-
     if (this.action == 0) {
       this.textForm = "Crear";
     } else if (this.action == 1){
       this.textForm = "Editar";
     } else {
       this.textForm = "Eliminar";
-    }
-   
+    }   
   }
 
   getAction(requisito){
-    if (this.requisito.idRequisito == 0) {
-      this.add(requisito);
+    requisito.idTipoPrestamo = this.idTipoPrestamo;
+    if (this.action == 0) {
+      this.create(requisito);
     } else if (this.action == 1){
-      this.edit(requisito);
+      this.update(requisito);
     } else {
       this.delete(requisito);
     }
   }
 
-  add(requisito){
-    this.requisitoService.add(requisito)
+  create (requisito){
+    this.requisitoService.create(requisito)
       .subscribe(
         response => {
             console.log(response);
@@ -75,8 +76,8 @@ export class RequisitoFormComponent implements OnInit {
       )
   }
 
-  edit(requisito){
-    this.requisitoService.edit(requisito)
+  update (requisito){
+    this.requisitoService.update(requisito)
       .subscribe(
         response => {
           console.log(response);
@@ -95,8 +96,8 @@ export class RequisitoFormComponent implements OnInit {
       )
   }
 
-  delete(requisito){
-    this.requisitoService.delete(requisito)
+  delete (requisito){
+    this.requisitoService.delete(requisito.idRequisito)
       .subscribe(
         response => {
             console.log(response);

@@ -1,32 +1,49 @@
 'use strict';
 
-var modelo = require('../models/requisitoModel');
+var model = require('../models/requisitoModel');
 
-exports.getAll = async function (req, res) {
+var requisitoController = {};
+
+requisitoController.getAll = async function (req, res) {  
+  var result = await model.getAll();
+  res.send(result);
+}
+
+requisitoController.getAllByIdTipoPrestamo = async function (req, res) {
+  var idTipoPrestamo = req.params.idTipoPrestamo;
+  var result = await model.getAllByIdTipoPrestamo(idTipoPrestamo);
+  res.send(result);
+}
+
+requisitoController.getByIdRequisito = async function (req, res) {
+  var idRequisito = req.params.idRequisito;
   res.send(modelo);
-};
+}
 
-exports.getById = async function (req, res) {
+requisitoController.create = async function(req, res) {
+  var requisito = req.body;
+  try {
+    var result = await model.create(requisito);
+    res.send({
+      status:'success',
+      message: "Requisito creado correctamente.",
+      result
+    });
+  } catch (error) {
+    res.send({
+      status: 'failed',
+      message: "Ha ocurrido un error",
+      error: error.message
+    });
+  }
+}
+
+requisitoController.update = function(req, res) {
   res.send(modelo);
-};
+}
 
-exports.getByIdTipoPrestamo = async function (req, res) {
+requisitoController.delete = function(req, res) {
   res.send(modelo);
-};
+}
 
-
-exports.crear = function(req, res) {
-  res.send(modelo);
-};
-
-exports.crear = function(req, res) {
-  res.send(modelo);
-};
-
-exports.actualizar = function(req, res) {
-  res.send(modelo);
-};
-
-exports.borrar = function(req, res) {
-  res.send(modelo);
-};
+module.exports = requisitoController;
