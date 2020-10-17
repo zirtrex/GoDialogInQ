@@ -26,6 +26,20 @@ cliente.getByIdCliente = async function (idCliente) {
     }
 }
 
+/* 
+cliente.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
+    try {
+        var query = 'select idTipoPrestamo from tipo_prestamo where nombreTipoPrestamo=:nombreTipoPrestamo';
+        var result = await db_connect.query(query,{
+            nombreTipoPrestamo:nombreTipoPrestamo
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+} */
+
+
 
 cliente.create = async function (cliente) {
     try {        

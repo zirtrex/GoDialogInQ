@@ -34,7 +34,7 @@ documentacionClienteController.getAllByIdPrestamoCliente = async function (req, 
     res.send({
       status:'failed',
       message: "Ha ocurrido un error",
-      error      
+      error: error.message      
     });  
   }  
 }

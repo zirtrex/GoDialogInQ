@@ -35,7 +35,7 @@ requisitoController.create = async function (req, res) {
     res.send({
       status:'failed',
       message: "Ha ocurrido un error",
-      error      
+      error: error.message      
     });  
   }  
 }
@@ -54,7 +54,7 @@ requisitoController.update = async function (req, res) {
     res.send({
       status:'failed',
       message: "Ha ocurrido un error",
-      error      
+      error: error.message      
     });  
   } 
 }

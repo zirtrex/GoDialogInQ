@@ -28,7 +28,7 @@ tipoPrestamoController.create = async function (req, res) {
     res.send({
       status:'failed',
       message: "Ha ocurrido un error",
-      error      
+      error: error.message      
     });  
   }  
 }
@@ -47,7 +47,7 @@ tipoPrestamoController.update = async function (req, res) {
     res.send({
       status:'failed',
       message: "Ha ocurrido un error",
-      error      
+      error: error.message          
     });  
   } 
 }
