@@ -1,4 +1,135 @@
 'user strict';
+
+var db_connect = require('./db');
+
+var cliente = {}; 
+
+cliente.getAll = async function () {
+    try {       
+        var query = 'select * from cliente'; 
+        var result = await db_connect.query(query);
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+cliente.getByIdCliente = async function (idCliente) {
+    try {
+        var query = 'select * from cliente where idCliente=:idCliente';
+        var result = await db_connect.query(query,{
+            idCliente:idCliente
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+
+cliente.create = async function (cliente) {
+    try {        
+        var query = `insert into cliente (
+            apellidos,
+            nombres,
+            tipoDocumento,
+            documento,
+            fechaNacimiento,
+            sexo,
+            telefono,
+            correo,
+            movil,
+            direccion,
+            razonSocial,
+            estado      
+        ) values (
+            :apellidos,
+            :nombres,
+            :tipoDocumento,
+            :documento,
+            :fechaNacimiento,
+            :sexo,
+            :telefono,
+            :correo,
+            :movil,
+            :direccion,
+            :razonSocial,
+            1
+        )`;
+        var result = await db_connect.query(query, {
+            apellidos: cliente.apellidos,
+            nombres: cliente.nombres,
+            tipoDocumento: cliente.tipoDocumento,
+            documento: cliente.documento,
+            fechaNacimiento: cliente.fechaNacimiento,
+            sexo: cliente.sexo,
+            telefono: cliente.telefono,
+            correo: cliente.correo,
+            movil: cliente.movil,
+            direccion: cliente.direccion,
+            razonSocial: cliente.razonSocial
+        });        
+        return result;        
+
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+cliente.update = async function (idCliente, cliente) {
+    try {        
+        var query = `update cliente set 
+            apellidos=:apellidos,
+            nombres=:nombres,
+            tipoDocumento=:tipoDocumento,
+            documento=:documento,
+            fechaNacimiento=:fechaNacimiento,
+            sexo=:sexo,
+            telefono=:telefono,
+            correo=:correo,
+            movil=:movil,
+            direccion=:direccion,
+            razonSocial=:razonSocial
+            where idCliente=:idCliente`; 
+        var result = await db_connect.query(query, {
+            nombres:cliente.nombres,
+            tipoDocumento:cliente.tipoDocumento,
+            documento:cliente.documento,
+            fechaNacimiento:cliente.fechaNacimiento,
+            sexo:cliente.sexo,
+            telefono:cliente.telefono,
+            correo:cliente.correo,
+            movil:cliente.movil,
+            direccion:cliente.direccion,
+            razonSocial:cliente.razonSocial,
+            idCliente:cliente
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+cliente.delete = async function (idCliente) {
+    try {        
+        var query = `delete from cliente where idCliente=:idCliente`; 
+        var result = await db_connect.query(query, {
+            idCliente:idCliente
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+module.exports = cliente;
+
+
+
+
+
+
+/* 
 var db_connect = require('./db');
 
 var Cliente = {};
@@ -122,4 +253,4 @@ Cliente.delete = async function (req, res) {
 }
 
 
-module.exports = Cliente;
+module.exports = Cliente; */
