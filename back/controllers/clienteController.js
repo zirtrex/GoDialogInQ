@@ -30,7 +30,7 @@ clienteController.create = async function (req, res) {
     res.send({
       status:'failed',
       message: "Ha ocurrido un error",
-      error      
+      error: error.message            
     });  
   }  
 }
@@ -49,7 +49,7 @@ clienteController.update = async function (req, res) {
     res.send({
       status:'failed',
       message: "Ha ocurrido un error",
-      error      
+      error: error.message      
     });  
   } 
 }
