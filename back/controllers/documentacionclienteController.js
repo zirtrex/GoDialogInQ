@@ -1,35 +1,34 @@
 'use strict';
 
-var model = require('../models/requisitoModel');
+var model = require('../models/documentacionclienteModel');
 
-var requisitoController = {};
+var documentacionclienteController = {};
 
-requisitoController.getAll = async function (req, res) {
-  var requisito = await model.getAll();
-  res.send(requisito);
+documentacionclienteController.getAll = async function (req, res) {
+  var documentacioncliente = await model.getAll();
+  res.send(documentacioncliente);
 }
 
-requisitoController.getByIdRequisito = async function (req, res) {
-  var idRequisito = req.params.idRequisito;
-  var requisito = await model.getByIdRequisito(idRequisito);
-  res.send(requisito);
+documentacionclienteController.getByIdDocumentacionCliente = async function (req, res) {
+  var idDocumentacionCliente = req.params.idDocumentacionCliente;
+  var documentacioncliente = await model.getByIdDocumentacionCliente(idDocumentacionCliente);
+  res.send(documentacioncliente);
 }
 
-requisitoController.getAllByIdTipoPrestamo = async function (req, res) {
-  var idTipoPrestamo = req.params.idTipoPrestamo;
-  var requisito = await model.getAllByIdTipoPrestamo(idTipoPrestamo);
-  res.send(requisito);
+documentacionclienteController.getAllByIdPrestamosCliente = async function (req, res) {
+  var idPrestamosCliente = req.params.idPrestamosCliente;
+  var documentacioncliente = await model.getAllByIdPrestamosCliente(idPrestamosCliente);
+  res.send(documentacioncliente);
 }
 
-
-requisitoController.create = async function (req, res) {
-  var requisito = req.body;
+  documentacionclienteController.create = async function (req, res) {
+  var documentacioncliente = req.body;
   try {
-    var result = await model.create(requisito);
+    var result = await model.create(documentacioncliente);
     res.send({
       status:'success',
       result,
-      message: "Requisito creado correctamente"
+      message: "Documentacion Cliente creado correctamente"
     });   
   } catch (error) {
     res.send({
@@ -40,6 +39,7 @@ requisitoController.create = async function (req, res) {
   }  
 }
 
+/* 
 requisitoController.update = async function (req, res) {
   var idRequisito = req.params.idRequisito;
   var requisito = req.body;
@@ -76,5 +76,5 @@ requisitoController.delete = async function (req, res) {
     });  
   } 
 }
-
-module.exports = requisitoController;
+ */
+module.exports = documentacionclienteController;

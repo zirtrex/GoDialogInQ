@@ -2,11 +2,11 @@
 
 var db_connect = require('./db');
 
-var requisito = {}; 
+var documentacioncliente = {}; 
 
-requisito.getAll = async function () {
+documentacioncliente.getAll = async function () {
     try {       
-        var query = 'select * from requisito'; 
+        var query = 'select * from documentacion_cliente'; 
         var result = await db_connect.query(query);
         return result;
     } catch(error) {
@@ -14,11 +14,11 @@ requisito.getAll = async function () {
     }
 }
 
-requisito.getByIdRequisito = async function (idRequisito) {
+documentacioncliente.getByIdDocumentacionCliente = async function (idDocumentacionCliente) {
     try {
-        var query = 'select * from requisito where idRequisito=:idRequisito';
+        var query = 'select * from documentacion_cliente where idDocumentacionCliente=:idDocumentacionCliente';
         var result = await db_connect.query(query,{
-            idRequisito:idRequisito
+            idDocumentacionCliente:idDocumentacionCliente
         });
         return result;
     } catch(error) {
@@ -26,11 +26,11 @@ requisito.getByIdRequisito = async function (idRequisito) {
     }
 }
 
-requisito.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
+documentacioncliente.getAllByIdPrestamosCliente = async function (idPrestamosCliente) {
     try {
-        var query = 'select * from requisito where idTipoPrestamo=:idTipoPrestamo';
+        var query = 'select * from documentacion_cliente where idPrestamosCliente=:idPrestamosCliente';
         var result = await db_connect.query(query,{
-            idTipoPrestamo:idTipoPrestamo
+            idPrestamosCliente:idPrestamosCliente
         });
         return result;
     } catch(error) {
@@ -40,20 +40,25 @@ requisito.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
 
 
 
-requisito.create = async function (requisito) {
+documentacioncliente.create = async function (documentacioncliente) {
     try {        
-        var query = `insert into requisito (
-            descripcionRequisito,
-            idTipoPrestamo,
-            estado      
+        var query = `insert into documentacion_cliente (
+          
+            nombreDocumentacion,
+            valor,
+            estado,
+            idPrestamosCliente
+
         ) values (
-            :descripcionRequisito,
-            :idTipoPrestamo,
-            1
+            :nombreDocumentacion,
+            :valor,
+            1,
+            :idPrestamosCliente
         )`;
         var result = await db_connect.query(query, {
-            descripcionRequisito:requisito.descripcionRequisito,
-            idTipoPrestamo:requisito.idTipoPrestamo
+            nombreDocumentacion:documentacioncliente.nombreDocumentacion,
+            valor:documentacioncliente.valor,
+            idPrestamosCliente:documentacioncliente.idPrestamosCliente
         });        
         return result;        
 
@@ -61,7 +66,7 @@ requisito.create = async function (requisito) {
         throw new Error(error);
     }
 }
-
+/* 
 requisito.update = async function (idRequisito, requisito) {
     try {        
         var query = `update requisito set 
@@ -89,7 +94,7 @@ requisito.delete = async function (idRequisito) {
     } catch(error) {
         throw new Error(error);
     }
-}
+} */
 
-module.exports = requisito;
+module.exports = documentacioncliente;
 
