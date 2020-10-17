@@ -51,7 +51,7 @@ prestamocliente.getAllByIdCliente = async function (idCliente) {
 }
 
 
-prestamocliente.create = async function (requisito) {
+prestamocliente.create = async function (prestamocliente) {
     try {        
         var query = `insert into prestamo_cliente (
            
@@ -73,12 +73,12 @@ prestamocliente.create = async function (requisito) {
             :idCliente
         )`;
         var result = await db_connect.query(query, {
-            montoNecesitado:requisito.montoNecesitado,
-            tiempoNegocio:requisito.tiempoNegocio,
-            ingresosAnuales:requisito.ingresosAnuales,
-            puntajeCredito:requisito.puntajeCredito,
-            idTipoPrestamo:requisito.idTipoPrestamo,
-            idCliente:requisito.idCliente
+            montoNecesitado:prestamocliente.montoNecesitado,
+            tiempoNegocio:prestamocliente.tiempoNegocio,
+            ingresosAnuales:prestamocliente.ingresosAnuales,
+            puntajeCredito:prestamocliente.puntajeCredito,
+            idTipoPrestamo:prestamocliente.idTipoPrestamo,
+            idCliente:prestamocliente.idCliente
         });        
         return result;        
 

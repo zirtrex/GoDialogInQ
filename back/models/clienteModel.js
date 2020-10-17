@@ -92,6 +92,7 @@ cliente.update = async function (idCliente, cliente) {
             razonSocial=:razonSocial
             where idCliente=:idCliente`; 
         var result = await db_connect.query(query, {
+            apellidos:cliente.apellidos,
             nombres:cliente.nombres,
             tipoDocumento:cliente.tipoDocumento,
             documento:cliente.documento,
@@ -102,7 +103,7 @@ cliente.update = async function (idCliente, cliente) {
             movil:cliente.movil,
             direccion:cliente.direccion,
             razonSocial:cliente.razonSocial,
-            idCliente:cliente
+            idCliente:idCliente
         });
         return result;
     } catch(error) {

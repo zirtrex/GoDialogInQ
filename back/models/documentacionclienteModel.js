@@ -40,7 +40,7 @@ documentacioncliente.getAllByIdPrestamosCliente = async function (idPrestamosCli
 
 
 
-documentacioncliente.create = async function (requisito) {
+documentacioncliente.create = async function (documentacioncliente) {
     try {        
         var query = `insert into documentacion_cliente (
           
