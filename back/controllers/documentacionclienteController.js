@@ -1,30 +1,30 @@
 'use strict';
 
-var model = require('../models/documentacionclienteModel');
+var model = require('../models/documentacionClienteModel');
 
-var documentacionclienteController = {};
+var documentacionClienteController = {};
 
-documentacionclienteController.getAll = async function (req, res) {
-  var documentacioncliente = await model.getAll();
-  res.send(documentacioncliente);
+documentacionClienteController.getAll = async function (req, res) {
+  var documentacionCliente = await model.getAll();
+  res.send(documentacionCliente);
 }
 
-documentacionclienteController.getByIdDocumentacionCliente = async function (req, res) {
+documentacionClienteController.getByIdDocumentacionCliente = async function (req, res) {
   var idDocumentacionCliente = req.params.idDocumentacionCliente;
-  var documentacioncliente = await model.getByIdDocumentacionCliente(idDocumentacionCliente);
-  res.send(documentacioncliente);
+  var documentacionCliente = await model.getByIdDocumentacionCliente(idDocumentacionCliente);
+  res.send(documentacionCliente);
 }
 
-documentacionclienteController.getAllByIdPrestamosCliente = async function (req, res) {
-  var idPrestamosCliente = req.params.idPrestamosCliente;
-  var documentacioncliente = await model.getAllByIdPrestamosCliente(idPrestamosCliente);
-  res.send(documentacioncliente);
+documentacionClienteController.getAllByIdPrestamoCliente = async function (req, res) {
+  var idPrestamoCliente = req.params.idPrestamoCliente;
+  var documentacionCliente = await model.getAllByIdPrestamoCliente(idPrestamoCliente);
+  res.send(documentacionCliente);
 }
 
-  documentacionclienteController.create = async function (req, res) {
-  var documentacioncliente = req.body;
+  documentacionClienteController.create = async function (req, res) {
+  var documentacionCliente = req.body;
   try {
-    var result = await model.create(documentacioncliente);
+    var result = await model.create(documentacionCliente);
     res.send({
       status:'success',
       result,
@@ -77,4 +77,4 @@ requisitoController.delete = async function (req, res) {
   } 
 }
  */
-module.exports = documentacionclienteController;
+module.exports = documentacionClienteController;

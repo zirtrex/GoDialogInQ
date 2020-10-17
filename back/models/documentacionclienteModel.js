@@ -26,9 +26,9 @@ documentacioncliente.getByIdDocumentacionCliente = async function (idDocumentaci
     }
 }
 
-documentacioncliente.getAllByIdPrestamosCliente = async function (idPrestamosCliente) {
+documentacioncliente.getAllByIdPrestamoCliente = async function (idPrestamosCliente) {
     try {
-        var query = 'select * from documentacion_cliente where idPrestamosCliente=:idPrestamosCliente';
+        var query = 'select * from documentacion_cliente where idPrestamoCliente=:idPrestamoCliente';
         var result = await db_connect.query(query,{
             idPrestamosCliente:idPrestamosCliente
         });
@@ -47,18 +47,18 @@ documentacioncliente.create = async function (documentacioncliente) {
             nombreDocumentacion,
             valor,
             estado,
-            idPrestamosCliente
+            idPrestamoCliente
 
         ) values (
             :nombreDocumentacion,
             :valor,
             1,
-            :idPrestamosCliente
+            :idPrestamoCliente
         )`;
         var result = await db_connect.query(query, {
             nombreDocumentacion:documentacioncliente.nombreDocumentacion,
             valor:documentacioncliente.valor,
-            idPrestamosCliente:documentacioncliente.idPrestamosCliente
+            idPrestamoCliente:documentacioncliente.idPrestamoCliente
         });        
         return result;        
 

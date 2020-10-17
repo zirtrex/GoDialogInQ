@@ -1,37 +1,37 @@
 'use strict';
 
-var model = require('../models/prestamoclienteModel');
+var model = require('../models/prestamoClienteModel');
 
-var prestamoclienteController = {};
+var prestamoClienteController = {};
 
-prestamoclienteController.getAll = async function (req, res) {
-  var prestamocliente = await model.getAll();
-  res.send(prestamocliente);
+prestamoClienteController.getAll = async function (req, res) {
+  var prestamoCliente = await model.getAll();
+  res.send(prestamoCliente);
 }
 
-prestamoclienteController.getByIdPrestamosCliente = async function (req, res) {
-  var idPrestamosCliente = req.params.idPrestamosCliente;
-  var prestamocliente = await model.getByIdPrestamosCliente(idPrestamosCliente);
-  res.send(prestamocliente);
+prestamoClienteController.getByIdPrestamoCliente = async function (req, res) {
+  var idPrestamoCliente = req.params.idPrestamoCliente;
+  var prestamoCliente = await model.getByIdPrestamoCliente(idPrestamoCliente);
+  res.send(prestamoCliente);
 }
 
-prestamoclienteController.getAllByIdTipoPrestamo = async function (req, res) {
+prestamoClienteController.getAllByIdTipoPrestamo = async function (req, res) {
   var idTipoPrestamo = req.params.idTipoPrestamo;
-  var prestamocliente = await model.getAllByIdTipoPrestamo(idTipoPrestamo);
-  res.send(prestamocliente);
+  var prestamoCliente = await model.getAllByIdTipoPrestamo(idTipoPrestamo);
+  res.send(prestamoCliente);
 }
 
-prestamoclienteController.getAllByIdCliente = async function (req, res) {
+prestamoClienteController.getAllByIdCliente = async function (req, res) {
     var idCliente = req.params.idCliente;
-    var prestamocliente = await model.getAllByIdCliente(idCliente);
-    res.send(prestamocliente);
+    var prestamoCliente = await model.getAllByIdCliente(idCliente);
+    res.send(prestamoCliente);
   }
 
 
-prestamoclienteController.create = async function (req, res) {
-  var prestamocliente = req.body;
+prestamoClienteController.create = async function (req, res) {
+  var prestamoCliente = req.body;
   try {
-    var result = await model.create(prestamocliente);
+    var result = await model.create(prestamoCliente);
     res.send({
       status:'success',
       result,
@@ -83,4 +83,4 @@ requisitoController.delete = async function (req, res) {
   } 
 }
  */
-module.exports = prestamoclienteController;
+module.exports = prestamoClienteController;

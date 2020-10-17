@@ -1,6 +1,6 @@
 'use strict';
 
-var model = require('../models/tipoprestamoModel');
+var model = require('../models/tipoPrestamoModel');
 
 var tipoPrestamoController = {};
 

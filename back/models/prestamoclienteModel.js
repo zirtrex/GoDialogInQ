@@ -14,11 +14,11 @@ prestamocliente.getAll = async function () {
     }
 }
 
-prestamocliente.getByIdPrestamosCliente = async function (idPrestamosCliente) {
+prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
     try {
-        var query = 'select * from prestamo_cliente where idPrestamosCliente=:idPrestamosCliente';
+        var query = 'select * from prestamo_cliente where idPrestamoCliente=:idPrestamoCliente';
         var result = await db_connect.query(query,{
-            idPrestamosCliente:idPrestamosCliente
+            idPrestamoCliente:idPrestamoCliente
         });
         return result;
     } catch(error) {
