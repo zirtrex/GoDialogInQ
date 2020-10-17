@@ -20,7 +20,7 @@ export class RequisitoService {
 
     getAllByIdTipoPrestamo(idTipoPrestamo: any): Observable<Requisito[]> {
       return this.http
-                .get<Requisito[]>(this.REST_API_SERVER_DEV+ '/' + idTipoPrestamo)
+                .get<Requisito[]>(this.REST_API_SERVER_DEV+ '/tipo_prestamo/' + idTipoPrestamo)
                 .pipe(catchError(this.handleError));
     }
 

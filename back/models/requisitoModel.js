@@ -6,7 +6,7 @@ var requisito = {};
 
 requisito.getAll = async function () {
     try {       
-        var query = 'select * from requisito'; 
+        var query = 'select * from requisito';
         var result = await db_connect.query(query);
         return result;
     } catch(error) {

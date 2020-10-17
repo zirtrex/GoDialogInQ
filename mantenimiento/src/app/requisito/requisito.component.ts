@@ -25,7 +25,7 @@ export class RequisitoComponent implements OnInit {
   idTipoPrestamo: any;
   requisito: Requisito = new Requisito();
 
-  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'estado', 'idTipoPrestamo', 'acciones'];
+  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'idTipoPrestamo', 'acciones'];
   dataSource: MatTableDataSource<Requisito>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;

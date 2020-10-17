@@ -11,6 +11,7 @@ import { Requisito } from '../../models/requisito';
 })
 export class RequisitoFormComponent implements OnInit {
 
+  idRequisito: any;
   idTipoPrestamo: any;
   params: any;
   action: number;

@@ -26,10 +26,10 @@ export class ClienteFormComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) {
     if (data.action == 0) {
-      this.cliente = new Cliente(0, "", "", "", "", "", "", "", "", "", "", "", 1);
+      this.cliente = new Cliente();
       this.action = data.action;
     } else {
-      this.cliente = data.requisito;
+      this.cliente = data.cliente;
       this.action = data.action;
     }
   }
@@ -47,7 +47,7 @@ export class ClienteFormComponent implements OnInit {
   }
 
   getAction(cliente){
-    if (this.cliente.idCliente == 0) {
+    if (this.action == 0) {
       this.add(cliente);
     } else if (this.action == 1){
       this.edit(cliente);

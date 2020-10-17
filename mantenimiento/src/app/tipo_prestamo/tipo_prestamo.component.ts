@@ -21,7 +21,7 @@ export class TipoPrestamoComponent implements OnInit {
 
   //productos: Observable<Producto[]>;
 
-  displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'estado', 'acciones'];
+  displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'acciones'];
   dataSource: MatTableDataSource<TipoPrestamo>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
