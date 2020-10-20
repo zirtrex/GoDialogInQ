@@ -1,43 +1,49 @@
 <div class="container mt-2">
   <div class="col-md-12">
     <div class="well well bs-component">
-      <form *ngIf="action == 0 || action == 1" novalidate class="form-horizontal" (ngSubmit)="getAction(TipoPrestamoForm.value)" #TipoPrestamoForm="ngForm">
+      <form *ngIf="action == 0 || action == 1" novalidate (ngSubmit)="getAction(tipoPrestamoForm.value)" [formGroup]='tipoPrestamoForm'>
         <fieldset>
           <legend>{{ textForm }} Tipo de Prestamo</legend>
 
-          <input type="hidden" id="idTipoPrestamo" name="idTipoPrestamo" [(ngModel)]="tipoPrestamo.idTipoPrestamo" #idTipoPrestamo="ngModel"/>
+          <input type="hidden" id="idTipoPrestamo" name="idTipoPrestamo" formControlName="idTipoPrestamo"   />         
+            
+          <mat-form-field class="col-lg-12">
+            <input type="text" matInput formControlName="nombreTipoPrestamo" id="nombreTipoPrestamo" name="nombreTipoPrestamo" placeholder="Nombre del Préstamo"  [errorStateMatcher]="errorStateMatcher" />
 
-          <div class="form-group">
-            <label for="nombreTipoPrestamo" class="control-label">Nombre del Préstamo</label>
-            <div class="col-lg-12">
-              <input type="text" class="form-control" id="nombreTipoPrestamo" name="nombreTipoPrestamo" placeholder="Nombre del Préstamo" [(ngModel)]="tipoPrestamo.nombreTipoPrestamo" #nombreTipoPrestamo="ngModel" required minlength="2"/>
-              <div *ngIf="nombreTipoPrestamo.errors?.required && nombreTipoPrestamo.touched" class="alert alert-danger mt-2">
-                El nombre del préstamo es obligatorio
-              </div>
-              <div *ngIf="nombreTipoPrestamo.errors?.minlength && nombreTipoPrestamo.touched" class="alert alert-danger mt-2">
-                Minimo 2 caracteres
-              </div>
-            </div>
-          </div>
+            <!-- #idTipoPrestamo="ngModel" [(ngModel)]="tipoPrestamo.idTipoPrestamo" #tipoPrestamoForm="ngForm" #nombreTipoPrestamo="ngModel" [(ngModel)]="tipoPrestamo.nombreTipoPrestamo" required minlength="2"  [errorStateMatcher]="errorStateMatcher"-->
+            
+            <mat-error *ngIf="tipoPrestamoForm.get('nombreTipoPrestamo').hasError('required')">
+              El campo es obligatorio
+            </mat-error>
+
+            <mat-error *ngIf="tipoPrestamoForm.get('nombreTipoPrestamo').hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+            
+            <mat-error *ngIf="tipoPrestamoForm.get('nombreTipoPrestamo').hasError('checkSpecialCharacters')">
+              Solo textos o números
+            </mat-error>
+            
+          </mat-form-field>          
 
           <div class="form-group">
             <div class="col-lg-12 col-lg-offset-2">
               <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
               &nbsp;
-              <button type="submit" class="btn btn-primary" [disabled]="TipoPrestamoForm.invalid">{{ textForm }}</button>
+              <button type="submit" class="btn btn-primary" [disabled]="tipoPrestamoForm.invalid && tipoPrestamoForm.submitted">{{ textForm }}</button>
             </div>
           </div>
         </fieldset>
       </form>
 
-      <form  *ngIf="action == 2" novalidate class="form-horizontal" (ngSubmit)="getAction(TipoPrestamoForm.value)" #TipoPrestamoForm="ngForm">
+      <form  *ngIf="action == 2" novalidate (ngSubmit)="getAction(tipoPrestamoForm.value)" #tipoPrestamoForm="ngForm">
         <fieldset>
           <legend>¿Eliminar: {{ tipoPrestamo.nombreTipoPrestamo }}?</legend>
           <div class="form-group">
             <label class="control-label">Id: {{tipoPrestamo.idTipoPrestamo}}</label>
           </div>
 
-          <input type="hidden" id="idTipoPrestamo" name="idTipoPrestamo" [(ngModel)]="tipoPrestamo.idTipoPrestamo" #idTipoPrestamo="ngModel"/>
+          <input type="hidden" name="idTipoPrestamo" [(ngModel)]="tipoPrestamo.idTipoPrestamo" #idTipoPrestamo="ngModel"/>
 
           <div class="form-group">
             <div class="col-lg-12">

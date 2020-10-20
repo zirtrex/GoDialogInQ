@@ -19,8 +19,6 @@ import {
 })
 export class TipoPrestamoComponent implements OnInit {
 
-  //productos: Observable<Producto[]>;
-
   displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'acciones'];
   dataSource: MatTableDataSource<TipoPrestamo>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -44,7 +42,7 @@ export class TipoPrestamoComponent implements OnInit {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
         this.paginator._intl.firstPageLabel = 'Primera página';
-        this.paginator._intl.itemsPerPageLabel = 'Productos por página';
+        this.paginator._intl.itemsPerPageLabel = 'Elementos por página';
         this.paginator._intl.lastPageLabel = 'Última página';
         this.paginator._intl.nextPageLabel = 'Siguiente';
         this.paginator._intl.previousPageLabel = 'Anterior';

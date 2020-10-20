@@ -42,8 +42,12 @@ export class RequisitoComponent implements OnInit {
 
   ngOnInit() {
     this.params = this.activatedRoute.params.subscribe(params => this.idTipoPrestamo = params['idTipoPrestamo']);
-    this.requisito.idTipoPrestamo = this.idTipoPrestamo;
-    this.getData();
+    if (this.idTipoPrestamo == null) {
+      this.router.navigate(['/tipo_prestamo']);
+    } else {
+      this.requisito.idTipoPrestamo = this.idTipoPrestamo;
+      this.getData(); 
+    }    
   }
 
   getData() {
