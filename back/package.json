@@ -8,17 +8,21 @@
   "scripts": {
     "dev": "nodemon --inspect ./bin/www.js",
     "start": "node ./bin/www.js",
-    "tunnel": "ngrok http 8080"
+    "tunnel": "ngrok http 8080",
+    "test": "mocha --timeout 10000"
   },
   "dependencies": {
     "@google-cloud/dialogflow": "^3.2.0",
     "actions-on-google": "^2.13.0",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "dialogflow-fulfillment": "^0.6.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "log4js": "^6.3.0",
     "method-override": "^3.0.0",
+    "mocha": "^8.2.0",
     "mysql": "^2.18.1",
     "pug": "^3.0.0",
     "util": "^0.12.3",
@@ -26,6 +30,11 @@
   },
   "devDependencies": {
     "ngrok": "^3.3.0",
-    "nodemon": "^1.19.4"
+    "node-fetch": "^2.6.1",
+    "nodemon": "^1.19.4",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.2.2"
+
   }
 }
