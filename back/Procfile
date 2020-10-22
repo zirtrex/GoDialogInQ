@@ -1,0 +1,2 @@
+#linea necesario para Heroku
+web: npm start
