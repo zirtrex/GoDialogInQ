@@ -4,11 +4,11 @@ pipeline {
 	environment {
 		imagename = 'zirtrex/godialoginq'
 		container = 'godialoginq'
-		/*releasedVersion = getReleasedVersion()*/	
+		releasedVersion = getReleasedVersion()
 	}
 	
     stages {
-        stage('Verificar SCMES') {
+        stage('Verificar SCM') {
             steps {
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
@@ -74,5 +74,9 @@ def dockerCmd(args) {
 }
 
 def getReleasedVersion() {
+
+	def props = readJSON file: '/back/package.json'
+	return props['version']
+
 	/*return (readFile('pom.xml') =~ '<version>(.+)-SNAPSHOT</version>')[0][1]*/
 }	
