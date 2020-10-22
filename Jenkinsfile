@@ -17,10 +17,9 @@ pipeline {
         }
 		stage ('Instalar NodeJs en Back') {
 			steps {
-				sh 'cd back'
-				nodejs (nodeJSInstallationName: 'Node 12.18.0') {
-					sh 'npm install'
-				}
+				sh 'cd back'				
+				sh 'npm install'
+				
 			}
 		}
 		/*stage ('Ejecutar Aplicacion Back') {
