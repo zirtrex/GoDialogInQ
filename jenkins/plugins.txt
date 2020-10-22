@@ -38,6 +38,7 @@ matrix-project
 maven-plugin
 momentjs
 nested-view
+nodejs
 parameterized-trigger
 pipeline-build-step
 pipeline-graph-analysis

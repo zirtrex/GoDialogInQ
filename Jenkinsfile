@@ -13,33 +13,28 @@ pipeline {
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
         }
-		stage ('Instalar NodeJs') {
+		stage ('Instalar NodeJs en Back') {
 			steps {
 				sh 'cd back'
 				sh 'npm install'
 			}
 		}
-		stage ('Ejecutar Aplicacion') {
+		stage ('Ejecutar Aplicacion Back') {
 			steps {
 				sh 'node app.js'
 			}
 		}
-		stage('Ejecutar Pruebas de Integracion'){
+		stage ('Ejecutar Pruebas de Integracion Back') {
 			steps {
 				sh 'node test/test.js'
 			}
 		}
-		/*stage('Compilar Paquete'){
-			steps {
-				powershell 'mvn clean package'
-			}
-		}
-		stage('Contruir Imagen Docker'){
+		/*stage ('Contruir Imagen Docker') {
 			steps {				
 				dockerCmd  "build -f Dockerfile -t ${imagename}:${releasedVersion} ."
 			}
 		}
-		/*stage('Prueba de Integracion con Selenium'){
+		stage('Prueba de Integracion con Selenium'){
 			steps {
 				powershell 'mvn -Dtest=NewSeleneseIT  surefire:test'
 			}
@@ -80,7 +75,7 @@ pipeline {
 }
 
 def dockerCmd(args) {
-	powershell "docker ${args}"
+	sh "docker ${args}"
 }
 
 def getReleasedVersion() {
