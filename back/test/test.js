@@ -24,7 +24,7 @@ describe('Prueba Funcional Tipo de Prestamo', function () {
     }
   });
 
- it("Devuelve id de tipo de prestamo por nombre", (done) => {
+  it("Devuelve id de tipo de prestamo por nombre", (done) => {
   const getIdTipoPrestamoByNombre = "coronavirus";
   
   chai.request(urlBase)
@@ -39,7 +39,7 @@ describe('Prueba Funcional Tipo de Prestamo', function () {
     });  
   }); 
 
- it("POST /tipo_prestamo ==> Graba Tipo de Prestamo", (done) => {
+  it("POST /tipo_prestamo ==> Graba Tipo de Prestamo", (done) => {
   chai.request(urlBase)                
       .post('/tipo_prestamo')
       .send({
@@ -51,23 +51,23 @@ describe('Prueba Funcional Tipo de Prestamo', function () {
         //console.log(err);
         done();
       });
-});
+  });
 
 
-it("PUT /Modifica Tipo de Prestamo", (done) => {
-  chai.request(urlBase)                
-      .put("/tipo_prestamo/52")
-      .send({
-        "nombreTipoPrestamo": "Modificacion de Requisito desde Test UNIT",
-	      "idTipoPrestamo":"52"
-      })
-      .end((err, response) => {
-          response.should.have.status(200);
-          response.body.should.be.a('object');
-          //console.log(err);
-      done();
-      });
-});
+  it("PUT /Modifica Tipo de Prestamo", (done) => {
+    chai.request(urlBase)                
+        .put("/tipo_prestamo/52")
+        .send({
+          "nombreTipoPrestamo": "Modificacion de Requisito desde Test UNIT",
+          "idTipoPrestamo":"52"
+        })
+        .end((err, response) => {
+            response.should.have.status(200);
+            response.body.should.be.a('object');
+            //console.log(err);
+        done();
+        });
+  });
 
 
   it("DELETE /tipo_prestamo ==> Elimina Tipo de Prestamo", (done) => {
