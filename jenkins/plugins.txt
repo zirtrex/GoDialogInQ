@@ -51,6 +51,7 @@ pipeline-rest-api
 pipeline-stage-step
 pipeline-stage-tags-metadata
 pipeline-stage-view
+pipeline-utility-steps
 plain-credentials
 pmd
 run-condition

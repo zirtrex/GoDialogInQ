@@ -75,7 +75,7 @@ def dockerCmd(args) {
 
 def getReleasedVersion() {
 
-	def props = readJSON file: '/back/package.json'
+	def props = readJSON file: './back/package.json'
 	return props['version']
 
 	/*return (readFile('pom.xml') =~ '<version>(.+)-SNAPSHOT</version>')[0][1]*/
