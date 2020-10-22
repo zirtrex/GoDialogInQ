@@ -8,18 +8,28 @@ pipeline {
 	}
 	
     stages {
-        stage('Verificar SCM') {
+        stage ('Verificar SCM') {
             steps {
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
         }
-		/*stage('Ejecutar Pruebas Unitarias'){
+		stage ('Instalar NodeJs') {
 			steps {
-				#powershell 'mvn clean'
-				powershell 'mvn test -Dtest="net.zirtrex.controller.EquipoControllerTest" '
+				sh 'cd back'
+				sh 'npm install'
 			}
 		}
-		stage('Compilar Paquete'){
+		stage ('Ejecutar Aplicacion') {
+			steps {
+				sh 'node app.js'
+			}
+		}
+		stage('Ejecutar Pruebas de Integracion'){
+			steps {
+				sh 'node test/test.js'
+			}
+		}
+		/*stage('Compilar Paquete'){
 			steps {
 				powershell 'mvn clean package'
 			}
