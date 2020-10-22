@@ -5,26 +5,88 @@ var model = require('../models/prestamoClienteModel');
 var prestamoClienteController = {};
 
 prestamoClienteController.getAll = async function (req, res) {
-  var prestamoCliente = await model.getAll();
-  res.send(prestamoCliente);
+  try {
+    var prestamoCliente = await model.getAll();
+    res.send(prestamoCliente);
+    } catch (error) {
+      res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error",
+      error: error.message      
+    });  
+    }
 }
 
 prestamoClienteController.getByIdPrestamoCliente = async function (req, res) {
   var idPrestamoCliente = req.params.idPrestamoCliente;
-  var prestamoCliente = await model.getByIdPrestamoCliente(idPrestamoCliente);
-  res.send(prestamoCliente);
+  try {
+    var prestamoCliente = await model.getByIdPrestamoCliente(idPrestamoCliente);
+    if (Object.entries(prestamoCliente).length === 0) {
+      res.status(404).send(
+        {
+          status:'error',
+          message: "No se pudo encontrar el recurso necesario",
+        }
+      );
+    }else
+    {
+    res.send(prestamoCliente);
+    }
+  } catch (error) {
+    res.status(500).send({
+    status:'error',
+    message: "Ha ocurrido un error",
+    error: error.message      
+  });  
+  }
 }
 
 prestamoClienteController.getAllByIdTipoPrestamo = async function (req, res) {
   var idTipoPrestamo = req.params.idTipoPrestamo;
-  var prestamoCliente = await model.getAllByIdTipoPrestamo(idTipoPrestamo);
-  res.send(prestamoCliente);
+  try {
+    var prestamoCliente = await model.getAllByIdTipoPrestamo(idTipoPrestamo);
+    if (Object.entries(prestamoCliente).length === 0) {
+      res.status(404).send(
+        {
+          status:'error',
+          message: "No se pudo encontrar el recurso necesario",
+        }
+      );
+    }else
+    {
+    res.send(prestamoCliente);
+    }
+  } catch (error) {
+    res.status(500).send({
+    status:'error',
+    message: "Ha ocurrido un error",
+    error: error.message      
+  });  
+  }
 }
 
 prestamoClienteController.getAllByIdCliente = async function (req, res) {
     var idCliente = req.params.idCliente;
-    var prestamoCliente = await model.getAllByIdCliente(idCliente);
-    res.send(prestamoCliente);
+    try {
+      var prestamoCliente = await model.getAllByIdCliente(idCliente);
+      if (Object.entries(prestamoCliente).length === 0) {
+        res.status(404).send(
+          {
+            status:'error',
+            message: "No se pudo encontrar el recurso necesario",
+          }
+        );
+      }else
+      {
+      res.send(prestamoCliente);
+      }
+    } catch (error) {
+      res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error",
+      error: error.message      
+    });  
+    }  
   }
 
 
@@ -32,19 +94,30 @@ prestamoClienteController.create = async function (req, res) {
   var prestamoCliente = req.body;
   try {
     var result = await model.create(prestamoCliente);
-    res.send({
+    if(result.affectedRows>0)
+    {
+      res.status(201).send({
       status:'success',
       result,
       message: "Prestamo Cliente creado correctamente"
     });   
+    }else
+    {
+        res.status(400).send({
+        status:'failed',
+        result,
+        message: "La creación ha fallado"
+      });
+    }
   } catch (error) {
-    res.send({
-      status:'failed',
+    res.status(500).send({
+      status:'error',
       message: "Ha ocurrido un error",
       error: error.message      
     });  
   }  
 }
+
 /* 
 requisitoController.update = async function (req, res) {
   var idRequisito = req.params.idRequisito;
