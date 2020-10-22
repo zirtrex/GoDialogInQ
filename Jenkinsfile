@@ -25,14 +25,14 @@ pipeline {
 		stage ('Ejecutar Aplicacion Back') {
 			steps {
 				dir ('back') {
-					sh 'node app.js'
+					sh 'node app'
 				}
 			}
 		}
 		stage ('Ejecutar Pruebas de Integracion Back') {
 			steps {
 				dir ('back/test') {
-					sh 'node test.js'
+					sh 'node test'
 				}
 			}
 		}
