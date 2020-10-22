@@ -16,10 +16,12 @@ pipeline {
 		stage ('Instalar NodeJs en Back') {
 			steps {
 				sh 'cd back'
-				sh 'npm install'
+				nodejs (nodeJSInstallationName: 'Node 12.18.0') {
+					sh 'npm install'
+				}
 			}
 		}
-		stage ('Ejecutar Aplicacion Back') {
+		/*stage ('Ejecutar Aplicacion Back') {
 			steps {
 				sh 'node app.js'
 			}
@@ -29,7 +31,7 @@ pipeline {
 				sh 'node test/test.js'
 			}
 		}
-		/*stage ('Contruir Imagen Docker') {
+		stage ('Contruir Imagen Docker') {
 			steps {				
 				dockerCmd  "build -f Dockerfile -t ${imagename}:${releasedVersion} ."
 			}
