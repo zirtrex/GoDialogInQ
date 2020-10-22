@@ -17,7 +17,7 @@ pipeline {
         }
 		stage ('Instalar NodeJs en Back') {
 			steps {
-				sh 'cd back'				
+				sh 'cd ./back'			
 				sh 'npm install'
 				
 			}
