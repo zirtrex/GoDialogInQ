@@ -8,7 +8,8 @@ tipoPrestamoController.getAll = async function (req, res) {
 
   try {
       var tiposPrestamo = await model.getAll();
-      res.send(tiposPrestamo);
+     
+      res.status(200).send(tiposPrestamo);
     } catch (error) {
       res.status(500).send({
         status:'error',
@@ -19,13 +20,25 @@ tipoPrestamoController.getAll = async function (req, res) {
 }
 
 tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
-  
+
+
   var nombreTipoPrestamo = req.params.nombreTipoPrestamo;
+
   try {
 
   var idTipoPrestamo = await model.getIdTipoPrestamoByNombre(nombreTipoPrestamo);
-  res.send(idTipoPrestamo);
 
+  if (Object.entries(idTipoPrestamo).length === 0) {
+    res.status(404).send(
+      {
+        status:'error',
+        message: "No se pudo encontrar el recurso necesario",
+      }
+    );
+  }else
+  {
+  res.status(200).send(idTipoPrestamo);
+  }
   } catch (error) {
   res.status(500).send({
     status:'error',
@@ -58,9 +71,6 @@ tipoPrestamoController.create = async function (req, res) {
       });
        
     }
-
-
-
   } catch (error) {
     res.status(500).send({
       status:'error',
@@ -97,7 +107,7 @@ tipoPrestamoController.update = async function (req, res) {
 
 
   } catch (error) {
-    res.send({
+    res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
       error: error.message          
@@ -137,8 +147,6 @@ tipoPrestamoController.delete = async function (req, res) {
     });  
   } 
 }
-
-
 
 
 module.exports = tipoPrestamoController;
