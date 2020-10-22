@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage ('Obtener archivos del repositorio: https://github.com/zirtrex/GoDialogInQ') {
             steps {
+				cleanWs()
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
         }
