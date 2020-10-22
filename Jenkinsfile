@@ -10,7 +10,7 @@ pipeline {
 	}
 	
     stages {
-        stage ('Verificar SCM') {
+        stage ('Obtener archivos del repositorio: https://github.com/zirtrex/GoDialogInQ') {
             steps {
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
@@ -22,17 +22,21 @@ pipeline {
 				}
 			}
 		}
-		/*stage ('Ejecutar Aplicacion Back') {
+		stage ('Ejecutar Aplicacion Back') {
 			steps {
-				sh 'node app.js'
+				dir ('back') {
+					sh 'node app.js'
+				}
 			}
 		}
 		stage ('Ejecutar Pruebas de Integracion Back') {
 			steps {
-				sh 'node test/test.js'
+				dir ('back/test') {
+					sh 'node test.js'
+				}
 			}
 		}
-		stage ('Contruir Imagen Docker') {
+		/*stage ('Contruir Imagen Docker') {
 			steps {				
 				dockerCmd  "build -f Dockerfile -t ${imagename}:${releasedVersion} ."
 			}
