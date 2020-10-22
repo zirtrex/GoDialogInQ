@@ -8,7 +8,7 @@ pipeline {
 	}
 	
     stages {
-        stage('Verificar SCM') {
+        stage('Verificar SCMES') {
             steps {
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
