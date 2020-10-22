@@ -1,21 +1,33 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { TipoPrestamoService } from '../../services/tipo_prestamo.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
+import { FormBuilder, FormGroup, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { TipoPrestamoService } from '../../services/tipo_prestamo.service';
 import { TipoPrestamo } from '../../models/tipo_prestamo';
+import { checkSpecialCharacters } from '../../validators/checkSpecialCharacters.validator';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }  
+}
 
 @Component({
-  selector: 'app-crear-tipo_prestamo',
+  selector: 'app-tipo_prestamo-form',
   templateUrl: './tipo_prestamo_form.component.html',
   styleUrls: []
 })
-export class TipoPrestamoFormComponent implements OnInit {
+export class TipoPrestamoFormComponent implements OnInit  {
 
-  idTipoPrestamo: any;
   params: any;
+  idTipoPrestamo: any;
   action: number;
   textForm: string;
   tipoPrestamo: TipoPrestamo;
+  tipoPrestamoForm: FormGroup;
+  errorStateMatcher: ErrorStateMatcher = new MyErrorStateMatcher();
 
   constructor(
     private tipoPrestamoService:TipoPrestamoService,
@@ -23,9 +35,10 @@ export class TipoPrestamoFormComponent implements OnInit {
     public dialogRef: MatDialogRef<TipoPrestamoFormComponent>,
     @Inject(MAT_DIALOG_DATA) data,
     private snackBar: MatSnackBar,
+    private fb: FormBuilder
   ) {
     if (data.action == 0) {
-      this.tipoPrestamo = new TipoPrestamo(0, "", 0);
+      this.tipoPrestamo = new TipoPrestamo();
       this.action = data.action;
     } else {
       this.tipoPrestamo = data.tipoPrestamo;
@@ -35,6 +48,14 @@ export class TipoPrestamoFormComponent implements OnInit {
 
   ngOnInit() {
 
+    this.tipoPrestamoForm = this.fb.group({
+      idTipoPrestamo: [this.tipoPrestamo.idTipoPrestamo],
+      nombreTipoPrestamo: [this.tipoPrestamo.nombreTipoPrestamo, Validators.compose( [Validators.required, Validators.minLength(2)] )]
+    },
+    {
+      validator: [checkSpecialCharacters('nombreTipoPrestamo')]
+    });    
+
     if (this.action == 0) {
       this.textForm = "Crear";
     } else if (this.action == 1){
@@ -42,29 +63,20 @@ export class TipoPrestamoFormComponent implements OnInit {
     } else {
       this.textForm = "Eliminar";
     }
-
-    /*this.tipoPrestamoService.get(this.idTipoPrestamo.toString()).subscribe(
-      data => {
-        console.log(data);
-        this.tipoPrestamo.idTipoPrestamo = data['idTipoPrestamo'];
-        this.tipoPrestamo.nombreTipoPrestamo = data['nombreTipoPrestamo'];
-        this.tipoPrestamo.estado = data['estado'];
-      },
-      error => console.log(<any> error)
-    );*/
   }
 
-  actionTipoPrestamo(tipoPrestamo){
-    if (this.tipoPrestamo.idTipoPrestamo == 0) {
-      this.addTipoPrestamo(tipoPrestamo);
+  getAction (tipoPrestamo){
+    if (this.action == 0) {
+      this.create(tipoPrestamo);
     } else if (this.action == 1){
-      this.editTipoPrestamo(tipoPrestamo);
+      this.update(tipoPrestamo);
     } else {
-      this.eliminarTipoPrestamo(tipoPrestamo);
+      this.delete(tipoPrestamo);
     }
   }
 
-  addTipoPrestamo(tipoPrestamo){
+  create (tipoPrestamo){
+    console.log(tipoPrestamo);
     this.tipoPrestamoService.add(tipoPrestamo)
       .subscribe(
         response => {
@@ -84,7 +96,7 @@ export class TipoPrestamoFormComponent implements OnInit {
       )
   }
 
-  editTipoPrestamo(tipoPrestamo){
+  update(tipoPrestamo){
     this.tipoPrestamoService.edit(tipoPrestamo)
       .subscribe(
         response => {
@@ -104,8 +116,8 @@ export class TipoPrestamoFormComponent implements OnInit {
       )
   }
 
-  eliminarTipoPrestamo(tipoPrestamo){
-    this.tipoPrestamoService.delete(tipoPrestamo)
+  delete (tipoPrestamo){
+    this.tipoPrestamoService.delete(tipoPrestamo.idTipoPrestamo)
       .subscribe(
         response => {
             console.log(response);

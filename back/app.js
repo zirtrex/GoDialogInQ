@@ -11,9 +11,7 @@ log4js.configure({
   appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
   categories: { default: { appenders: ['cheese'], level: 'debug' } }
 });
-
 const logger = log4js.getLogger('cheese');
-
 
 var app = express();
 var server = http.Server(app); //createServer
@@ -44,12 +42,17 @@ const index = require('./routes/index');
 const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
 const requisitoRoutes = require('./routes/requisitoRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
+const documentacioncliente = require('./routes/documentacionclienteRoutes');
+const prestamocliente = require('./routes/prestamoclienteRoutes');
 
 //routes
 app.use(index);
 app.use(tipoPrestamoRoutes);
 app.use(requisitoRoutes);
 app.use(clienteRoutes);
+app.use(documentacioncliente);
+app.use(prestamocliente);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -66,7 +69,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error.pug');
+  res.send('Ha ocurrido un error');
 });
 
 server.listen(port, () => {

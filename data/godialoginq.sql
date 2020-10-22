@@ -9,6 +9,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
+-- Schema godialoginq
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `godialoginq` DEFAULT CHARACTER SET utf8 ;
+USE `godialoginq` ;
+
+-- -----------------------------------------------------
 -- Table `cliente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -48,19 +54,19 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `prestamo_cliente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
-  `idPrestamosCliente` INT NOT NULL AUTO_INCREMENT,
+  `idPrestamoCliente` INT NOT NULL AUTO_INCREMENT,
   `montoNecesitado` VARCHAR(50) NULL DEFAULT NULL,
   `tiempoNegocio` VARCHAR(50) NULL DEFAULT NULL,
   `ingresosAnuales` VARCHAR(50) NULL DEFAULT NULL,
   `puntajeCredito` VARCHAR(50) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
-  `tipo_prestamo` INT NOT NULL,
+  `idTipoPrestamo` INT NOT NULL,
   `idCliente` INT NOT NULL,
-  PRIMARY KEY (`idPrestamosCliente`),
-  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`tipo_prestamo` ASC) VISIBLE,
+  PRIMARY KEY (`idPrestamoCliente`),
+  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) VISIBLE,
   INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) VISIBLE,
   CONSTRAINT `fk_prestamo_cliente_tipo_prestamo`
-    FOREIGN KEY (`tipo_prestamo`)
+    FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -81,12 +87,12 @@ CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
   `nombreDocumentacion` VARCHAR(100) NULL DEFAULT NULL,
   `valor` VARCHAR(1000) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
-  `idPrestamosCliente` INT NOT NULL,
+  `idPrestamoCliente` INT NOT NULL,
   PRIMARY KEY (`idDocumentacionCliente`),
-  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamosCliente` ASC) VISIBLE,
+  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC) VISIBLE,
   CONSTRAINT `fk_documentacion_cliente_prestamo_cliente1`
-    FOREIGN KEY (`idPrestamosCliente`)
-    REFERENCES `prestamo_cliente` (`idPrestamosCliente`)
+    FOREIGN KEY (`idPrestamoCliente`)
+    REFERENCES `prestamo_cliente` (`idPrestamoCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

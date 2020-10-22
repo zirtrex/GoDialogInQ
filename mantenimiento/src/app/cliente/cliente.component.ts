@@ -20,7 +20,7 @@ import {
 })
 export class ClienteComponent implements OnInit {
 
-  displayedColumns: string[] = ['idCliente', 'apellidos', 'nombres', 'tipoDocumento', 'documento', 'acciones'];
+  displayedColumns: string[] = ['idCliente', 'apellidos', 'nombres', 'tipoDocumento', 'documento', 'telefono', 'correo', 'acciones'];
   dataSource: MatTableDataSource<Cliente>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -73,22 +73,22 @@ export class ClienteComponent implements OnInit {
       .afterClosed().subscribe(result => this.getData());
   }
 
-  edit(requisito){
+  edit(cliente){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = {action: 1, requisito};
+    dialogConfig.data = {action: 1, cliente};
     this.dialog.open(ClienteFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }
 
-  delete(requisito){
+  delete(cliente){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
-    dialogConfig.data = {action: 2, requisito};
+    dialogConfig.data = {action: 2, cliente};
     this.dialog.open(ClienteFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }

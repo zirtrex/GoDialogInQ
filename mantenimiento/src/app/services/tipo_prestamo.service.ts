@@ -18,7 +18,6 @@ export class TipoPrestamoService {
                 .pipe(catchError(this.handleError));
     }
 
-    //Se cambio Producto[] por any porque aquí no siempre devuelve un producto
     add(tipoPrestamo: TipoPrestamo): Observable<any>{
       return this.http
                 .post<any>(this.REST_API_SERVER_DEV, tipoPrestamo)
