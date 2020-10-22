@@ -21,32 +21,31 @@ tipoPrestamoController.getAll = async function (req, res) {
 
 tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
 
-
   var nombreTipoPrestamo = req.params.nombreTipoPrestamo;
 
   try {
+    var idTipoPrestamo = await model.getIdTipoPrestamoByNombre(nombreTipoPrestamo);
 
-  var idTipoPrestamo = await model.getIdTipoPrestamoByNombre(nombreTipoPrestamo);
-
-  if (Object.entries(idTipoPrestamo).length === 0) {
-    res.status(404).send(
-      {
-        status:'error',
-        message: "No se pudo encontrar el recurso necesario",
-      }
-    );
-  }else
-  {
-  res.status(200).send(idTipoPrestamo);
+    if (Object.entries(idTipoPrestamo).length === 0) {
+      res.status(404).send({
+          status:'failed',
+          message: "No se pudo encontrar el recurso necesario",
+          result: null
+      });
+    }else {
+      res.status(200).send({
+        status:'success',
+        message: "",
+        result: idTipoPrestamo
+      });
+    }
+  } catch (error) { 
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error fatal",
+      result: error.message      
+    });  
   }
-  } catch (error) {
-  res.status(500).send({
-    status:'error',
-    message: "Ha ocurrido un error",
-    error: error.message      
-  });  
-}  
-
 }
 
 tipoPrestamoController.create = async function (req, res) {

@@ -25,16 +25,19 @@ describe('Prueba Funcional Tipo de Prestamo', function () {
   });
 
  it("Devuelve id de tipo de prestamo por nombre", (done) => {
-  const getIdTipoPrestamoByNombre = "Prestamo Coronavirus";
-  chai.request(urlBase)                
-      .get('/tipo_prestamo/'+getIdTipoPrestamoByNombre)
-      .end((err, response) => {
-          response.should.have.status(200);
-          response.body.should.be.a('array');
-          console.log(err);
-      done();
-      });
-}); 
+  const getIdTipoPrestamoByNombre = "coronavirus";
+  
+  chai.request(urlBase)
+    .get('/tipo_prestamo/'+ getIdTipoPrestamoByNombre)
+    .end((err, response) => {      
+      //expect(response).to.have.status(200);
+      //expect(response).to.be.an('Array');
+      response.should.have.status(200);
+      response.body.should.be.a('array');
+      //console.log(err);
+      done();           
+    });  
+  }); 
 
  it("POST /tipo_prestamo ==> Graba Tipo de Prestamo", (done) => {
   chai.request(urlBase)                
@@ -43,10 +46,10 @@ describe('Prueba Funcional Tipo de Prestamo', function () {
         "nombreTipoPrestamo": "Prestamo Gobierno desde Test Unit"
       })
       .end((err, response) => {
-          response.should.have.status(201);
-          response.body.should.be.a('object');
-          console.log(err);
-      done();
+        response.should.have.status(201);
+        response.body.should.be.a('object');
+        //console.log(err);
+        done();
       });
 });
 
@@ -61,7 +64,7 @@ it("PUT /Modifica Tipo de Prestamo", (done) => {
       .end((err, response) => {
           response.should.have.status(200);
           response.body.should.be.a('object');
-          console.log(err);
+          //console.log(err);
       done();
       });
 });
@@ -74,7 +77,7 @@ it("PUT /Modifica Tipo de Prestamo", (done) => {
           .end((err, response) => {
               response.should.have.status(200);
               response.body.should.be.a('object');
-              console.log(err);
+              //console.log(err);
           done();
           });
   });
@@ -93,7 +96,7 @@ describe('Prueba Funcional Requisitos', function () {
         .end((err, response) => {
             response.should.have.status(200);
             response.body.should.be.a('array');
-            console.log(err);
+            //console.log(err);
         done();
         });
     });
@@ -106,7 +109,7 @@ describe('Prueba Funcional Requisitos', function () {
       .end((err, response) => {
           response.should.have.status(200);
           response.body.should.be.a('array');
-          console.log(err);
+          //console.log(err);
       done();
       });
 }); 
@@ -118,7 +121,7 @@ it("Devuelve requisito por id de tipo de prestamo", (done) => {
       .end((err, response) => {
           response.should.have.status(200);
           response.body.should.be.a('array');
-          console.log(err);
+          //console.log(err);
       done();
       });
 }); 
@@ -134,7 +137,7 @@ it("Devuelve requisito por id de tipo de prestamo", (done) => {
       .end((err, response) => {
           response.should.have.status(201);
           response.body.should.be.a('object');
-          console.log(err);
+          //console.log(err);
       done();
       });
 });
@@ -150,7 +153,7 @@ it("PUT /Modifica Requisito", (done) => {
       .end((err, response) => {
           response.should.have.status(200);
           response.body.should.be.a('object');
-          console.log(err);
+          //console.log(err);
           
       done();
       });
@@ -164,7 +167,7 @@ it("PUT /Modifica Requisito", (done) => {
           .end((err, response) => {
               response.should.have.status(200);
               response.body.should.be.a('object');
-              console.log(err);
+              //console.log(err);
           done();
           });
   });

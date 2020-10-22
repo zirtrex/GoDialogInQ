@@ -74,23 +74,25 @@ requisitoController.getAllByIdTipoPrestamo = async function (req, res) {
     if (Object.entries(requisito).length === 0) {
       res.status(404).send(
         {
-          status:'error',
+          status:'failed',
           message: "No se pudo encontrar el recurso necesario",
+          result: null
         }
       );
-    }else
-    {
-    res.status(200).send(requisito);
+    } else {
+      res.status(200).send({
+          status:'success',
+          message: "",
+          result: requisito
+      });
     }
-
   } catch (error) {
-  res.status(500).send({
-    status:'error',
-    message: "Ha ocurrido un error",
-    error: error.message      
-  });  
-  } 
-
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error fatal",
+      result: error.message
+    });  
+  }
 }
 
 
