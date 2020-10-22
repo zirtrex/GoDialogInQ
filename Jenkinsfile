@@ -4,7 +4,7 @@ pipeline {
 	environment {
 		imagename = 'zirtrex/godialoginq'
 		container = 'godialoginq'
-		releasedVersion = getReleasedVersion()		
+		/*releasedVersion = getReleasedVersion()*/	
 	}
 	
     stages {
@@ -13,9 +13,9 @@ pipeline {
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
         }
-		stage('Ejecutar Pruebas Unitarias'){
+		/*stage('Ejecutar Pruebas Unitarias'){
 			steps {
-				powershell 'mvn clean'
+				#powershell 'mvn clean'
 				powershell 'mvn test -Dtest="net.zirtrex.controller.EquipoControllerTest" '
 			}
 		}
@@ -33,7 +33,7 @@ pipeline {
 			steps {
 				powershell 'mvn -Dtest=NewSeleneseIT  surefire:test'
 			}
-		}*/
+		}
 		stage('Ejecutar docker'){
 			steps {
 				dockerCmd "run --name ${container} -d -t -p 8282:8080 --mount src=mysql-db-data,dst=/var/lib/mysql ${imagename}:${releasedVersion}"
@@ -53,7 +53,7 @@ pipeline {
 			steps {
 				dockerCmd "exec -d ${container} service mysql start"
 			}
-		}
+		}*/
     }
 	
     /*post {
@@ -74,5 +74,5 @@ def dockerCmd(args) {
 }
 
 def getReleasedVersion() {
-	return (readFile('pom.xml') =~ '<version>(.+)-SNAPSHOT</version>')[0][1]
+	/*return (readFile('pom.xml') =~ '<version>(.+)-SNAPSHOT</version>')[0][1]*/
 }	
