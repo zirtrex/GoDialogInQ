@@ -1,5 +1,7 @@
 pipeline {
     agent any
+
+	tools {nodejs "node"}
 	
 	environment {
 		imagename = 'zirtrex/godialoginq'
