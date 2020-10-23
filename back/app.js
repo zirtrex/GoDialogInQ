@@ -42,16 +42,16 @@ const index = require('./routes/index');
 const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
 const requisitoRoutes = require('./routes/requisitoRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
-const documentacioncliente = require('./routes/documentacionclienteRoutes');
-const prestamocliente = require('./routes/prestamoclienteRoutes');
+const documentacionCliente = require('./routes/documentacionClienteRoutes');
+const prestamoCliente = require('./routes/prestamoClienteRoutes');
 
 //routes
 app.use(index);
 app.use(tipoPrestamoRoutes);
 app.use(requisitoRoutes);
 app.use(clienteRoutes);
-app.use(documentacioncliente);
-app.use(prestamocliente);
+app.use(documentacionCliente);
+app.use(prestamoCliente);
 
 
 // catch 404 and forward to error handler
@@ -125,31 +125,4 @@ function onListening() {
 }
 
 module.exports = app;
-
-/*
-const express = require('express');
-const app = express();
-
-//imports
-const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
-const requisitoRoutes = require('./routes/requisitoRoutes');
-const index = require('./routes/index');
-
-
-//settings
-app.set('port', 8081);
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-//routes
-app.use(tipoPrestamoRoutes);
-app.use(requisitoRoutes);
-app.use(index);
-
-
-//run
-app.listen(app.get('port'), () => {
-    console.log('Server on Port 8081')
-})
-*/
 

@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage ('Obtener archivos del repositorio: https://github.com/zirtrex/GoDialogInQ') {
             steps {
+				cleanWs()
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
         }
@@ -25,14 +26,19 @@ pipeline {
 		stage ('Ejecutar Aplicacion Back') {
 			steps {
 				dir ('back') {
-					sh 'node app'
+					sh 'node app &'
 				}
+			}
+		}
+		stage ('Ejecutar Mysql') {
+			steps {
+				dockerCmd "exec -d ${container} find /var/lib/mysql -type f -exec touch {} +"
 			}
 		}
 		stage ('Ejecutar Pruebas de Integracion Back') {
 			steps {
-				dir ('back/test') {
-					sh 'node test'
+				dir ('back') {
+					sh 'npm test'
 				}
 			}
 		}
@@ -56,16 +62,6 @@ pipeline {
 				dockerCmd "exec -d ${container} ./bin/startup.sh"
 			}
 		}
-		stage('Ejecutar Mysql p1'){
-			steps {
-				dockerCmd "exec -d ${container} find /var/lib/mysql -type f -exec touch {} +"
-			}
-		}
-		stage('Ejecutar Mysql p2'){
-			steps {
-				dockerCmd "exec -d ${container} service mysql start"
-			}
-		}*/
     }
 	
     /*post {
