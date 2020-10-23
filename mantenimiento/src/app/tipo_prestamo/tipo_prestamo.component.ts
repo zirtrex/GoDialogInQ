@@ -38,8 +38,8 @@ export class TipoPrestamoComponent implements OnInit {
 
   getData() {
     this.tipoPrestamoService.getAll().subscribe(
-      data => {
-        this.dataSource = new MatTableDataSource(data);
+      object => {
+        this.dataSource = new MatTableDataSource(object.result);
         this.dataSource.sort = this.sort;
         this.paginator._intl.firstPageLabel = 'Primera página';
         this.paginator._intl.itemsPerPageLabel = 'Elementos por página';

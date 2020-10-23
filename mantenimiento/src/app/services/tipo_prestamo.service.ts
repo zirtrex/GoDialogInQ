@@ -12,9 +12,9 @@ export class TipoPrestamoService {
 
     constructor(private http:HttpClient) { }
 
-    getAll(): Observable<TipoPrestamo[]>{
+    getAll(): Observable<any>{
       return this.http
-                .get<TipoPrestamo[]>(this.REST_API_SERVER_DEV)
+                .get<any>(this.REST_API_SERVER_DEV)
                 .pipe(catchError(this.handleError));
     }
 

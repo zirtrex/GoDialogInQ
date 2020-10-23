@@ -12,9 +12,9 @@ export class ClienteService {
 
     constructor(private http:HttpClient) { }
 
-    getAll(): Observable<Cliente[]>{
+    getAll(): Observable<any>{
       return this.http
-                .get<Cliente[]>(this.REST_API_SERVER_DEV)
+                .get<any>(this.REST_API_SERVER_DEV)
                 .pipe(catchError(this.handleError));
     }
 

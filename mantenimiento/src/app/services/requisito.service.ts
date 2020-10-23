@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse, HttpErrorResponse  } from '@angular/common/ht
 import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError  } from 'rxjs';
 import { Requisito } from '../models/requisito';
+import { GenericObject } from '../models/generic_object';
 
 @Injectable()
 export class RequisitoService {
@@ -12,15 +13,15 @@ export class RequisitoService {
 
     constructor(private http:HttpClient) { }
 
-    getAll(): Observable<Requisito[]> {
+    getAll(): Observable<any> {
       return this.http
-                .get<Requisito[]>(this.REST_API_SERVER_DEV)
-                .pipe(catchError(this.handleError));
+        .get<any>(this.REST_API_SERVER_DEV)
+        .pipe(catchError(this.handleError));
     }
 
-    getAllByIdTipoPrestamo(idTipoPrestamo: any): Observable<Requisito[]> {
+    getAllByIdTipoPrestamo(idTipoPrestamo: any): Observable<any> {
       return this.http
-                .get<Requisito[]>(this.REST_API_SERVER_DEV+ '/tipo_prestamo/' + idTipoPrestamo)
+                .get<any>(this.REST_API_SERVER_DEV+ '/tipo_prestamo/' + idTipoPrestamo)
                 .pipe(catchError(this.handleError));
     }
 
@@ -51,6 +52,7 @@ export class RequisitoService {
 
     handleError(error: HttpErrorResponse) {
       let errorMessage = 'Unknown error!';
+      console.log(error.error);
       if (error.error instanceof ErrorEvent) {
         // Client-side errors
         errorMessage = `Error: ${error.error.message}`;
@@ -58,7 +60,8 @@ export class RequisitoService {
         // Server-side errors
         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
       }
-      window.alert(errorMessage);
-      return throwError(errorMessage);
+      //window.alert(errorMessage);
+      return error.error;
+      //return throwError(errorMessage);
     }
 }

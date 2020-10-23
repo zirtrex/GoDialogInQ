@@ -40,8 +40,8 @@ router.post("/dialogflow", express.json(), (req, res) => {
     intentMap.set("Default Welcome Intent", welcome);
 	intentMap.set("Default Fallback Intent", defaultFallback);
 	intentMap.set("Extraer el tipo de prestamo", extraerTipoPrestamo);
-	//intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
-	//intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
+	intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
+	intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
 	agent.handleRequest(intentMap);
 	/*res.json({
 		"fulfillmentText": "Hola desde el back"
@@ -102,7 +102,7 @@ async function extraerTipoPrestamo_old(agent) {
 				agent.add("- " + object.descripcionRequisito);
 			});
 
-			//agent.add('Los requisitos para: ' + nombreTipoPrestamo + ", son: " + textResponse);
+			agent.add('Si estás interesado, dime tu nombre');
 
 		}else{
 			agent.add('No tenemos ese préstamo');
@@ -112,8 +112,6 @@ async function extraerTipoPrestamo_old(agent) {
 		console.error(error)
   	} 
 }
-
-
 
 async function extraerTipoPrestamo(agent) {
 
@@ -134,6 +132,8 @@ async function extraerTipoPrestamo(agent) {
 				agent.add("- " + object.descripcionRequisito);
 			});
 
+			agent.add('Si estás interesado, dime tu nombre');
+
 		}else{
 			agent.add('No tenemos ese préstamo');
 		}
@@ -142,46 +142,45 @@ async function extraerTipoPrestamo(agent) {
   	} 
 }
 
-
-
 function extraerInfoCliente(agent) {	
 
-	let tipo_prestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipo_prestamo.original'];
+	let nombres = agent.request_.body.queryResult.outputContexts[0].parameters['given-name'];
+	let apellidos = agent.request_.body.queryResult.outputContexts[0].parameters['last-name'];
+	let telefono = agent.request_.body.queryResult.outputContexts[0].parameters['phone-number'];
+	let correo = agent.request_.body.queryResult.outputContexts[0].parameters['email'];
+
+	//let session['cliente'] = ;
 	
-	console.log(tipo_prestamo);
+	console.log(nombres);
+	console.log(apellidos);
 
-	if(tipo_prestamo == "coronavirus"){
+	agent.add('Gracias ' + nombres + " por respondernos");
+	agent.add("¿Qué monto necesitas?");
 
-		let sql = "select * from prestamos where tipo_prestamo='coronavirus'";
-
-
-		agent.add('Los prestamos coronavirus son:  Programa de protección de pagos, etc');
-		
-
-		
-	}else{
-		agent.add('No tenemos ese préstamo');
-	}    
 }
 
 function extraerInfoInicial(agent) {	
 
-	let tipo_prestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipo_prestamo.original'];
+	let montoNecesitado = agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado.original'];
+	let tiempoNegocio = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
 	
-	console.log(tipo_prestamo);
+	let session = {};
 
-	if(tipo_prestamo == "coronavirus"){
+	session.montoNecesitado = montoNecesitado;
+	
+	console.log(montoNecesitado);
+	console.log(tiempoNegocio);
 
-		let sql = "select * from prestamos where tipo_prestamo='coronavirus'";
-
-
-		agent.add('Los prestamos coronavirus son:  Programa de protección de pagos, etc');
+	if(montoNecesitado != "") {
+		agent.add('Si podemos darte los ' + montoNecesitado );
+		agent.add('Y cuanto tiempo tienes en el negocio ');
 		
-
-		
-	}else{
-		agent.add('No tenemos ese préstamo');
-	}    
+	}else if (tiempoNegocio != "") {
+		agent.add('Me parece bien ');
+		agent.add('Y cuanto necesitas');
+	} else{
+		agent.add('Y cuanto necesitas');
+	}
 }
 
 

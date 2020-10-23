@@ -8,4 +8,4 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=godialoginq
     ports:
-      - '3306:3306'
+      - '3305:3306'

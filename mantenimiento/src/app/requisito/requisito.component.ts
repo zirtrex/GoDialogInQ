@@ -25,7 +25,7 @@ export class RequisitoComponent implements OnInit {
   idTipoPrestamo: any;
   requisito: Requisito = new Requisito();
 
-  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'idTipoPrestamo', 'acciones'];
+  displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'idTipoPrestamo', 'nombreTipoPrestamo', 'acciones'];
   dataSource: MatTableDataSource<Requisito>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -52,8 +52,8 @@ export class RequisitoComponent implements OnInit {
 
   getData() {
     this.requisitoService.getAllByIdTipoPrestamo(this.idTipoPrestamo).subscribe(
-      data => {
-        this.dataSource = new MatTableDataSource(data);
+      object => {
+        this.dataSource = new MatTableDataSource(object.result);
         this.dataSource.sort = this.sort;
         this.paginator._intl.firstPageLabel = 'Primera página';
         this.paginator._intl.itemsPerPageLabel = 'Productos por página';

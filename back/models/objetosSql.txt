@@ -1,8 +1,0 @@
-//Vista Requisito y Tipo de Prestamo
-create view vw_requisito_getAllByIdTipoPrestamo
-as
-select r.idRequisito, r.descripcionRequisito, t.idTipoPrestamo, t.nombreTipoPrestamo 
-from requisito r inner join tipo_prestamo t on r.idTipoPrestamo=t.idTipoPrestamo
-where r.estado<>0 
-
-

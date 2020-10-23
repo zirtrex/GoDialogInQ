@@ -15,7 +15,7 @@ tipoPrestamoController.getAll = async function (req, res) {
           message: "",
           result: tiposPrestamo
         }
-        );
+      );
 
     } catch (error) {
       res.status(500).send({
