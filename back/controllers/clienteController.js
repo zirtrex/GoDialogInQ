@@ -55,6 +55,36 @@ clienteController.getByIdCliente = async function (req, res) {
 }
 
 
+clienteController.getByDocumento = async function (req, res) {
+  var documento = req.params.documento;
+  try {
+  var cliente = await model.getByDocumento(documento);
+  if (Object.entries(cliente).length === 0) {
+    res.status(404).send(
+      {
+        status:'failed',
+        message: "No se pudo encontrar el recurso necesario",
+        result: null
+      }
+    );
+  }else
+  {
+    res.status(200).send({
+      status:'success',
+      message: "",
+      result: cliente
+    });
+  }
+  } catch (error) {
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error",
+      result: error.message      
+    });  
+  }
+}
+
+
 clienteController.create = async function (req, res) {
   var cliente = req.body;
   try {
