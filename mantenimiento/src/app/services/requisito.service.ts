@@ -15,7 +15,7 @@ export class RequisitoService {
 
     getAll(): Observable<any> {
       return this.http
-        .get<any>(this.REST_API_SERVER_DEV)
+        .get(this.REST_API_SERVER_DEV)
         .pipe(catchError(this.handleError));
     }
 
@@ -52,7 +52,7 @@ export class RequisitoService {
 
     handleError(error: HttpErrorResponse) {
       let errorMessage = 'Unknown error!';
-      console.log(error.error);
+      //console.log(error.error);
       if (error.error instanceof ErrorEvent) {
         // Client-side errors
         errorMessage = `Error: ${error.error.message}`;
@@ -61,7 +61,7 @@ export class RequisitoService {
         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
       }
       //window.alert(errorMessage);
-      return error.error;
+      return throwError(error.error);
       //return throwError(errorMessage);
     }
 }

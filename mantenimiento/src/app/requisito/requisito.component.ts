@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpResponse, HttpErrorResponse  } from '@angular/common/http';
+import { Observable, Subject  } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Requisito } from '../models/requisito';
 import { RequisitoService } from '../services/requisito.service';
 import { RequisitoFormComponent } from '../requisito/requisito_form/requisito_form.component';
@@ -19,14 +21,16 @@ import {
   templateUrl: './requisito.component.html',
   styleUrls: []
 })
-export class RequisitoComponent implements OnInit {
+export class RequisitoComponent implements OnInit, OnDestroy  {
 
+  destroy$: Subject<boolean> = new Subject<boolean>();
   params: any;
   idTipoPrestamo: any;
   requisito: Requisito = new Requisito();
+  requisitos = [];
 
   displayedColumns: string[] = ['idRequisito', 'descripcionRequisito', 'idTipoPrestamo', 'nombreTipoPrestamo', 'acciones'];
-  dataSource: MatTableDataSource<Requisito>;
+  dataSource: MatTableDataSource<Object>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   keyPressed: string;
@@ -51,20 +55,37 @@ export class RequisitoComponent implements OnInit {
   }
 
   getData() {
-    this.requisitoService.getAllByIdTipoPrestamo(this.idTipoPrestamo).subscribe(
-      object => {
-        this.dataSource = new MatTableDataSource(object.result);
+    //var result;
+    this.requisitoService.getAllByIdTipoPrestamo(this.idTipoPrestamo).pipe(takeUntil(this.destroy$)).subscribe(
+      (res) => {
+        console.log(res);
+        this.requisitos = res.result;
+        this.dataSource = new MatTableDataSource(res.result); 
         this.dataSource.sort = this.sort;
         this.paginator._intl.firstPageLabel = 'Primera página';
         this.paginator._intl.itemsPerPageLabel = 'Productos por página';
         this.paginator._intl.lastPageLabel = 'Última página';
         this.paginator._intl.nextPageLabel = 'Siguiente';
         this.paginator._intl.previousPageLabel = 'Anterior';
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.paginator;        
         this.changeDetectorRefs.detectChanges();
-        //console.log(this.dataSource);
+      },
+      (error) => {
+        console.error(error);
+        this.requisitos = error.result;
+        this.dataSource = new MatTableDataSource(error.result); 
+        this.dataSource.sort = this.sort;
+        this.paginator._intl.firstPageLabel = 'Primera página';
+        this.paginator._intl.itemsPerPageLabel = 'Productos por página';
+        this.paginator._intl.lastPageLabel = 'Última página';
+        this.paginator._intl.nextPageLabel = 'Siguiente';
+        this.paginator._intl.previousPageLabel = 'Anterior';
+        this.dataSource.paginator = this.paginator;        
+        this.changeDetectorRefs.detectChanges();
       }
     );
+    
+      
   }
 
   filterApply() {
@@ -104,5 +125,11 @@ export class RequisitoComponent implements OnInit {
     dialogConfig.data = {action: 2, idTipoPrestamo: this.idTipoPrestamo, requisito};
     this.dialog.open(RequisitoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
   }
 }
