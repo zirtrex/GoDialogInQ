@@ -26,6 +26,18 @@ cliente.getByIdCliente = async function (idCliente) {
     }
 }
 
+cliente.getByDocumento = async function (documento) {
+    try {
+        var query = 'select * from cliente where documento=:documento';
+        var result = await db_connect.query(query,{
+            documento:documento
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
 /* 
 cliente.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     try {

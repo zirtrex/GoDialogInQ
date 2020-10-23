@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session');
 var bodyParser = require("body-parser");
 var router = express.Router();
 const fetch   = require('node-fetch');
@@ -150,6 +151,8 @@ function extraerInfoCliente(agent) {
 	let correo = agent.request_.body.queryResult.outputContexts[0].parameters['email'];
 
 	//let session['cliente'] = ;
+
+	
 	
 	console.log(nombres);
 	console.log(apellidos);

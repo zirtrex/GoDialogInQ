@@ -59,6 +59,9 @@ prestamocliente.create = async function (prestamocliente) {
             tiempoNegocio,
             ingresosAnuales,
             puntajeCredito,
+            queNegocioTiene,
+            comoVaUsar,
+            cuanRapidoNecesita,
             estado,
             idTipoPrestamo,
             idCliente
@@ -68,6 +71,9 @@ prestamocliente.create = async function (prestamocliente) {
             :tiempoNegocio,
             :ingresosAnuales,
             :puntajeCredito,
+            :queNegocioTiene,
+            :comoVaUsar,
+            :cuanRapidoNecesita,
             1,
             :idTipoPrestamo,
             :idCliente
@@ -77,6 +83,9 @@ prestamocliente.create = async function (prestamocliente) {
             tiempoNegocio:prestamocliente.tiempoNegocio,
             ingresosAnuales:prestamocliente.ingresosAnuales,
             puntajeCredito:prestamocliente.puntajeCredito,
+            queNegocioTiene:prestamocliente.queNegocioTiene,
+            comoVaUsar:prestamocliente.comoVaUsar,
+            cuanRapidoNecesita:prestamocliente.cuanRapidoNecesita,
             idTipoPrestamo:prestamocliente.idTipoPrestamo,
             idCliente:prestamocliente.idCliente
         });        

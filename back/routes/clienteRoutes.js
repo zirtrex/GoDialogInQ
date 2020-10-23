@@ -9,6 +9,8 @@ router.get('/cliente/', controller.getAll);
 
 router.get('/cliente/:idCliente', controller.getByIdCliente);
 
+router.get('/cliente/documento/:documento', controller.getByDocumento);
+
 router.post('/cliente', controller.create);
 
 router.put('/cliente/:idCliente', controller.update);
