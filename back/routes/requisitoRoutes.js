@@ -11,6 +11,8 @@ router.get('/requisito/:idRequisito', controller.getByIdRequisito);
 
 router.get('/requisito/tipo_prestamo/:idTipoPrestamo', controller.getAllByIdTipoPrestamo);
 
+router.get('/requisito/tipo_prestamo/nombre/:nombreTipoPrestamo', controller.getAllTipoPrestamoByNombre);
+
 router.post('/requisito', controller.create);
 
 router.put('/requisito/:idRequisito', controller.update);

@@ -71,7 +71,7 @@ function defaultFallback(agent) {
     agent.add('Lo siento, no te entendí. ¿En qué te puedo ayudar?');
 }
 
-async function extraerTipoPrestamo(agent) {
+async function extraerTipoPrestamo_old(agent) {
 
 	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];
 	
@@ -112,6 +112,37 @@ async function extraerTipoPrestamo(agent) {
 		console.error(error)
   	} 
 }
+
+
+
+async function extraerTipoPrestamo(agent) {
+
+	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];
+	
+	//console.log(nombreTipoPrestamo);
+
+	try {
+		var response = await fetch(urlBase + '/requisito/tipo_prestamo/nombre/' + nombreTipoPrestamo);
+		var requisitos = await response.json();
+		//console.log(requisitos);
+
+		if(requisitos.status == "success"){
+			var textResponse = "";
+			agent.add('Los requisitos son: ');
+			requisitos.result.forEach(object => {
+				
+				agent.add("- " + object.descripcionRequisito);
+			});
+
+		}else{
+			agent.add('No tenemos ese préstamo');
+		}
+	} catch (error) {
+		console.error(error)
+  	} 
+}
+
+
 
 function extraerInfoCliente(agent) {	
 

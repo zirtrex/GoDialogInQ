@@ -91,6 +91,37 @@ requisitoController.getAllByIdTipoPrestamo = async function (req, res) {
 }
 
 
+requisitoController.getAllTipoPrestamoByNombre = async function (req, res) {
+  var nombreTipoPrestamo = req.params.nombreTipoPrestamo;
+  
+  try {
+    var requisito = await model.getAllTipoPrestamoByNombre(nombreTipoPrestamo);
+    if (Object.entries(requisito).length === 0) {
+      res.status(404).send(
+        {
+          status:'failed',
+          message: "No se pudo encontrar el recurso necesario",
+          result: null
+        }
+      );
+    } else {
+      res.status(200).send({
+          status:'success',
+          message: "",
+          result: requisito
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error fatal",
+      result: error.message
+    });  
+  }
+}
+
+
+
 requisitoController.create = async function (req, res) {
   var requisito = req.body;
   try {

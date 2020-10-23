@@ -40,6 +40,19 @@ requisito.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
     }
 }
 
+requisito.getAllTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
+    try {
+   
+        var query = 'select * from vw_requisito_getAllByIdTipoPrestamo vr where vr.nombreTipoPrestamo=:nombreTipoPrestamo';
+        
+        var result = await db_connect.query(query,{
+            nombreTipoPrestamo:nombreTipoPrestamo
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
 
 
 requisito.create = async function (requisito) {
