@@ -28,7 +28,9 @@ requisito.getByIdRequisito = async function (idRequisito) {
 
 requisito.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
     try {
-        var query = 'select * from requisito where idTipoPrestamo=:idTipoPrestamo';
+        //var query = 'select * from requisito where idTipoPrestamo=:idTipoPrestamo';
+        var query = 'select * from vw_requisito_getAllByIdTipoPrestamo vr where vr.idTipoPrestamo=:idTipoPrestamo';
+        
         var result = await db_connect.query(query,{
             idTipoPrestamo:idTipoPrestamo
         });

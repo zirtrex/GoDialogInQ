@@ -7,12 +7,19 @@ var documentacionClienteController = {};
 documentacionClienteController.getAll = async function (req, res) {
   try {
     var documentacionCliente = await model.getAll();
-    res.send(documentacionCliente);
+    res.status(200).send(
+      {
+          status:'success',
+          message: "",
+          result: documentacionCliente
+      }
+      );
+
   } catch (error) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      error: error.message      
+      result: error.message      
     });  
   } 
 }
@@ -24,19 +31,26 @@ documentacionClienteController.getByIdDocumentacionCliente = async function (req
     if (Object.entries(documentacionCliente).length === 0) {
       res.status(404).send(
         {
-          status:'error',
+          status:'failed',
           message: "No se pudo encontrar el recurso necesario",
+          result: null
         }
       );
     }else
     {
-    res.send(documentacionCliente);
+    res.status(200).send(
+      {
+        status:'success',
+        message: "",
+        result: documentacionCliente
+      }
+      );
     }
   } catch (error) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      error: error.message      
+      result: error.message      
     });  
   } 
 }
@@ -48,13 +62,20 @@ documentacionClienteController.getAllByIdPrestamoCliente = async function (req, 
     if (Object.entries(documentacionCliente).length === 0) {
       res.status(404).send(
         {
-          status:'error',
+          status:'failed',
           message: "No se pudo encontrar el recurso necesario",
+          result: null
         }
       );
     }else
     {
-    res.send(documentacionCliente);
+    res.status(200).send(
+      {
+        status:'success',
+        message: "",
+        result: documentacionCliente
+      }
+      );
     }
   } catch (error) {
     res.status(500).send({
@@ -74,15 +95,17 @@ documentacionClienteController.create = async function (req, res) {
     {
       res.status(201).send({
       status:'success',
-      result,
-      message: "Documentacion Cliente creado correctamente"
+      message: "Documentacion Cliente creado correctamente",
+      result:result
+      
     }); 
     }else
     {
       res.status(400).send({
         status:'failed',
-        result,
-        message: "La creación ha fallado"
+        message: "La creación ha fallado",
+        result:null
+        
       });
       
     }
@@ -91,47 +114,9 @@ documentacionClienteController.create = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      error: error.message      
+      result: error.message      
     });  
   }  
 }
 
-/* 
-requisitoController.update = async function (req, res) {
-  var idRequisito = req.params.idRequisito;
-  var requisito = req.body;
-  try {
-    var result = await model.update(idRequisito, requisito);
-    res.send({
-      status:'success',
-      message: "Requisito actualizado correctamente",
-      result: result
-    });
-  } catch (error) {
-    res.send({
-      status:'failed',
-      message: "Ha ocurrido un error",
-      error      
-    });  
-  } 
-}
-
-requisitoController.delete = async function (req, res) {
-  var idRequisito = req.params.idRequisito;
-  try {
-    var result = await model.delete(idRequisito);
-    res.send({
-      status:'success',
-      message: "Requisito eliminado correctamente",
-      result: result
-    });
-  } catch (error) {
-    res.send({
-      status:'failed',
-      message: "Ha ocurrido un error",
-      error      
-    });  
-  } 
-}
- */
 module.exports = documentacionClienteController;

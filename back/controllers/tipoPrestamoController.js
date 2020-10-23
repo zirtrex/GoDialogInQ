@@ -9,12 +9,19 @@ tipoPrestamoController.getAll = async function (req, res) {
   try {
       var tiposPrestamo = await model.getAll();
      
-      res.status(200).send(tiposPrestamo);
+      res.status(200).send(
+        {
+          status:'success',
+          message: "",
+          result: tiposPrestamo
+        }
+        );
+
     } catch (error) {
       res.status(500).send({
         status:'error',
         message: "Ha ocurrido un error",
-        error: error.message      
+        result: error.message      
       });  
     }  
 }
@@ -57,16 +64,18 @@ tipoPrestamoController.create = async function (req, res) {
     {
       res.status(201).send({
         status:'success',
-        result,
-        message: "Tipo de préstamo creado correctamente"
+        message: "Tipo de préstamo creado correctamente",
+        result:result
+        
       });
 
     }else
     {
       res.status(400).send({
         status:'failed',
-        result,
-        message: "La creación ha fallado"
+        message: "La creación ha fallado",
+        result:null
+        
       });
        
     }
@@ -74,7 +83,7 @@ tipoPrestamoController.create = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      error: error.message      
+      result: error.message      
     });  
   }  
 }
@@ -95,11 +104,10 @@ tipoPrestamoController.update = async function (req, res) {
       });
     }else
     {
-
         res.status(404).send({
         status:'failed',
-        message: "Tipo de préstamo actualizado correctamente",
-        result: result
+        message: "La modificación ha fallado",
+        result: null
       });
     }
     
@@ -109,7 +117,7 @@ tipoPrestamoController.update = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      error: error.message          
+      result: error.message          
     });  
   } 
 }
@@ -134,6 +142,7 @@ tipoPrestamoController.delete = async function (req, res) {
       res.status(404).send({
         status:'failed',
         message: "No se pudo eliminar ningun registro",
+        result:null
        });
     }
 
@@ -142,7 +151,7 @@ tipoPrestamoController.delete = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      error      
+      result: error.message   
     });  
   } 
 }
