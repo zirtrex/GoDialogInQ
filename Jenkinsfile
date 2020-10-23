@@ -30,6 +30,11 @@ pipeline {
 				}
 			}
 		}
+		stage ('Ejecutar Mysql') {
+			steps {
+				dockerCmd "exec -d ${container} find /var/lib/mysql -type f -exec touch {} +"
+			}
+		}
 		stage ('Ejecutar Pruebas de Integracion Back') {
 			steps {
 				dir ('back') {
@@ -57,16 +62,6 @@ pipeline {
 				dockerCmd "exec -d ${container} ./bin/startup.sh"
 			}
 		}
-		stage('Ejecutar Mysql p1'){
-			steps {
-				dockerCmd "exec -d ${container} find /var/lib/mysql -type f -exec touch {} +"
-			}
-		}
-		stage('Ejecutar Mysql p2'){
-			steps {
-				dockerCmd "exec -d ${container} service mysql start"
-			}
-		}*/
     }
 	
     /*post {
