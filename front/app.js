@@ -32,7 +32,7 @@ app.use(methodOverride("_method"));
 var COOKIE_SECRET = 'secretencode';
 var COOKIE_NAME = 'sid';
 
-var port = normalizePort(process.env.PORT || '8080');
+var port = normalizePort(process.env.PORT || '8082');
 app.set('port', port);
 
 app.use(bodyParser.json());
@@ -64,7 +64,9 @@ app.use(function(err, req, res, next) {
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port);
+server.listen(port, () => {
+    console.log('Server on Port: ' + port)
+});
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -86,8 +88,6 @@ function normalizePort(val) {
 
     return false;
 }
-
-
 
 /**
  * Event listener for HTTP server "error" event.

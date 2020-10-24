@@ -34,7 +34,7 @@ function listendom(no){
 $(window).load(function() {
     autoScroll(".messages");
     setTimeout(function() {
-        serverMessage("Hola, soy GoDialogInQ, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
+        serverMessage("Hola, soy tu GodialogInq, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
     }, 100);
 
 });

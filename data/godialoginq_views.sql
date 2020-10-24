@@ -7,4 +7,4 @@ AS
 	SELECT r.idRequisito, r.descripcionRequisito, tp.idTipoPrestamo, tp.nombreTipoPrestamo 
 	FROM requisito r 
     INNER JOIN tipo_prestamo tp ON tp.idTipoPrestamo = r.idTipoPrestamo
-	WHERE r.estado <> 0; 
+	WHERE r.estado <> 0;

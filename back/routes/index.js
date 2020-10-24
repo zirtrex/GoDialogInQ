@@ -128,8 +128,7 @@ async function extraerTipoPrestamo(agent) {
 		if(requisitos.status == "success"){
 			var textResponse = "";
 			agent.add('Los requisitos son: ');
-			requisitos.result.forEach(object => {
-				
+			requisitos.result.forEach(object => {				
 				agent.add("- " + object.descripcionRequisito);
 			});
 
@@ -137,6 +136,11 @@ async function extraerTipoPrestamo(agent) {
 
 		}else{
 			agent.add('No tenemos ese préstamo');
+			agent.add('Los préstamo disponibles son: ');
+			agent.add("- coronavirus");
+			agent.add("- 7A");
+			agent.add("- 7A Express");
+			agent.add("- Prestamo del estado de nueva york");
 		}
 	} catch (error) {
 		console.error(error)
