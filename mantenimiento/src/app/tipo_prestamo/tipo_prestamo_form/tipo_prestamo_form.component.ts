@@ -54,7 +54,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
     },
     {
       validator: [checkSpecialCharacters('nombreTipoPrestamo')]
-    });    
+    });
 
     if (this.action == 0) {
       this.textForm = "Crear";
