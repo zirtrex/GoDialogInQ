@@ -33,7 +33,7 @@ prestamoClienteController.getByIdPrestamoCliente = async function (req, res) {
         {
           status:'failed',
           message: "No se pudo encontrar el recurso necesario",
-          result: null
+          result: []
       }
       );
     }else
@@ -63,7 +63,7 @@ prestamoClienteController.getAllByIdTipoPrestamo = async function (req, res) {
         {
           status:'failed',
           message: "No se pudo encontrar el recurso necesario",
-          result:null
+          result:[]
         }
       );
     }else
@@ -93,7 +93,7 @@ prestamoClienteController.getAllByIdCliente = async function (req, res) {
           {
             status:'failed',
             message: "No se pudo encontrar el recurso necesario",
-            result:null
+            result:[]
           }
         );
       }else
@@ -132,7 +132,7 @@ prestamoClienteController.create = async function (req, res) {
         res.status(400).send({
         status:'failed',
         message: "La creación ha fallado",
-        result:null
+        result:[]
         
       });
     }

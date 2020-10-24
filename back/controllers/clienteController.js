@@ -34,7 +34,7 @@ clienteController.getByIdCliente = async function (req, res) {
       {
         status:'failed',
         message: "No se pudo encontrar el recurso necesario",
-        result: null
+        result: []
       }
     );
   }else
@@ -64,7 +64,7 @@ clienteController.getByDocumento = async function (req, res) {
       {
         status:'failed',
         message: "No se pudo encontrar el recurso necesario",
-        result: null
+        result: []
       }
     );
   }else
@@ -102,7 +102,7 @@ clienteController.create = async function (req, res) {
         res.status(400).send({
         status:'failed',
         message: "La creación ha fallado",
-        result:null
+        result:[]
         
       });
       
@@ -134,7 +134,7 @@ clienteController.update = async function (req, res) {
       res.status(404).send({
       status:'failed',
       message: "La modificación ha fallado",
-      result: null
+      result: []
     });
   }
   } catch (error) {
@@ -162,7 +162,7 @@ clienteController.delete = async function (req, res) {
         res.status(404).send({
         status:'failed',
         message: "No se pudo eliminar ningun registro",
-        result:null
+        result:[]
       });
     }
   } catch (error) {

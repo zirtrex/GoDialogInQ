@@ -36,7 +36,7 @@ requisitoController.getByIdRequisito = async function (req, res) {
           {
             status:'error',
             message: "No se pudo encontrar el recurso necesario",
-            result:null
+            result:[]
           }
         );
       }else
@@ -71,7 +71,7 @@ requisitoController.getAllByIdTipoPrestamo = async function (req, res) {
         {
           status:'failed',
           message: "No se pudo encontrar el recurso necesario",
-          result: null
+          result: []
         }
       );
     } else {
@@ -101,7 +101,7 @@ requisitoController.getAllTipoPrestamoByNombre = async function (req, res) {
         {
           status:'failed',
           message: "No se pudo encontrar el recurso necesario",
-          result: null
+          result: []
         }
       );
     } else {
@@ -139,7 +139,7 @@ requisitoController.create = async function (req, res) {
       res.status(400).send({
         status:'failed',
         message: "La creación ha fallado",
-        result:null
+        result:[]
         
       });
       
@@ -171,7 +171,7 @@ requisitoController.update = async function (req, res) {
         res.status(404).send({
         status:'failed',
         message: "La modificación ha fallado",
-        result: null
+        result: []
       });
     }
   } catch (error) {
@@ -199,7 +199,7 @@ requisitoController.delete = async function (req, res) {
       res.status(404).send({
         status:'failed',
         message: "No se pudo eliminar ningun registro",
-        result:null
+        result:[]
       });
     }
   } catch (error) {
