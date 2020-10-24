@@ -168,7 +168,7 @@ export class RequisitoFormComponent implements OnInit {
               duration: 10000,
               horizontalPosition: 'right',
               verticalPosition: 'top',
-              panelClass: ['text-warning']
+              panelClass: ['text-danger']
             }); 
           }          
         }

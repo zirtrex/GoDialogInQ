@@ -97,7 +97,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
           var result = error.result;
           console.log(result);
           if (typeof result === 'object') {
-            this.snackBar.open("El tipo de prestamo ya existe", null, {
+            this.snackBar.open("El tipo de prestamo ingresado ya existe", null, {
               duration: 10000,
               horizontalPosition: 'right',
               verticalPosition: 'top',
@@ -129,7 +129,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
           var result = error.result;
           console.log(result);
           if (typeof result === 'object') {
-            this.snackBar.open("El tipo de prestamo ya existe", null, {
+            this.snackBar.open("El tipo de prestamo ingresado ya existe", null, {
               duration: 10000,
               horizontalPosition: 'right',
               verticalPosition: 'top',
@@ -160,7 +160,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
           var result = error.result;
           console.log(result);
           if (typeof result === 'object') {
-            this.snackBar.open("Error desconocido", null, {
+            this.snackBar.open("No se puede eliminar el registro por que está siendo usado por otro objeto", null, {
               duration: 10000,
               horizontalPosition: 'right',
               verticalPosition: 'top',

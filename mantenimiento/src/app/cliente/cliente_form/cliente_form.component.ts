@@ -97,7 +97,7 @@ export class ClienteFormComponent implements OnInit {
   }
 
   delete(cliente){
-    this.clienteService.delete(cliente)
+    this.clienteService.delete(cliente.idCliente)
       .subscribe(
         response => {
             console.log(response);
@@ -111,7 +111,21 @@ export class ClienteFormComponent implements OnInit {
               this.closeDialog();
             }
         },
-        error => console.log(<any> error)
+        //error => console.log(<any> error)
+        error => {
+          console.log(error);
+          var result = error.result;
+          console.log(result);
+          if (typeof result === 'object') {
+            this.snackBar.open("El cliente seleccionado esta siendo usado por otro objeto.", null, {
+              duration: 10000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['text-warning']
+            }); 
+          }          
+        }
+        
       )
   }
 
