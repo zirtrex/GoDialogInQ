@@ -1,35 +1,47 @@
 <div class="container mt-3">
   <div class="row">
 
-    <div class="col-sm">
+    <div class="col-sm-1 col-lg-6">
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">Tipos de Préstamo</h5>
           <p class="card-text"></p>
-          <a class="nav-link btn btn-primary" [routerLink]="['/tipo_prestamo']">ver</a>
+          <a class="nav-link btn btn-primary" [routerLink]="['/tipo_prestamo']">Mantenimiento</a>
         </div>
       </div>
     </div>
 
-    <div class="col-sm">
+    <div class="col-sm-1 col-lg-6">
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">Requisitos</h5>
           <p class="card-text"></p>
-          <a class="nav-link btn btn-primary" [routerLink]="['/requisito']">ver</a>
+          <a class="nav-link btn btn-primary" [routerLink]="['/requisito']">Mantenimiento</a>
         </div>
       </div>
 
     </div>
-
-    <div class="col-sm">
+  </div>
+  <div class="row mt-3">
+    <div class="col-sm-1 col-lg-6">
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">Clientes</h5>
           <p class="card-text"></p>
-          <a class="nav-link btn btn-primary" [routerLink]="['/cliente']">ver</a>
+          <a class="nav-link btn btn-primary" [routerLink]="['/cliente']">Listar</a>
         </div>
       </div>
     </div>
+
+    <div class="col-sm-1 col-lg-6">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Prestamos de los clientes</h5>
+          <p class="card-text"></p>
+          <a class="nav-link btn btn-primary" [routerLink]="['/prestamo_cliente']">Listar</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
