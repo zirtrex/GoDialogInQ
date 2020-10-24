@@ -6,6 +6,8 @@ import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
 import { RequisitoComponent } from './requisito/requisito.component';
 import { ClienteComponent } from './cliente/cliente.component';
 
+import { PrestamoClienteComponent } from './prestamo_cliente/prestamo_cliente.component';
+
 const appRoutes: Routes = [
   /*{path: '', redirectTo: '/productos', pathMatch: 'full'},*/
   {path: '', component: InicioComponent},
@@ -13,6 +15,9 @@ const appRoutes: Routes = [
   {path: 'requisito', component: RequisitoComponent},
   {path: 'requisito/:idTipoPrestamo', component: RequisitoComponent},
   {path: 'cliente', component: ClienteComponent},
+  
+  {path: 'prestamo_cliente', component: PrestamoClienteComponent},
+
   /*{path: 'ventas/edit/:idVentas', component: EditarVentaComponent},
   {path: 'ventas/delete/:idVentas', component: EliminarVentaComponent},
   {path: 'producciones', component: ProduccionComponent},
