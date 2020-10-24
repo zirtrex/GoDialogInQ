@@ -93,8 +93,9 @@ export class TipoPrestamoFormComponent implements OnInit  {
             }
         },
         error => {
-          console.log(<any> error);
+          console.log(error);
           var result = error.body.result;
+          console.log(result);
           //if (result)
           
         }
