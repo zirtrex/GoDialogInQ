@@ -37,7 +37,7 @@ tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
       res.status(404).send({
           status:'failed',
           message: "No se pudo encontrar el recurso necesario",
-          result: null
+          result: []
       });
     }else {
       res.status(200).send({
@@ -74,7 +74,7 @@ tipoPrestamoController.create = async function (req, res) {
       res.status(400).send({
         status:'failed',
         message: "La creación ha fallado",
-        result:null
+        result:[]
         
       });
        
@@ -107,7 +107,7 @@ tipoPrestamoController.update = async function (req, res) {
         res.status(404).send({
         status:'failed',
         message: "La modificación ha fallado",
-        result: null
+        result: []
       });
     }
     
@@ -142,7 +142,7 @@ tipoPrestamoController.delete = async function (req, res) {
       res.status(404).send({
         status:'failed',
         message: "No se pudo eliminar ningun registro",
-        result:null
+        result:[]
        });
     }
 

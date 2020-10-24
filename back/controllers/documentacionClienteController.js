@@ -33,7 +33,7 @@ documentacionClienteController.getByIdDocumentacionCliente = async function (req
         {
           status:'failed',
           message: "No se pudo encontrar el recurso necesario",
-          result: null
+          result: []
         }
       );
     }else
@@ -64,7 +64,7 @@ documentacionClienteController.getAllByIdPrestamoCliente = async function (req, 
         {
           status:'failed',
           message: "No se pudo encontrar el recurso necesario",
-          result: null
+          result: []
         }
       );
     }else
@@ -104,7 +104,7 @@ documentacionClienteController.create = async function (req, res) {
       res.status(400).send({
         status:'failed',
         message: "La creación ha fallado",
-        result:null
+        result:[]
         
       });
       

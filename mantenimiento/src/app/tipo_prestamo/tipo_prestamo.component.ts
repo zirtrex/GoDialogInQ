@@ -36,7 +36,7 @@ export class TipoPrestamoComponent implements OnInit {
     this.getData();
   }
 
-  getData() {
+  /* getData() {
     this.tipoPrestamoService.getAll().subscribe(
       object => {
         this.dataSource = new MatTableDataSource(object.result);
@@ -51,7 +51,36 @@ export class TipoPrestamoComponent implements OnInit {
         //console.log(this.dataSource);
       }
     );
+  } */
+
+  getData() {
+    this.tipoPrestamoService.getAll().subscribe(
+      (res) => {
+        this.dataSource = new MatTableDataSource(res.result);
+        this.dataSource.sort = this.sort;
+        this.paginator._intl.firstPageLabel = 'Primera página';
+        this.paginator._intl.itemsPerPageLabel = 'Elementos por página';
+        this.paginator._intl.lastPageLabel = 'Última página';
+        this.paginator._intl.nextPageLabel = 'Siguiente';
+        this.paginator._intl.previousPageLabel = 'Anterior';
+        this.dataSource.paginator = this.paginator;
+        this.changeDetectorRefs.detectChanges();
+      },
+      (error) => {
+        this.dataSource = new MatTableDataSource(error.result);
+        this.dataSource.sort = this.sort;
+        this.paginator._intl.firstPageLabel = 'Primera página';
+        this.paginator._intl.itemsPerPageLabel = 'Elementos por página';
+        this.paginator._intl.lastPageLabel = 'Última página';
+        this.paginator._intl.nextPageLabel = 'Siguiente';
+        this.paginator._intl.previousPageLabel = 'Anterior';
+        this.dataSource.paginator = this.paginator;
+        this.changeDetectorRefs.detectChanges();
+      }
+
+    );
   }
+
 
   filterApply() {
     this.dataSource.filter = this.keyPressed.trim().toLowerCase();
