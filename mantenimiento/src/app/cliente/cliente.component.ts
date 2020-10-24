@@ -117,8 +117,10 @@ export class ClienteComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "auto";
+    //dialogConfig.data = {action: 2, cliente};
     dialogConfig.data = {action: 2, cliente};
     this.dialog.open(ClienteFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
   }
+
 }

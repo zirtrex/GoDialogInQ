@@ -73,7 +73,22 @@ export class RequisitoFormComponent implements OnInit {
               this.closeDialog();
             }
         },
-        error => console.log(<any> error)
+
+        //error => console.log(<any> error)
+        error => {
+          console.log(error);
+          var result = error.result;
+          console.log(result);
+          if (typeof result === 'object') {
+            this.snackBar.open("El requisito ingresado por tipo de prestamo ya existe", null, {
+              duration: 10000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['text-warning']
+            }); 
+          }          
+        }
+
       )
   }
 
