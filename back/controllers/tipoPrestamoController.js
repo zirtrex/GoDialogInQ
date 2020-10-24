@@ -21,7 +21,7 @@ tipoPrestamoController.getAll = async function (req, res) {
       res.status(500).send({
         status:'error',
         message: "Ha ocurrido un error",
-        result: error.message      
+        result: error      
       });  
     }  
 }
@@ -50,7 +50,7 @@ tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error fatal",
-      result: error.message      
+      result: error      
     });  
   }
 }
@@ -117,7 +117,7 @@ tipoPrestamoController.update = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message          
+      result: error          
     });  
   } 
 }
@@ -151,7 +151,7 @@ tipoPrestamoController.delete = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message   
+      result: error   
     });  
   } 
 }

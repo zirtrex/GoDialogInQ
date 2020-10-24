@@ -19,7 +19,7 @@ documentacionClienteController.getAll = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error     
     });  
   } 
 }
@@ -50,7 +50,7 @@ documentacionClienteController.getByIdDocumentacionCliente = async function (req
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error      
     });  
   } 
 }
@@ -81,7 +81,7 @@ documentacionClienteController.getAllByIdPrestamoCliente = async function (req, 
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      error: error.message      
+      result: error      
     });  
   } 
 }
@@ -114,7 +114,7 @@ documentacionClienteController.create = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error    
     });  
   }  
 }

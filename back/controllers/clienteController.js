@@ -20,7 +20,7 @@ clienteController.getAll = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error     
     });  
   }
 }
@@ -49,7 +49,7 @@ clienteController.getByIdCliente = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error      
     });  
   }
 }
@@ -79,7 +79,7 @@ clienteController.getByDocumento = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error      
     });  
   }
 }
@@ -111,7 +111,7 @@ clienteController.create = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message            
+      result: error            
     });  
   }  
 }
@@ -141,7 +141,7 @@ clienteController.update = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error     
     });  
   } 
 }
@@ -169,7 +169,7 @@ clienteController.delete = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error      
     });  
   } 
 }

@@ -19,7 +19,7 @@ prestamoClienteController.getAll = async function (req, res) {
       res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error     
     });  
     }
 }
@@ -49,7 +49,7 @@ prestamoClienteController.getByIdPrestamoCliente = async function (req, res) {
     res.status(500).send({
     status:'error',
     message: "Ha ocurrido un error",
-    result: error.message      
+    result: error      
   });  
   }
 }
@@ -79,7 +79,7 @@ prestamoClienteController.getAllByIdTipoPrestamo = async function (req, res) {
     res.status(500).send({
     status:'error',
     message: "Ha ocurrido un error",
-    result: error.message      
+    result: error      
   });  
   }
 }
@@ -109,7 +109,7 @@ prestamoClienteController.getAllByIdCliente = async function (req, res) {
       res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error     
     });  
     }  
   }
@@ -140,7 +140,7 @@ prestamoClienteController.create = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.message      
+      result: error     
     });  
   }  
 }
