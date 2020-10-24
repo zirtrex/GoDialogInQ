@@ -14,6 +14,16 @@ prestamocliente.getAll = async function () {
     }
 }
 
+prestamocliente.getAllClienteTipoPrestamo = async function () {
+    try {       
+        var query = 'select * from vw_prestamo_cliente_getAllClienteTipoPrestamo'; 
+        var result = await db_connect.query(query);
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
 prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
     try {
         var query = 'select * from prestamo_cliente where idPrestamoCliente=:idPrestamoCliente';
