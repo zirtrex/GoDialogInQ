@@ -92,7 +92,12 @@ export class TipoPrestamoFormComponent implements OnInit  {
               this.closeDialog();
             }
         },
-        error => console.log(<any> error)
+        error => {
+          console.log(<any> error);
+          var result = error.body.result;
+          //if (result)
+          
+        }
       )
   }
 
