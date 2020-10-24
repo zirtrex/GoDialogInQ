@@ -94,10 +94,16 @@ export class TipoPrestamoFormComponent implements OnInit  {
         },
         error => {
           console.log(error);
-          var result = error.body.result;
+          var result = error.result;
           console.log(result);
-          //if (result)
-          
+          if (typeof result === 'object') {
+            this.snackBar.open("El tipo de prestamo ya existe", null, {
+              duration: 10000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['text-warning']
+            }); 
+          }          
         }
       )
   }
@@ -118,7 +124,19 @@ export class TipoPrestamoFormComponent implements OnInit  {
               this.closeDialog();
           }
         },
-        error => console.log(<any> error)
+        error => {
+          console.log(error);
+          var result = error.result;
+          console.log(result);
+          if (typeof result === 'object') {
+            this.snackBar.open("El tipo de prestamo ya existe", null, {
+              duration: 10000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['text-warning']
+            }); 
+          }
+        }
       )
   }
 
@@ -137,7 +155,19 @@ export class TipoPrestamoFormComponent implements OnInit  {
               this.closeDialog();
             }
         },
-        error => console.log(<any> error)
+        error => {
+          console.log(error);
+          var result = error.result;
+          console.log(result);
+          if (typeof result === 'object') {
+            this.snackBar.open("Error desconocido", null, {
+              duration: 10000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['text-warning']
+            }); 
+          }          
+        }
       )
   }
 

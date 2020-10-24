@@ -83,7 +83,7 @@ tipoPrestamoController.create = async function (req, res) {
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error",
-      result: error.error      
+      result: error      
     });  
   }  
 }
