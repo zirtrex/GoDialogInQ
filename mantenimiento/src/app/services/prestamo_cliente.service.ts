@@ -52,7 +52,7 @@ export class PrestamoClienteService {
         // Server-side errors
         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
       }
-      window.alert(errorMessage);
+      window.alert(error.error);
       return throwError(errorMessage);
     }
 }

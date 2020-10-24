@@ -52,7 +52,11 @@ export class ClienteService {
         // Server-side errors
         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
       }
-      window.alert(errorMessage);
-      return throwError(errorMessage);
+      window.alert(error.error);
+      return throwError(error.error);
     }
+
+
+    
+    
 }
