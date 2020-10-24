@@ -6,8 +6,8 @@ import { PrestamoClienteService } from '../../services/prestamo_cliente.service'
 import { PrestamoCliente } from '../../models/prestamo_cliente';
 
 @Component({
-  selector: 'app-cliente-form',
-  templateUrl: './cliente_form.component.html',
+  selector: 'app-prestamo-cliente-form',
+  templateUrl: './prestamo_cliente_form.component.html',
   styleUrls: []
 })
 export class PrestamoClienteFormComponent implements OnInit {

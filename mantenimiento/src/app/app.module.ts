@@ -28,7 +28,6 @@ import { ClienteFormComponent } from './cliente/cliente_form/cliente_form.compon
 import { PrestamoClienteComponent } from './prestamo_cliente/prestamo_cliente.component';
 import { PrestamoClienteFormComponent } from './prestamo_cliente/prestamo_cliente_form/prestamo_cliente_form.component';
 
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 
@@ -67,7 +66,8 @@ import { MaterialModule } from './material/material.module';
   entryComponents: [
     TipoPrestamoFormComponent,
     RequisitoFormComponent,
-    ClienteFormComponent
+    ClienteFormComponent,
+    PrestamoClienteFormComponent
   ]
 })
 export class AppModule { }
