@@ -1,37 +1,43 @@
 <div class="container mt-2">
   <div class="col-md-12">
     <div class="well well bs-component">
-      <form *ngIf="action == 0 || action == 1" novalidate class="form-horizontal" (ngSubmit)="getAction(RequisitoForm.value)" #RequisitoForm="ngForm">
+      <form *ngIf="action == 0 || action == 1" novalidate class="form-horizontal" (ngSubmit)="getAction(requisitoForm.value)" [formGroup]='requisitoForm'>
         <fieldset>
           <legend>{{ textForm }} Requisito</legend>
 
-          <input type="hidden" id="idRequisito" name="idRequisito" [(ngModel)]="requisito.idRequisito" #idRequisito="ngModel"/>
-          <input type="hidden" id="idTipoPrestamo" name="idTipoPrestamo" [(ngModel)]="requisito.idTipoPrestamo" #idTipoPrestamo="ngModel"/>
+          <input type="hidden" id="idRequisito" name="idRequisito" formControlName="idRequisito"/>
+          <input type="hidden" id="idTipoPrestamo" name="idTipoPrestamo" formControlName="idTipoPrestamo"/>
+          <mat-error *ngIf="requisitoForm.get('idTipoPrestamo').hasError('required')">
+            El campo es obligatorio
+          </mat-error>
 
-          <div class="form-group">
-            <label for="descripcionRequisito" class="control-label">Nombre del Requisito</label>
-            <div class="col-lg-12">
-              <input type="text" class="form-control" id="descripcionRequisito" name="descripcionRequisito" placeholder="Nombre del Requisito" [(ngModel)]="requisito.descripcionRequisito" #descripcionRequisito="ngModel" required minlength="2"/>
-              <div *ngIf="descripcionRequisito.errors?.required && descripcionRequisito.touched" class="alert alert-danger mt-2">
-                El nombre del requisito es obligatorio
-              </div>
-              <div *ngIf="descripcionRequisito.errors?.minlength && descripcionRequisito.touched" class="alert alert-danger mt-2">
-                Minimo 2 caracteres
-              </div>
-            </div>
-          </div>
+          <mat-form-field class="col-lg-12">
+            <input type="text" matInput formControlName="descripcionRequisito" id="descripcionRequisito" placeholder="Requisito"  [errorStateMatcher]="errorStateMatcher" />
+            <mat-error *ngIf="requisitoForm.get('descripcionRequisito').hasError('required')">
+              El campo es obligatorio
+            </mat-error>
+            <mat-error *ngIf="requisitoForm.get('descripcionRequisito').hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+            <mat-error *ngIf="requisitoForm.get('descripcionRequisito').hasError('maxlength')">
+              Máximo 2 caracteres
+            </mat-error>
+            <mat-error *ngIf="requisitoForm.get('descripcionRequisito').hasError('checkSpecialCharacters')">
+              Solo textos o números
+            </mat-error>            
+          </mat-form-field>
 
           <div class="form-group">
             <div class="col-lg-12 col-lg-offset-2">
               <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
               &nbsp;
-              <button type="submit" class="btn btn-primary" [disabled]="RequisitoForm.invalid">{{ textForm }}</button>
+              <button type="submit" class="btn btn-primary" [disabled]="requisitoForm.invalid">{{ textForm }}</button>
             </div>
           </div>
         </fieldset>
       </form>
 
-      <form  *ngIf="action == 2" novalidate class="form-horizontal" (ngSubmit)="getAction(RequisitoForm.value)" #RequisitoForm="ngForm">
+      <form  *ngIf="action == 2" novalidate class="form-horizontal" (ngSubmit)="getAction(requisitoForm.value)" #RequisitoForm="ngForm">
         <fieldset>
           <legend>¿Eliminar: {{ requisito.descripcionRequisito }}?</legend>
           <div class="form-group">

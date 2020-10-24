@@ -50,7 +50,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
 
     this.tipoPrestamoForm = this.fb.group({
       idTipoPrestamo: [this.tipoPrestamo.idTipoPrestamo],
-      nombreTipoPrestamo: [this.tipoPrestamo.nombreTipoPrestamo, Validators.compose( [Validators.required, Validators.minLength(2)] )]
+      nombreTipoPrestamo: [this.tipoPrestamo.nombreTipoPrestamo, Validators.compose( [Validators.required, Validators.minLength(2), Validators.maxLength(200)] )]
     },
     {
       validator: [checkSpecialCharacters('nombreTipoPrestamo')]

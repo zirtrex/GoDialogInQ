@@ -19,6 +19,10 @@
             <mat-error *ngIf="tipoPrestamoForm.get('nombreTipoPrestamo').hasError('minlength')">
               Mínimo 2 caracteres
             </mat-error>
+
+            <mat-error *ngIf="requisitoForm.get('descripcionRequisito').hasError('maxlength')">
+              Máximo 2 caracteres
+            </mat-error> 
             
             <mat-error *ngIf="tipoPrestamoForm.get('nombreTipoPrestamo').hasError('checkSpecialCharacters')">
               Solo textos o números
