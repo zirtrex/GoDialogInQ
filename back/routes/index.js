@@ -128,7 +128,7 @@ async function extraerTipoPrestamo(agent) {
 		if(requisitos.status == "success"){
 			var textResponse = "";
 			agent.add('Los requisitos son: ');
-			requisitos.result.forEach(object => {				
+			requisitos.result.forEach(object => {
 				agent.add("- " + object.descripcionRequisito);
 			});
 
