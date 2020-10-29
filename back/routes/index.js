@@ -15,6 +15,7 @@ const dialogflow = require('@google-cloud/dialogflow');
 const uuid = require('uuid');
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { Card, Suggestion } = require("dialogflow-fulfillment");
+const { sessionEntitiesHelper } = require('actions-on-google-dialogflow-session-entities-plugin');
 
 var tipoPrestamoController = require('../controllers/tipoPrestamoController');
 var requisitoController = require('../controllers/requisitoController');
@@ -24,6 +25,9 @@ var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(sessionEntitiesHelper);
+
+var sessionId;
 
 const urlBase = 'http://localhost:8081';
 
@@ -43,6 +47,7 @@ router.post("/dialogflow", express.json(), (req, res) => {
 	intentMap.set("Extraer el tipo de prestamo", extraerTipoPrestamo);
 	intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
 	intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
+	intentMap.set("Prueba sesion", pruebaSesion);
 	agent.handleRequest(intentMap);
 	/*res.json({
 		"fulfillmentText": "Hola desde el back"
@@ -190,5 +195,67 @@ function extraerInfoInicial(agent) {
 	}
 }
 
+async function pruebaSesion(agent) {
+
+	const sessionId = agent.session.split("/").reverse()[0];
+	let nombre = agent.request_.body.queryResult.outputContexts[0].parameters['given-name.original'];
+	
+	console.log(nombre);
+
+	if (typeof agent.request_.session.sessionId === 'undefined') {
+		agent.request_.session.sessionId = sessionId;
+		console.log("Nueva sesion: " + sessionId);
+	} else {
+		console.log("Sesion ya creada: " + sessionId);
+	}
+
+	if (agent.request_.session.sessionId == sessionId) {
+
+		const setInformacionCliente = agent.context.get('setinformacioncliente');
+		var nombres = setInformacionCliente.parameters['given-name.original'];
+		console.log(setInformacionCliente.parameters);
+		console.log(nombres);
+
+	} else {
+		console.log("diferente");
+	}
+
+	agent.add('Los requisitos son: ');
+
+	/*try {
+		//let idTipoPrestamo = await tipoPrestamoController.getIdTipoPrestamoByNombre(nombreTipoPrestamo);
+		var response = await fetch(urlBase + '/tipo_prestamo/' + nombreTipoPrestamo);    
+		var json = await response.json();
+		var idTipoPrestamo = json.result[0].idTipoPrestamo;
+		console.log(idTipoPrestamo);
+	} catch (error) {
+    	// handle error
+    	console.error(error)
+  	}
+	
+	try {
+		//let requisitos = await requisitoController.getAllByIdTipoPrestamo(idTipoPrestamo[0].idTipoPrestamo);
+		var response = await fetch(urlBase + '/requisito/tipo_prestamo/' + idTipoPrestamo);
+		var requisitos = await response.json();
+		console.log(requisitos);
+
+		if(requisitos.status == "success"){
+			var textResponse = "";
+			agent.add('Los requisitos son: ');
+			requisitos.result.forEach(object => {
+				//textResponse += object.descripcionRequisito + ", "				
+				agent.add("- " + object.descripcionRequisito);
+			});
+
+			agent.add('Si estás interesado, dime tu nombre');
+
+		}else{
+			agent.add('No tenemos ese préstamo');
+		}
+	} catch (error) {
+		// handle error
+		console.error(error)
+  	} */
+}
 
 module.exports = router;
