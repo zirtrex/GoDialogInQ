@@ -19,6 +19,8 @@ const { sessionEntitiesHelper } = require('actions-on-google-dialogflow-session-
 
 var tipoPrestamoController = require('../controllers/tipoPrestamoController');
 var requisitoController = require('../controllers/requisitoController');
+
+
 const { json } = require('body-parser');
 
 var app = express();
@@ -44,6 +46,7 @@ router.post("/dialogflow", express.json(), (req, res) => {
     let intentMap = new Map();
     intentMap.set("Default Welcome Intent", welcome);
 	intentMap.set("Default Fallback Intent", defaultFallback);
+	intentMap.set("Mostrar prestamos sin idea de los prestamos", mostrarPrestamosSinIdea);
 	intentMap.set("Extraer el tipo de prestamo", extraerTipoPrestamo);
 	intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
 	intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
@@ -119,6 +122,30 @@ async function extraerTipoPrestamo_old(agent) {
   	} 
 }
 
+async function mostrarPrestamosSinIdea(agent) {
+
+	try {
+		var request = await fetch(urlBase + '/tipo_prestamo');
+		var response = await request.json();
+
+		if (response.status == "success") {
+			agent.add('Los préstamos disponibles son: ');
+			response.result.forEach(object => {				
+				agent.add("- " + object.nombreTipoPrestamo);
+			});
+
+			agent.add('¿Estás interesado en alguno de ellos?');
+			agent.add('Indicanos en cual');
+
+		}else{
+			agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+		}
+	} catch (error) {
+		console.error(error);
+		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+  	} 
+}
+
 async function extraerTipoPrestamo(agent) {
 
 	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];
@@ -126,29 +153,67 @@ async function extraerTipoPrestamo(agent) {
 	//console.log(nombreTipoPrestamo);
 
 	try {
-		var response = await fetch(urlBase + '/requisito/tipo_prestamo/nombre/' + nombreTipoPrestamo);
-		var requisitos = await response.json();
+		var request = await fetch(urlBase + '/requisito/tipo_prestamo/nombre/' + nombreTipoPrestamo);
+		var response = await request.json();
 		//console.log(requisitos);
 
-		if(requisitos.status == "success"){
+		if (response.status == "success") {
 			var textResponse = "";
 			agent.add('Los requisitos son: ');
-			requisitos.result.forEach(object => {				
+			response.result.forEach(object => {				
 				agent.add("- " + object.descripcionRequisito);
 			});
 
 			agent.add('Si estás interesado, dime tu nombre');
 
 		}else{
-			agent.add('No tenemos ese préstamo');
-			agent.add('Los préstamo disponibles son: ');
-			agent.add("- coronavirus");
-			agent.add("- 7A");
-			agent.add("- 7A Express");
-			agent.add("- Prestamo del estado de nueva york");
+			agent.add('No tenemos los requisitos disponibles');
+			const existingContext = agent.context.get("settipoprestamo");
+			agent.setContext({'name': existingContext.name, 'lifespan': 0});
+			try {
+				var request = await fetch(urlBase + '/tipo_prestamo');
+				var response = await request.json();
+		
+				if (response.status == "success") {
+					agent.add('Pero quizás te interesa: ');
+					response.result.forEach(object => {				
+						agent.add("- " + object.nombreTipoPrestamo);
+					});
+		
+					agent.add('¿Estás interesado en alguno de ellos?');
+					agent.add('Indicanos en cual');
+		
+				}else{
+					agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+				}
+			} catch (error) {
+				console.error(error);
+				agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+			}
 		}
 	} catch (error) {
-		console.error(error)
+		console.error(error);
+
+		try {
+			var request = await fetch(urlBase + '/tipo_prestamo');
+			var response = await request.json();
+	
+			if (response.status == "success") {
+				agent.add('Los préstamos disponibles son: ');
+				response.result.forEach(object => {				
+					agent.add("- " + object.nombreTipoPrestamo);
+				});
+	
+				agent.add('¿Estás interesado en alguno de ellos?');
+				agent.add('Indicanos en cual');
+	
+			}else{
+				agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+			}
+		} catch (error) {
+			console.error(error);
+			agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+		}
   	} 
 }
 
@@ -198,9 +263,9 @@ function extraerInfoInicial(agent) {
 async function pruebaSesion(agent) {
 
 	const sessionId = agent.session.split("/").reverse()[0];
-	let nombre = agent.request_.body.queryResult.outputContexts[0].parameters['given-name.original'];
+	//let nombres = agent.request_.body.queryResult.outputContexts[0].parameters['given-name.original'];
 	
-	console.log(nombre);
+	//console.log(nombre);
 
 	if (typeof agent.request_.session.sessionId === 'undefined') {
 		agent.request_.session.sessionId = sessionId;
@@ -213,14 +278,49 @@ async function pruebaSesion(agent) {
 
 		const setInformacionCliente = agent.context.get('setinformacioncliente');
 		var nombres = setInformacionCliente.parameters['given-name.original'];
+		var apellidos = setInformacionCliente.parameters['last-name.original'];
+		var telefono = setInformacionCliente.parameters['phone-number.original'];
+		var correo = setInformacionCliente.parameters['email.original'];
+
 		console.log(setInformacionCliente.parameters);
 		console.log(nombres);
 
+		data = {
+			"nombres": nombres,
+			"apellidos": apellidos,
+			"telefono": telefono,
+			"correo": correo
+		}
+
+		try {			
+			var request = await fetch(urlBase + '/cliente', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+			var response = await request.json();
+			var result = response.result;
+			console.log(result);
+
+			if (result.affectedRows == 1) {
+				agent.add('Datos guardados correctamente.');
+			}
+
+		} catch (error) {
+			// handle error
+			console.error(error);
+			agent.add("Error");
+		}
+		
+
 	} else {
 		console.log("diferente");
+		agent.add("diferente");
 	}
 
-	agent.add('Los requisitos son: ');
+	agent.add('Fin');
 
 	/*try {
 		//let idTipoPrestamo = await tipoPrestamoController.getIdTipoPrestamoByNombre(nombreTipoPrestamo);

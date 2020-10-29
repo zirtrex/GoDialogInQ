@@ -2,11 +2,18 @@
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
 -- Schema godialoginq
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `godialoginq` ;
+
+-- -----------------------------------------------------
+-- Schema godialoginq
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `godialoginq` DEFAULT CHARACTER SET utf8 ;
+USE `godialoginq` ;
 
 -- -----------------------------------------------------
 -- Table `cliente`
@@ -28,7 +35,6 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`idCliente`),
   UNIQUE INDEX `idCliente_UNIQUE` (`idCliente` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -43,7 +49,6 @@ CREATE TABLE IF NOT EXISTS `tipo_prestamo` (
   UNIQUE INDEX `idTipoPrestamo_UNIQUE` (`idTipoPrestamo` ASC) VISIBLE,
   UNIQUE INDEX `nombreTipoPrestamo_UNIQUE` (`nombreTipoPrestamo` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -120,10 +125,25 @@ CREATE TABLE IF NOT EXISTS `requisito` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Data for table `tipo_prestamo`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `godialoginq`;
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Plazo fijo', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Línea de crédito', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Dinero por tus facturas', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A Express', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Compras de propiedades comerciales', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'coronavirus', NULL);
+
+COMMIT;
+
