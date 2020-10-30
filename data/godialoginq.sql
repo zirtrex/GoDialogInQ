@@ -1,4 +1,4 @@
--- MySQL Workbench Forward Engineering
+﻿-- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `razonSocial` VARCHAR(20) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   PRIMARY KEY (`idCliente`),
-  UNIQUE INDEX `idCliente_UNIQUE` (`idCliente` ASC) VISIBLE)
+  UNIQUE INDEX `idCliente_UNIQUE` (`idCliente` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS `tipo_prestamo` (
   `nombreTipoPrestamo` VARCHAR(200) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   PRIMARY KEY (`idTipoPrestamo`),
-  UNIQUE INDEX `idTipoPrestamo_UNIQUE` (`idTipoPrestamo` ASC) VISIBLE,
-  UNIQUE INDEX `nombreTipoPrestamo_UNIQUE` (`nombreTipoPrestamo` ASC) VISIBLE)
+  UNIQUE INDEX `idTipoPrestamo_UNIQUE` (`idTipoPrestamo` ASC),
+  UNIQUE INDEX `nombreTipoPrestamo_UNIQUE` (`nombreTipoPrestamo` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `idTipoPrestamo` INT NOT NULL,
   `idCliente` INT NOT NULL,
   PRIMARY KEY (`idPrestamoCliente`),
-  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) VISIBLE,
-  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) VISIBLE,
-  UNIQUE INDEX `idPrestamoCliente_UNIQUE` (`idPrestamoCliente` ASC) VISIBLE,
+  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC),
+  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC),
+  UNIQUE INDEX `idPrestamoCliente_UNIQUE` (`idPrestamoCliente` ASC),
   CONSTRAINT `fk_prestamo_cliente_tipo_prestamo`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idPrestamoCliente` INT NOT NULL,
   PRIMARY KEY (`idDocumentacionCliente`),
-  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC) VISIBLE,
-  UNIQUE INDEX `idDocumentacionCliente_UNIQUE` (`idDocumentacionCliente` ASC) VISIBLE,
+  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC),
+  UNIQUE INDEX `idDocumentacionCliente_UNIQUE` (`idDocumentacionCliente` ASC),
   CONSTRAINT `fk_documentacion_cliente_prestamo_cliente1`
     FOREIGN KEY (`idPrestamoCliente`)
     REFERENCES `prestamo_cliente` (`idPrestamoCliente`)
@@ -115,10 +115,8 @@ CREATE TABLE IF NOT EXISTS `requisito` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   PRIMARY KEY (`idRequisito`),
-  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC) VISIBLE,
-  UNIQUE INDEX `idRequisito_UNIQUE` (`idRequisito` ASC) VISIBLE,
-  UNIQUE INDEX `idTipoPrestamo_UNIQUE` (`idTipoPrestamo` ASC) VISIBLE,
-  UNIQUE INDEX `descripcionRequisito_UNIQUE` (`descripcionRequisito` ASC) VISIBLE,
+  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC),
+  UNIQUE INDEX `idRequisito_UNIQUE` (`idRequisito` ASC),
   CONSTRAINT `fk_requisito_tipo_prestamo1`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -126,6 +124,9 @@ CREATE TABLE IF NOT EXISTS `requisito` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+ALTER TABLE `requisito`
+add UNIQUE KEY `res_desReqPoridPrestamo` (`descripcionRequisito`,`idTipoPrestamo`);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -143,7 +144,51 @@ INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) V
 INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A Express', '1');
 INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A', '1');
 INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Compras de propiedades comerciales', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'coronavirus', NULL);
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'coronavirus', '1');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `requisito`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `godialoginq`;
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Estados de cuenta bancario del negocio de los últimos 3 meses', '1', 1);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Aplicación firmada', '1', 1);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID estatal', '1', 1);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Los últimos 3 estados de cuenta bancarios', '1', 2);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID estatal', '1', 2);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Aplicación firmada', '1', 2);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'El invoice por cobrar', '1', 3);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank Statements del negocio', '1', 3);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID del o los dueños', '1', 3);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos de negocios', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de ingresos y egresos al 30 de enero del 2020', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Forma 4506T del IRS', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Personal Financial Statement (SBA Form 413)', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'SBA Form 1368', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales del o los dueños', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueños del negocio', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Crédito requerido: al menos 600 puntos', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos de negocios últimos 3 años', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales últimos 2 años', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Financial Statement de los últimos dos años', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Business Plan y Proyecciones Financieras', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Personal Financial Statement (SBA Form 413)', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'SBA Form 1368', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank statements del negocio de los últimos 12 meses', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales del o los dueños', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueños del negocio', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos de negocios últimos 3 años', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales últimos 2 años', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Financial Statement de los últimos dos años', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Personal Financial Statement (SBA Form 413)', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'SBA Form 1368', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank statements del negocio de los últimos 12 meses', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales del o los dueños', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Información de la propiedad', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueños del negocio', '1', 6);
 
 COMMIT;
 
