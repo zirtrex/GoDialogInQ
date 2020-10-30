@@ -324,22 +324,22 @@ function extraerInfoInicial(agent) {
 	if (montoNecesitado != "") {
 		agent.request_.session.montoNecesitado = montoNecesitado;
 		agent.request_.session.prestamo_cliente.push(montoNecesitado);
-		agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado'] = montoNecesitado;
+		agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitadoS'] = montoNecesitado;
 	}
 	if (tiempoNegocio != "") {
 		agent.request_.session.tiempoNegocio = tiempoNegocio;
 		agent.request_.session.prestamo_cliente.push(tiempoNegocio);
-		agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio'] = tiempoNegocio;
+		agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocioS'] = tiempoNegocio;
 	}
 	if (ingresosAnuales != "") {
 		agent.request_.session.ingresosAnuales = ingresosAnuales;
 		agent.request_.session.prestamo_cliente.push(ingresosAnuales);
-		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnuales'] = ingresosAnuales;
+		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnualesS'] = ingresosAnuales;
 	}	
 	if (puntajeCredito != "") {
 		agent.request_.session.puntajeCredito = puntajeCredito;
 		agent.request_.session.prestamo_cliente.push(puntajeCredito);
-		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnuales'] = ingresosAnuales;
+		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnualesS'] = ingresosAnuales;
 	}
 
 	
