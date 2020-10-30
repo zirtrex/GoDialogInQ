@@ -310,7 +310,7 @@ function extraerInfoInicial(agent) {
 	let comoVaUsar = agent.request_.body.queryResult.outputContexts[0].parameters['comoVaUsar.original'];
 	let cuanRapidoNecesita = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
 
-	console.log(agent.request_.session.prestamo_cliente);
+	console.log(agent.request_.body.queryResult.outputContexts[0]);
 
 	if (typeof agent.request_.session.prestamo_cliente === 'undefined'){
 		agent.request_.session.prestamo_cliente = [];
@@ -319,24 +319,37 @@ function extraerInfoInicial(agent) {
 	/*
 	agent.request_.session.queNegocioTiene = queNegocioTiene;
 	agent.request_.session.comoVaUsar = comoVaUsar;
-	agent.request_.session.cuanRapidoNecesita = cuanRapidoNecesita;*/
+	agent.request_.session.cuanRapidoNecesita = cuanRapidoNecesita;*/	
 
 	if (montoNecesitado != "") {
 		agent.request_.session.montoNecesitado = montoNecesitado;
 		agent.request_.session.prestamo_cliente.push(montoNecesitado);
+		agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado'] = montoNecesitado;
 	}
 	if (tiempoNegocio != "") {
 		agent.request_.session.tiempoNegocio = tiempoNegocio;
 		agent.request_.session.prestamo_cliente.push(tiempoNegocio);
+		agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio'] = tiempoNegocio;
 	}
 	if (ingresosAnuales != "") {
 		agent.request_.session.ingresosAnuales = ingresosAnuales;
 		agent.request_.session.prestamo_cliente.push(ingresosAnuales);
+		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnuales'] = ingresosAnuales;
 	}	
 	if (puntajeCredito != "") {
 		agent.request_.session.puntajeCredito = puntajeCredito;
 		agent.request_.session.prestamo_cliente.push(puntajeCredito);
+		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnuales'] = ingresosAnuales;
 	}
+
+	
+
+	/*const existingContext = agent.context.get("setinformacioninicial");
+	agent.context.set({
+		'name': existingContext.name, 
+		'lifespan': 20,
+		'parameters': 
+	});*/
 
 	/*if (typeof agent.request_.session.montoNecesitado === 'undefined') {
 		agent.request_.session.montoNecesitado = montoNecesitado;
@@ -355,7 +368,7 @@ function extraerInfoInicial(agent) {
 		prestamo_cliente.push(puntajeCredito);
 	}*/
 
-	console.log(agent.request_.session.prestamo_cliente);
+	console.log(agent.request_.body.queryResult.outputContexts[0]);
 	console.log(agent.request_.session);
 
 	if (agent.request_.session.prestamo_cliente.length == 4) {
