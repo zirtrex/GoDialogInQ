@@ -1,5 +1,4 @@
 var express = require('express');
-var session = require('express-session');
 var bodyParser = require("body-parser");
 var router = express.Router();
 const fetch   = require('node-fetch');
@@ -19,8 +18,6 @@ var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session);
-app.use(sessionEntitiesHelper);
 
 const urlBase = 'http://localhost:8081';
 
@@ -252,15 +249,31 @@ async function extraerInfoCliente(agent) {
 
 		console.log(setInformacionCliente.parameters);
 
-		data = {
+		Cliente = {
 			"idSession": sessionId,
 			"nombres": nombres,
 			"apellidos": apellidos,
 			"telefono": telefono,
 			"correo": correo
+		};
+
+		try {	
+			response = await saveOrUpdateCliente(sessionId, Cliente);
+			var result = response.result;
+			if (result.affectedRows == 1) {
+				agent.request_.body.queryResult.outputContexts[0].parameters['idCliente'] = result.insertId;
+				agent.add('Gracias ' + nombres + " " + apellidos + " por respondernos");
+				agent.add("¿Qué monto necesitas?");
+
+				console.log("Datos del cliente guardados correctamente.");
+				logger.debug("Datos del cliente guardados correctamente.");		
+			}
+		} catch (error) {
+			console.error(error);
+			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
 		}
 
-		try {			
+		/*try {			
 			var request = await fetch(urlBase + '/cliente', {
 				method: 'POST',
 				headers: {
@@ -285,7 +298,7 @@ async function extraerInfoCliente(agent) {
 		} catch (error) {
 			console.error(error);
 			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}		
+		}*/	
 
 	} else {
 		console.log("Sesiones diferentes");
@@ -311,7 +324,7 @@ async function extraerInfoInicial(agent) {
 	const setTipoPrestamo = agent.context.get('settipoprestamo');
 	var idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
 	
-	tipo_prestamo = {
+	TipoPrestamo = {
 		"idSession": idSession,
 		"montoNecesitado": montoNecesitado,
 		"tiempoNegocio": tiempoNegocio,
@@ -324,15 +337,8 @@ async function extraerInfoInicial(agent) {
 		"idCliente": idCliente
 	};
 
-	try {			
-		var request = await fetch(urlBase + '/prestamo_cliente', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		});
-		var response = await request.json();
+	try {
+		var response = await saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
 		var result = response.result;
 		console.log(result);
 		logger.debug(result);
@@ -450,11 +456,11 @@ async function pruebaSesion(agent) {
 
 async function saveOrUpdateCliente (idSession, Cliente) {
 	try {		
-		var request = await fetch(urlBase + '/cliente/' + idSession);    
+		var request = await fetch(urlBase + '/cliente/session/' + idSession);    
 		var response = await request.json();
 
 		if (response.status == "success") {
-			var request = await fetch(urlBase + '/cliente/' + idSession, {
+			var request = await fetch(urlBase + '/cliente/session/' + idSession, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -462,7 +468,7 @@ async function saveOrUpdateCliente (idSession, Cliente) {
 				body: JSON.stringify(Cliente)
 			});
 			var response = await request.json();
-			return result = response.result;
+			return response;
 		} else {
 			var request = await fetch(urlBase + '/cliente', {
 				method: 'POST',
@@ -472,12 +478,44 @@ async function saveOrUpdateCliente (idSession, Cliente) {
 				body: JSON.stringify(Cliente)
 			});
 			var response = await request.json();
-			return result = response.result;
+			return response;
 		}
 	} catch (error) {
 		logger.debug(error);
-		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+		throw new Error(error);
   	}	
-} 
+}
+
+async function saveOrUpdatePrestamoCliente (idSession, PrestamoCliente) {
+	try {		
+		var request = await fetch(urlBase + '/prestamo-cliente/session/' + idSession);    
+		var response = await request.json();
+
+		if (response.status == "success") {
+			var request = await fetch(urlBase + '/prestamo-cliente/session/' + idSession, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(PrestamoCliente)
+			});
+			var response = await request.json();
+			return response;
+		} else {
+			var request = await fetch(urlBase + '/prestamo-cliente', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(PrestamoCliente)
+			});
+			var response = await request.json();
+			return response;
+		}
+	} catch (error) {
+		logger.debug(error);
+		throw new Error(error);
+  	}	
+}
 
 module.exports = router;
