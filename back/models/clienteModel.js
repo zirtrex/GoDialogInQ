@@ -26,6 +26,19 @@ cliente.getByIdCliente = async function (idCliente) {
     }
 }
 
+cliente.getByIdSession = async function (idSession) {
+    try {
+        var query = 'select * from cliente where idSession=:idSession';
+        var result = await db_connect.query(query,{
+            idSession:idSession
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+
 cliente.getByDocumento = async function (documento) {
     try {
         var query = 'select * from cliente where documento=:documento';
@@ -136,6 +149,8 @@ cliente.update = async function (idCliente, cliente) {
         throw new Error(error);
     }
 }
+
+
 
 cliente.delete = async function (idCliente) {
     try {        
