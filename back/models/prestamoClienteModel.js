@@ -36,6 +36,21 @@ prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
     }
 }
 
+
+prestamocliente.getByIdSession = async function (idSession) {
+    try {
+        var query = 'select * from prestamo_cliente where idSession=:idSession';
+        var result = await db_connect.query(query,{
+            idSession:idSession
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+
+
 prestamocliente.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
     try {
         var query = 'select * from prestamo_cliente where idTipoPrestamo=:idTipoPrestamo';
