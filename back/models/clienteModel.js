@@ -26,6 +26,19 @@ cliente.getByIdCliente = async function (idCliente) {
     }
 }
 
+cliente.getByIdSession = async function (idSession) {
+    try {
+        var query = 'select * from cliente where idSession=:idSession';
+        var result = await db_connect.query(query,{
+            idSession:idSession
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+
 cliente.getByDocumento = async function (documento) {
     try {
         var query = 'select * from cliente where documento=:documento';
@@ -67,6 +80,7 @@ cliente.create = async function (cliente) {
             movil,
             direccion,
             razonSocial,
+            idSession,
             estado      
         ) values (
             :apellidos,
@@ -80,7 +94,9 @@ cliente.create = async function (cliente) {
             :movil,
             :direccion,
             :razonSocial,
+            :idSession,
             1
+            
         )`;
         var result = await db_connect.query(query, {
             apellidos: cliente.apellidos,
@@ -93,7 +109,8 @@ cliente.create = async function (cliente) {
             correo: cliente.correo,
             movil: cliente.movil,
             direccion: cliente.direccion,
-            razonSocial: cliente.razonSocial
+            razonSocial: cliente.razonSocial,
+            idSession:cliente.idSession
         });        
         return result;        
 
@@ -136,6 +153,45 @@ cliente.update = async function (idCliente, cliente) {
         throw new Error(error);
     }
 }
+
+
+cliente.updateIdSession = async function (idSession, cliente) {
+    try {        
+        var query = `update cliente set 
+            apellidos=:apellidos,
+            nombres=:nombres,
+            tipoDocumento=:tipoDocumento,
+            documento=:documento,
+            fechaNacimiento=:fechaNacimiento,
+            sexo=:sexo,
+            telefono=:telefono,
+            correo=:correo,
+            movil=:movil,
+            direccion=:direccion,
+            razonSocial=:razonSocial
+            where idSession=:idSession`; 
+        var result = await db_connect.query(query, {
+            apellidos:cliente.apellidos,
+            nombres:cliente.nombres,
+            tipoDocumento:cliente.tipoDocumento,
+            documento:cliente.documento,
+            fechaNacimiento:cliente.fechaNacimiento,
+            sexo:cliente.sexo,
+            telefono:cliente.telefono,
+            correo:cliente.correo,
+            movil:cliente.movil,
+            direccion:cliente.direccion,
+            razonSocial:cliente.razonSocial,
+            idSession:idSession
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+
+
 
 cliente.delete = async function (idCliente) {
     try {        

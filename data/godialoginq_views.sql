@@ -2,6 +2,9 @@
 
 USE godialoginq;
 
+ALTER TABLE `requisito`
+ADD UNIQUE KEY `res_desReqPoridPrestamo` (`descripcionRequisito`,`idTipoPrestamo`);
+
 CREATE VIEW vw_requisito_getAllByIdTipoPrestamo
 AS
 	SELECT r.idRequisito, r.descripcionRequisito, tp.idTipoPrestamo, tp.nombreTipoPrestamo 

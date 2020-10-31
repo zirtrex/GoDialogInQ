@@ -8,14 +8,16 @@
   "scripts": {
     "dev": "nodemon --inspect ./bin/www.js",
     "start": "node ./bin/www.js",
-    "tunnel": "ngrok http 8080",
+    "tunnel": "ngrok http 8081",
     "test": "mocha --timeout 10000",
     "devtest": "concurrently \"npm run start\" \"npm run test\""
   },
   "dependencies": {
     "@google-cloud/dialogflow": "^3.2.0",
     "actions-on-google": "^2.13.0",
+    "actions-on-google-dialogflow-session-entities-plugin": "^1.0.1",
     "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
     "dialogflow-fulfillment": "^0.6.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
