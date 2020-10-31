@@ -202,4 +202,38 @@ prestamoClienteController.create = async function (req, res) {
   }  
 }
 
+
+
+prestamoClienteController.updateIdSession = async function (req, res) {
+  var idSession = req.params.idSession;
+  var prestamoCliente = req.body;
+  try {
+    var result = await model.updateIdSession(idSession, prestamoCliente);
+    if(result.affectedRows>0)
+    {
+      res.status(200).send({
+      status:'success',
+      message: "Prestamo cliente actualizado correctamente",
+      result: result
+    });
+  }else
+  {
+
+      res.status(404).send({
+      status:'failed',
+      message: "La modificación ha fallado",
+      result: []
+    });
+  }
+  } catch (error) {
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error",
+      result: error     
+    });  
+  } 
+}
+
+
+
 module.exports = prestamoClienteController;
