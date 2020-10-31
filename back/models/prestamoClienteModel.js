@@ -129,13 +129,13 @@ prestamocliente.create = async function (prestamocliente) {
 prestamocliente.updateIdSession = async function (idSession, prestamocliente) {
     try {        
         var query = `update prestamo_cliente set 
-            montoNecesitado:montoNecesitado,
-            tiempoNegocio:tiempoNegocio,
-            ingresosAnuales:ingresosAnuales,
-            puntajeCredito:puntajeCredito,
-            queNegocioTiene:queNegocioTiene,
-            comoVaUsar:comoVaUsar,
-            cuanRapidoNecesita:cuanRapidoNecesita
+            montoNecesitado=:montoNecesitado,
+            tiempoNegocio=:tiempoNegocio,
+            ingresosAnuales=:ingresosAnuales,
+            puntajeCredito=:puntajeCredito,
+            queNegocioTiene=:queNegocioTiene,
+            comoVaUsar=:comoVaUsar,
+            cuanRapidoNecesita=:cuanRapidoNecesita
             where idSession=:idSession`; 
         var result = await db_connect.query(query, {
             montoNecesitado:prestamocliente.montoNecesitado,
