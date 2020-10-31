@@ -78,8 +78,7 @@ prestamocliente.getAllByIdCliente = async function (idCliente) {
 
 prestamocliente.create = async function (prestamocliente) {
     try {        
-        var query = `insert into prestamo_cliente (
-           
+        var query = `insert into prestamo_cliente (           
             montoNecesitado,
             tiempoNegocio,
             ingresosAnuales,
@@ -91,7 +90,6 @@ prestamocliente.create = async function (prestamocliente) {
             idTipoPrestamo,
             idCliente,
             idSession
-
         ) values (
             :montoNecesitado,
             :tiempoNegocio,
@@ -120,11 +118,10 @@ prestamocliente.create = async function (prestamocliente) {
         return result;        
 
     } catch(error) {
+        console.log(error);
         throw new Error(error);
     }
 }
-
-
 
 prestamocliente.updateIdSession = async function (idSession, prestamocliente) {
     try {        
@@ -149,6 +146,7 @@ prestamocliente.updateIdSession = async function (idSession, prestamocliente) {
         });
         return result;
     } catch(error) {
+        console.log(error);
         throw new Error(error);
     }
 }

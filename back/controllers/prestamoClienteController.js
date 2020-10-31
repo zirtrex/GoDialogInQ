@@ -7,20 +7,17 @@ var prestamoClienteController = {};
 prestamoClienteController.getAll = async function (req, res) {
   try {
     var prestamoCliente = await model.getAll();
-    res.send(
-      {
+    res.send({
         status:'success',
         message: "",
         result: prestamoCliente
-      }
-      
-      );
+      });
     } catch (error) {
       res.status(500).send({
-      status:'error',
-      message: "Ha ocurrido un error",
-      result: error     
-    });  
+        status:'error',
+        message: "Ha ocurrido un error",
+        result: error   
+      });  
     }
 }
 
@@ -123,8 +120,7 @@ prestamoClienteController.getAllByIdTipoPrestamo = async function (req, res) {
           result:[]
         }
       );
-    }else
-    {
+    } else {
       res.status(200).send(
         {
           status:'success',
@@ -176,20 +172,17 @@ prestamoClienteController.create = async function (req, res) {
   var prestamoCliente = req.body;
   try {
     var result = await model.create(prestamoCliente);
-    if(result.affectedRows>0)
-    {
-      res.status(201).send({
-      status:'success',
-      message: "Prestamo Cliente creado correctamente",
-      result:result
-      
-    });   
-    }else
-    {
+    if (result.affectedRows > 0) {
+      res.status(200).send({
+        status:'success',
+        message: "Prestamo Cliente creado correctamente",
+        result:result  
+      });   
+    } else {
         res.status(400).send({
         status:'failed',
         message: "La creación ha fallado",
-        result:[]
+        result: result
         
       });
     }

@@ -103,6 +103,12 @@ async function extraerTipoPrestamo(agent) {
 		var response = await request.json();
 		var idTipoPrestamo = response.result[0].idTipoPrestamo;
 		agent.request_.body.queryResult.outputContexts[0].parameters['idTipoPrestamo'] = idTipoPrestamo;
+		const existingContext = agent.context.get("settipoprestamo");
+		agent.context.set({
+			'name': existingContext.name, 
+			'lifespan': 50,
+			'parameters' : {'idTipoPrestamo': idTipoPrestamo}
+		});
 	} catch (error) {
     	// handle error
 		logger.debug(error);
@@ -261,7 +267,17 @@ async function extraerInfoCliente(agent) {
 			response = await saveOrUpdateCliente(sessionId, Cliente);
 			var result = response.result;
 			if (result.affectedRows == 1) {
-				agent.request_.body.queryResult.outputContexts[0].parameters['idCliente'] = result.insertId;
+				if (typeof result.idCliente === "undefined") {
+					idCliente = result.insertId;
+				} else {
+					idCliente = result.idCliente;
+				}
+				const existingContext = agent.context.get("setinformacioncliente");
+				agent.context.set({
+					'name': existingContext.name, 
+					'lifespan': 50,
+					'parameters' : {'idCliente': idCliente}
+				});
 				agent.add('Gracias ' + nombres + " " + apellidos + " por respondernos");
 				agent.add("¿Qué monto necesitas?");
 
@@ -272,34 +288,6 @@ async function extraerInfoCliente(agent) {
 			console.error(error);
 			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
 		}
-
-		/*try {			
-			var request = await fetch(urlBase + '/cliente', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(data)
-			});
-			var response = await request.json();
-			var result = response.result;
-			console.log(result);
-			logger.debug(result);
-
-			if (result.affectedRows == 1) {
-				agent.request_.body.queryResult.outputContexts[0].parameters['idCliente'] = result.insertId;
-				agent.add('Gracias ' + nombres + " " + apellidos + " por respondernos");
-				agent.add("¿Qué monto necesitas?");
-
-				console.log("Datos guardados correctamente.");
-				logger.debug("Datos guardados correctamente.");				
-			}
-
-		} catch (error) {
-			console.error(error);
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}*/	
-
 	} else {
 		console.log("Sesiones diferentes");
 		logger.debug("Sesiones diferentes");
@@ -337,16 +325,21 @@ async function extraerInfoInicial(agent) {
 		"idCliente": idCliente
 	};
 
+	console.log(TipoPrestamo);
+	logger.debug(TipoPrestamo);
+
 	try {
 		var response = await saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
 		var result = response.result;
-		console.log(result);
-		logger.debug(result);
+		console.log(response);
+		logger.debug(response);
 
 		if (result.affectedRows == 1) {
 			agent.request_.body.queryResult.outputContexts[0].parameters['idPrestamoCliente'] = result.insertId;
 			agent.add('Gracias por responder las preguntas.');
 			agent.add('Uno de nuestros agentes se contactará contigo a la brevedad posible.');
+		} else {
+			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
 		}
 
 	} catch (error) {
@@ -458,8 +451,9 @@ async function saveOrUpdateCliente (idSession, Cliente) {
 	try {		
 		var request = await fetch(urlBase + '/cliente/session/' + idSession);    
 		var response = await request.json();
-
+		console.log(response);
 		if (response.status == "success") {
+			var idCliente = response.result[0].idCliente;
 			var request = await fetch(urlBase + '/cliente/session/' + idSession, {
 				method: 'PUT',
 				headers: {
@@ -468,6 +462,7 @@ async function saveOrUpdateCliente (idSession, Cliente) {
 				body: JSON.stringify(Cliente)
 			});
 			var response = await request.json();
+			response.result.idCliente = idCliente;
 			return response;
 		} else {
 			var request = await fetch(urlBase + '/cliente', {
@@ -488,11 +483,11 @@ async function saveOrUpdateCliente (idSession, Cliente) {
 
 async function saveOrUpdatePrestamoCliente (idSession, PrestamoCliente) {
 	try {		
-		var request = await fetch(urlBase + '/prestamo-cliente/session/' + idSession);    
+		var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession);    
 		var response = await request.json();
 
 		if (response.status == "success") {
-			var request = await fetch(urlBase + '/prestamo-cliente/session/' + idSession, {
+			var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -502,7 +497,7 @@ async function saveOrUpdatePrestamoCliente (idSession, PrestamoCliente) {
 			var response = await request.json();
 			return response;
 		} else {
-			var request = await fetch(urlBase + '/prestamo-cliente', {
+			var request = await fetch(urlBase + '/prestamo_cliente', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
