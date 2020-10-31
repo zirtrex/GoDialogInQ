@@ -7,15 +7,13 @@ var clienteController = {};
 
 clienteController.getAll = async function (req, res) {
   try {
-  var cliente = await model.getAll();
+    var cliente = await model.getAll();
 
-  res.status(200).send(
-    {
+    res.status(200).send({
       status:'success',
       message: "",
       result: cliente
-    }
-    );
+    });
   } catch (error) {
     res.status(500).send({
       status:'error',

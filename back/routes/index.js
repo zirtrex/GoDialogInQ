@@ -12,12 +12,8 @@ log4js.configure({
 const logger = log4js.getLogger('cheese');
 
 const dialogflow = require('@google-cloud/dialogflow');
-const uuid = require('uuid');
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { Card, Suggestion } = require("dialogflow-fulfillment");
-const { sessionEntitiesHelper } = require('actions-on-google-dialogflow-session-entities-plugin');
-
-const { json } = require('body-parser');
 
 var app = express();
 
@@ -51,9 +47,6 @@ router.post("/dialogflow", express.json(), (req, res) => {
 	intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
 	intentMap.set("Prueba sesion", pruebaSesion);
 	agent.handleRequest(intentMap);
-	/*res.json({
-		"fulfillmentText": "Hola desde el back"
-	});*/
 });
 
 router.post("/dialogflow2", (req, res) => {
@@ -252,7 +245,7 @@ async function extraerInfoCliente(agent) {
 	if (agent.request_.session.sessionId == sessionId) {
 
 		const setInformacionCliente = agent.context.get('setinformacioncliente');
-		var nombres = setInformacionCliente.parameters['given-name.original'];
+		var nombres = setInformacionCliente.parameters['given-name.original'];		
 		var apellidos = setInformacionCliente.parameters['last-name.original'];
 		var telefono = setInformacionCliente.parameters['phone-number.original'];
 		var correo = setInformacionCliente.parameters['email.original'];
@@ -260,6 +253,7 @@ async function extraerInfoCliente(agent) {
 		console.log(setInformacionCliente.parameters);
 
 		data = {
+			"idSession": sessionId,
 			"nombres": nombres,
 			"apellidos": apellidos,
 			"telefono": telefono,
@@ -300,7 +294,9 @@ async function extraerInfoCliente(agent) {
 	}
 }
 
-function extraerInfoInicial(agent) {	
+async function extraerInfoInicial(agent) {
+
+	const idSession = agent.session.split("/").reverse()[0];
 
 	let montoNecesitado = agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado.original'];
 	let tiempoNegocio = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
@@ -311,80 +307,47 @@ function extraerInfoInicial(agent) {
 	let cuanRapidoNecesita = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
 
 	const setInformacionCliente = agent.context.get('setinformacioncliente');
-	var nombres = setInformacionCliente.parameters['given-name.original'];
-	var apellidos = setInformacionCliente.parameters['last-name.original'];
-	var telefono = setInformacionCliente.parameters['phone-number.original'];
-	var correo = setInformacionCliente.parameters['email.original'];
+	var idCliente = setInformacionCliente.parameters['idCliente'];
+	const setTipoPrestamo = agent.context.get('settipoprestamo');
+	var idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
 	
-	
-	console.log(agent.request_.body.queryResult.outputContexts[0]);
+	tipo_prestamo = {
+		"idSession": idSession,
+		"montoNecesitado": montoNecesitado,
+		"tiempoNegocio": tiempoNegocio,
+		"ingresosAnuales": ingresosAnuales,
+		"puntajeCredito": puntajeCredito,
+		"queNegocioTiene": queNegocioTiene,
+		"comoVaUsar": comoVaUsar,
+		"cuanRapidoNecesita": cuanRapidoNecesita,
+		"idTipoPrestamo": idTipoPrestamo,
+		"idCliente": idCliente
+	};
 
-	if (typeof agent.request_.session.prestamo_cliente === 'undefined'){
-		agent.request_.session.prestamo_cliente = [];
-	}	
-	
-	/*
-	agent.request_.session.queNegocioTiene = queNegocioTiene;
-	agent.request_.session.comoVaUsar = comoVaUsar;
-	agent.request_.session.cuanRapidoNecesita = cuanRapidoNecesita;*/	
+	try {			
+		var request = await fetch(urlBase + '/prestamo_cliente', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
+		var response = await request.json();
+		var result = response.result;
+		console.log(result);
+		logger.debug(result);
 
-	if (montoNecesitado != "") {
-		agent.request_.session.montoNecesitado = montoNecesitado;
-		agent.request_.session.prestamo_cliente.push(montoNecesitado);
-		agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitadoS'] = montoNecesitado;
+		if (result.affectedRows == 1) {
+			agent.request_.body.queryResult.outputContexts[0].parameters['idPrestamoCliente'] = result.insertId;
+			agent.add('Gracias por responder las preguntas.');
+			agent.add('Uno de nuestros agentes se contactará contigo a la brevedad posible.');
+		}
+
+	} catch (error) {
+		console.error(error);
+		logger.debug(error);
+		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
 	}
-	if (tiempoNegocio != "") {
-		agent.request_.session.tiempoNegocio = tiempoNegocio;
-		agent.request_.session.prestamo_cliente.push(tiempoNegocio);
-		agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocioS'] = tiempoNegocio;
-	}
-	if (ingresosAnuales != "") {
-		agent.request_.session.ingresosAnuales = ingresosAnuales;
-		agent.request_.session.prestamo_cliente.push(ingresosAnuales);
-		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnualesS'] = ingresosAnuales;
-	}	
-	if (puntajeCredito != "") {
-		agent.request_.session.puntajeCredito = puntajeCredito;
-		agent.request_.session.prestamo_cliente.push(puntajeCredito);
-		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnualesS'] = ingresosAnuales;
-	}
-
-	
-
-	/*const existingContext = agent.context.get("setinformacioninicial");
-	agent.context.set({
-		'name': existingContext.name, 
-		'lifespan': 20,
-		'parameters': 
-	});*/
-
-	/*if (typeof agent.request_.session.montoNecesitado === 'undefined') {
-		agent.request_.session.montoNecesitado = montoNecesitado;
-		prestamo_cliente.push(montoNecesitado);
-	}
-	if (typeof agent.request_.session.tiempoNegocio === 'undefined') {
-		agent.request_.session.tiempoNegocio = tiempoNegocio;
-		prestamo_cliente.push(tiempoNegocio);
-	}
-	if (typeof agent.request_.session.ingresosAnuales === 'undefined') {
-		agent.request_.session.ingresosAnuales = ingresosAnuales;
-		prestamo_cliente.push(ingresosAnuales);
-	}	
-	if (typeof agent.request_.session.puntajeCredito === 'undefined') {
-		agent.request_.session.puntajeCredito = puntajeCredito;
-		prestamo_cliente.push(puntajeCredito);
-	}*/
-
-	console.log(agent.request_.body.queryResult.outputContexts[0]);
-	console.log(agent.request_.session);
-
-	if (agent.request_.session.prestamo_cliente.length == 4) {
-		agent.add("Se completaron los datos");
-	} else {
-		agent.add("Faltan por completar");
-	}
-
-	agent.add("Final");
 }
 
 async function pruebaSesion(agent) {
@@ -484,5 +447,37 @@ async function pruebaSesion(agent) {
 		console.error(error)
   	} */
 }
+
+async function saveOrUpdateCliente (idSession, Cliente) {
+	try {		
+		var request = await fetch(urlBase + '/cliente/' + idSession);    
+		var response = await request.json();
+
+		if (response.status == "success") {
+			var request = await fetch(urlBase + '/cliente/' + idSession, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(Cliente)
+			});
+			var response = await request.json();
+			return result = response.result;
+		} else {
+			var request = await fetch(urlBase + '/cliente', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(Cliente)
+			});
+			var response = await request.json();
+			return result = response.result;
+		}
+	} catch (error) {
+		logger.debug(error);
+		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+  	}	
+} 
 
 module.exports = router;
