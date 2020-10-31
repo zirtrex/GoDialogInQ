@@ -70,12 +70,23 @@ function serverMessage(response2) {
         return false;
     }
     $('<div class="message loading new"><span></span></div>').appendTo($('.messages-content'));
-    updateScrollbar();  
+    updateScrollbar();
+
+    var finalMessage = "";
+    
+    if (typeof response2 === 'object') {
+        response2.forEach(element => {
+            finalMessage += element.text.text[0] + "<br/>";
+        });
+    } else {
+        finalMessage = response2;
+    }
 
     setTimeout(function() {
         $('.message.loading').remove();
-        $('<div class="message new">' + response2 + '</div>').appendTo($('.messages-content')).addClass('new');
+        $('<div class="message new">' + finalMessage + '</div>').appendTo($('.messages-content')).addClass('new');
         updateScrollbar();
+        speechSynthesis.speak( new SpeechSynthesisUtterance(finalMessage));
     }, 100 + (Math.random() * 20) * 100);
 
 }
@@ -101,7 +112,7 @@ function fetchmsg(){
     .then(response => {
         console.log(response);
         serverMessage(response.Reply);
-        speechSynthesis.speak( new SpeechSynthesisUtterance(response.Reply));
+        
     })
     .catch(error => console.error('Error h:', error));
 
