@@ -1,4 +1,4 @@
-﻿-- MySQL Workbench Forward Engineering
+-- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -20,6 +20,7 @@ USE `godialoginq` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cliente` (
   `idCliente` INT NOT NULL AUTO_INCREMENT,
+  `idSession` VARCHAR(500) NOT NULL,
   `apellidos` VARCHAR(100) NULL DEFAULT NULL,
   `nombres` VARCHAR(100) NULL DEFAULT NULL,
   `tipoDocumento` VARCHAR(10) NULL DEFAULT NULL,
@@ -32,10 +33,11 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `direccion` VARCHAR(500) NULL DEFAULT NULL,
   `razonSocial` VARCHAR(20) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`idCliente`),
-  UNIQUE INDEX `idCliente_UNIQUE` (`idCliente` ASC))
+  PRIMARY KEY (`idCliente`, `idSession`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+CREATE UNIQUE INDEX `idCliente_UNIQUE` ON `cliente` (`idCliente` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -45,11 +47,13 @@ CREATE TABLE IF NOT EXISTS `tipo_prestamo` (
   `idTipoPrestamo` INT NOT NULL AUTO_INCREMENT,
   `nombreTipoPrestamo` VARCHAR(200) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`idTipoPrestamo`),
-  UNIQUE INDEX `idTipoPrestamo_UNIQUE` (`idTipoPrestamo` ASC),
-  UNIQUE INDEX `nombreTipoPrestamo_UNIQUE` (`nombreTipoPrestamo` ASC))
+  PRIMARY KEY (`idTipoPrestamo`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+CREATE UNIQUE INDEX `idTipoPrestamo_UNIQUE` ON `tipo_prestamo` (`idTipoPrestamo` ASC) VISIBLE;
+
+CREATE UNIQUE INDEX `nombreTipoPrestamo_UNIQUE` ON `tipo_prestamo` (`nombreTipoPrestamo` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -57,6 +61,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `idPrestamoCliente` INT NOT NULL AUTO_INCREMENT,
+  `idSession` VARCHAR(500) NOT NULL,
   `montoNecesitado` VARCHAR(50) NULL DEFAULT NULL,
   `tiempoNegocio` VARCHAR(50) NULL DEFAULT NULL,
   `ingresosAnuales` VARCHAR(50) NULL DEFAULT NULL,
@@ -67,10 +72,7 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   `idCliente` INT NOT NULL,
-  PRIMARY KEY (`idPrestamoCliente`),
-  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC),
-  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC),
-  UNIQUE INDEX `idPrestamoCliente_UNIQUE` (`idPrestamoCliente` ASC),
+  PRIMARY KEY (`idPrestamoCliente`, `idSession`),
   CONSTRAINT `fk_prestamo_cliente_tipo_prestamo`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -84,6 +86,12 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+CREATE INDEX `fk_prestamo_cliente_tipo_prestamo_idx` ON `prestamo_cliente` (`idTipoPrestamo` ASC) VISIBLE;
+
+CREATE INDEX `fk_prestamo_cliente_cliente1_idx` ON `prestamo_cliente` (`idCliente` ASC) VISIBLE;
+
+CREATE UNIQUE INDEX `idPrestamoCliente_UNIQUE` ON `prestamo_cliente` (`idPrestamoCliente` ASC) VISIBLE;
+
 
 -- -----------------------------------------------------
 -- Table `documentacion_cliente`
@@ -95,8 +103,6 @@ CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idPrestamoCliente` INT NOT NULL,
   PRIMARY KEY (`idDocumentacionCliente`),
-  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC),
-  UNIQUE INDEX `idDocumentacionCliente_UNIQUE` (`idDocumentacionCliente` ASC),
   CONSTRAINT `fk_documentacion_cliente_prestamo_cliente1`
     FOREIGN KEY (`idPrestamoCliente`)
     REFERENCES `prestamo_cliente` (`idPrestamoCliente`)
@@ -104,6 +110,10 @@ CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+CREATE INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` ON `documentacion_cliente` (`idPrestamoCliente` ASC) VISIBLE;
+
+CREATE UNIQUE INDEX `idDocumentacionCliente_UNIQUE` ON `documentacion_cliente` (`idDocumentacionCliente` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -115,8 +125,6 @@ CREATE TABLE IF NOT EXISTS `requisito` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   PRIMARY KEY (`idRequisito`),
-  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC),
-  UNIQUE INDEX `idRequisito_UNIQUE` (`idRequisito` ASC),
   CONSTRAINT `fk_requisito_tipo_prestamo1`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -125,8 +133,9 @@ CREATE TABLE IF NOT EXISTS `requisito` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-ALTER TABLE `requisito`
-add UNIQUE KEY `res_desReqPoridPrestamo` (`descripcionRequisito`,`idTipoPrestamo`);
+CREATE INDEX `fk_requisito_tipo_prestamo1_idx` ON `requisito` (`idTipoPrestamo` ASC) VISIBLE;
+
+CREATE UNIQUE INDEX `idRequisito_UNIQUE` ON `requisito` (`idRequisito` ASC) VISIBLE;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

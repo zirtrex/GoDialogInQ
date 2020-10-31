@@ -112,7 +112,7 @@ async function extraerTipoPrestamo(agent) {
 		var request = await fetch(urlBase + '/tipo_prestamo/' + nombreTipoPrestamo);    
 		var response = await request.json();
 		var idTipoPrestamo = response.result[0].idTipoPrestamo;
-		agent.request_.session.idTipoPrestamo = idTipoPrestamo;
+		agent.request_.body.queryResult.outputContexts[0].parameters['idTipoPrestamo'] = idTipoPrestamo;
 	} catch (error) {
     	// handle error
 		logger.debug(error);
@@ -280,7 +280,7 @@ async function extraerInfoCliente(agent) {
 			logger.debug(result);
 
 			if (result.affectedRows == 1) {
-				agent.request_.session.idCliente = result.insertId;
+				agent.request_.body.queryResult.outputContexts[0].parameters['idCliente'] = result.insertId;
 				agent.add('Gracias ' + nombres + " " + apellidos + " por respondernos");
 				agent.add("¿Qué monto necesitas?");
 
@@ -310,6 +310,13 @@ function extraerInfoInicial(agent) {
 	let comoVaUsar = agent.request_.body.queryResult.outputContexts[0].parameters['comoVaUsar.original'];
 	let cuanRapidoNecesita = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
 
+	const setInformacionCliente = agent.context.get('setinformacioncliente');
+	var nombres = setInformacionCliente.parameters['given-name.original'];
+	var apellidos = setInformacionCliente.parameters['last-name.original'];
+	var telefono = setInformacionCliente.parameters['phone-number.original'];
+	var correo = setInformacionCliente.parameters['email.original'];
+	
+	
 	console.log(agent.request_.body.queryResult.outputContexts[0]);
 
 	if (typeof agent.request_.session.prestamo_cliente === 'undefined'){
