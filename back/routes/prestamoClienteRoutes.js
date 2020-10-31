@@ -19,5 +19,6 @@ router.get('/prestamo_cliente/cliente/:idCliente', controller.getAllByIdCliente)
 
 router.post('/prestamo_cliente', controller.create);
 
+router.put('/prestamo_cliente/session/:idSession', controller.updateIdSession);
 
 module.exports = router;

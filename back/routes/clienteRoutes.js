@@ -17,6 +17,8 @@ router.post('/cliente', controller.create);
 
 router.put('/cliente/:idCliente', controller.update);
 
+router.put('/cliente/session/:idSession', controller.updateIdSession);
+
 router.delete('/cliente/:idCliente', controller.delete);
 
 module.exports = router;
