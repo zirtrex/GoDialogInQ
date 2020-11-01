@@ -25,6 +25,18 @@ tipoPrestamo.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     }
 }
 
+tipoPrestamo.getAllPrestamoByNombre = async function (nombreTipoPrestamo) {
+    try {
+        var query = 'select * from tipo_prestamo where nombreTipoPrestamo=:nombreTipoPrestamo';
+        var result = await db_connect.query(query,{
+            nombreTipoPrestamo:nombreTipoPrestamo
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
 tipoPrestamo.create = async function (tipoPrestamo) {
     try {        
         var query = `insert into tipo_prestamo (
