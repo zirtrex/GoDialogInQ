@@ -2,7 +2,7 @@
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema godialoginq
@@ -46,6 +46,7 @@ CREATE UNIQUE INDEX `idCliente_UNIQUE` ON `cliente` (`idCliente` ASC) VISIBLE;
 CREATE TABLE IF NOT EXISTS `tipo_prestamo` (
   `idTipoPrestamo` INT NOT NULL AUTO_INCREMENT,
   `nombreTipoPrestamo` VARCHAR(200) NULL DEFAULT NULL,
+  `descripcionTipoPrestamo` VARCHAR(500) NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   PRIMARY KEY (`idTipoPrestamo`))
 ENGINE = InnoDB
@@ -147,13 +148,13 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `godialoginq`;
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Plazo fijo', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Línea de crédito', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Dinero por tus facturas', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A Express', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Compras de propiedades comerciales', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `estado`) VALUES (DEFAULT, 'coronavirus', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Plazo fijo', 'Descripción Plazo fijo', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Línea de crédito', 'Descripción Línea de crédito', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Dinero por tus facturas', 'Descripción Dinero por tus facturas', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A Express', 'Descripción 7A Express', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (DEFAULT, '7A', 'Descripción 7A', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (DEFAULT, 'Compras de propiedades comerciales', 'Descripción Compras de propiedades comerciales', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (DEFAULT, 'coronavirus', 'Descripción coronavirus', '1');
 
 COMMIT;
 
