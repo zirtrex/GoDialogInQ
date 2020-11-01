@@ -42,6 +42,7 @@ router.post("/dialogflow", express.json(), (req, res) => {
     intentMap.set("Default Welcome Intent", welcome);
 	intentMap.set("Default Fallback Intent", defaultFallback);
 	intentMap.set("Mostrar prestamos sin idea de los prestamos", mostrarPrestamosSinIdea);
+	intentMap.set("Guiar al usuario para elegir un prestamo - yes - custom", guiarUsuarioYesCustom);
 	intentMap.set("Extraer el tipo de prestamo", extraerTipoPrestamo);
 	intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
 	intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
@@ -86,6 +87,38 @@ async function mostrarPrestamosSinIdea(agent) {
 
 			agent.add('¿Estás interesado en alguno de ellos?');
 			agent.add('Indicanos en cual');
+
+		} else {
+			agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+		}
+	} catch (error) {
+		console.error(error);
+		logger.debug(error);
+		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+  	} 
+}
+
+async function guiarUsuarioYesCustom(agent) {
+
+	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];
+
+	frasesResponses = [];
+	frasesResponses.push("¿Estás interesado en alguno de ellos?");
+	frasesResponses.push("¿Resolvimos tus dudas?");
+	frasesResponses.push("¿Te podemos ayudar en algo más?");
+
+	try {
+		var request = await fetch(urlBase + '/tipo_prestamo/' + nombreTipoPrestamo);
+		var response = await request.json();
+
+		if (response.status == "success") {
+			response.result.forEach(object => {				
+				agent.add("Descripción: " + object.descripcionTipoPrestamo);
+			});
+
+			message = frasesResponses[Math.floor(Math.random() * frasesResponses.lenght + 1)];
+
+			agent.add(message);
 
 		} else {
 			agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
@@ -299,6 +332,60 @@ async function extraerInfoCliente(agent) {
 }
 
 async function extraerInfoInicial(agent) {
+
+	const idSession = agent.session.split("/").reverse()[0];
+
+	let montoNecesitado = agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado.original'];
+	let tiempoNegocio = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
+	let ingresosAnuales = agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnuales.original'];
+	let puntajeCredito = agent.request_.body.queryResult.outputContexts[0].parameters['puntajeCredito.original'];
+	let queNegocioTiene = agent.request_.body.queryResult.outputContexts[0].parameters['queNegocioTiene.original'];
+	let comoVaUsar = agent.request_.body.queryResult.outputContexts[0].parameters['comoVaUsar.original'];
+	let cuanRapidoNecesita = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
+
+	const setInformacionCliente = agent.context.get('setinformacioncliente');
+	var idCliente = setInformacionCliente.parameters['idCliente'];
+	const setTipoPrestamo = agent.context.get('settipoprestamo');
+	var idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
+	
+	TipoPrestamo = {
+		"idSession": idSession,
+		"montoNecesitado": montoNecesitado,
+		"tiempoNegocio": tiempoNegocio,
+		"ingresosAnuales": ingresosAnuales,
+		"puntajeCredito": puntajeCredito,
+		"queNegocioTiene": queNegocioTiene,
+		"comoVaUsar": comoVaUsar,
+		"cuanRapidoNecesita": cuanRapidoNecesita,
+		"idTipoPrestamo": idTipoPrestamo,
+		"idCliente": idCliente
+	};
+
+	console.log(TipoPrestamo);
+	logger.debug(TipoPrestamo);
+
+	try {
+		var response = await saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
+		var result = response.result;
+		console.log(response);
+		logger.debug(response);
+
+		if (result.affectedRows == 1) {
+			agent.request_.body.queryResult.outputContexts[0].parameters['idPrestamoCliente'] = result.insertId;
+			agent.add('Gracias por responder las preguntas.');
+			agent.add('Uno de nuestros agentes se contactará contigo a la brevedad posible.');
+		} else {
+			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+		}
+
+	} catch (error) {
+		console.error(error);
+		logger.debug(error);
+		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+	}
+}
+
+async function extraerInfoInicialOld(agent) {
 
 	const idSession = agent.session.split("/").reverse()[0];
 
