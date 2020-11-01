@@ -20,8 +20,17 @@ var debug = require('debug')('myapp:server');
 
 app.use(methodOverride("_method"));
 
-var COOKIE_SECRET = 'secretencode';
-var COOKIE_NAME = 'sid';
+var COOKIE_SECRET = 'GoDialogSession';
+var COOKIE_NAME = 'godialogsession';
+
+var sessionMiddleware = session({
+    name: COOKIE_NAME,
+    secret: COOKIE_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    name: 'express.sid',
+    key: 'express.sid'
+});
 
 var sessionMiddleware = session({
     name: COOKIE_NAME,

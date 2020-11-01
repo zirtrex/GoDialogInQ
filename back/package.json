@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "nodemon --inspect ./bin/www.js",
     "start": "node ./bin/www.js",
-    "tunnel": "ngrok http 8080",
+    "tunnel": "ngrok http 8081",
     "test": "mocha --timeout 10000",
     "devtest": "concurrently \"npm run start\" \"npm run test\""
   },

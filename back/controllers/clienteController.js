@@ -7,15 +7,13 @@ var clienteController = {};
 
 clienteController.getAll = async function (req, res) {
   try {
-  var cliente = await model.getAll();
+    var cliente = await model.getAll();
 
-  res.status(200).send(
-    {
+    res.status(200).send({
       status:'success',
       message: "",
       result: cliente
-    }
-    );
+    });
   } catch (error) {
     res.status(500).send({
       status:'error',
@@ -53,6 +51,38 @@ clienteController.getByIdCliente = async function (req, res) {
     });  
   }
 }
+
+
+
+clienteController.getByIdSession = async function (req, res) {
+  var idSession = req.params.idSession;
+  try {
+  var cliente = await model.getByIdSession(idSession);
+  if (Object.entries(cliente).length === 0) {
+    res.status(404).send(
+      {
+        status:'failed',
+        message: "No se pudo encontrar el recurso necesario",
+        result: []
+      }
+    );
+  }else
+  {
+    res.status(200).send({
+      status:'success',
+      message: "",
+      result: cliente
+    });
+  }
+  } catch (error) {
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error",
+      result: error      
+    });  
+  }
+}
+
 
 
 clienteController.getByDocumento = async function (req, res) {
@@ -145,6 +175,38 @@ clienteController.update = async function (req, res) {
     });  
   } 
 }
+
+
+clienteController.updateIdSession = async function (req, res) {
+  var idSession = req.params.idSession;
+  var cliente = req.body;
+  try {
+    var result = await model.updateIdSession(idSession, cliente);
+    if(result.affectedRows>0)
+    {
+      res.status(200).send({
+      status:'success',
+      message: "Cliente actualizado correctamente",
+      result: result
+    });
+  }else
+  {
+
+      res.status(404).send({
+      status:'failed',
+      message: "La modificación ha fallado",
+      result: []
+    });
+  }
+  } catch (error) {
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error",
+      result: error     
+    });  
+  } 
+}
+
 
 clienteController.delete = async function (req, res) {
   var idCliente = req.params.idCliente;

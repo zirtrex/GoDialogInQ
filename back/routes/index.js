@@ -1,5 +1,4 @@
 var express = require('express');
-var session = require('express-session');
 var bodyParser = require("body-parser");
 var router = express.Router();
 const fetch   = require('node-fetch');
@@ -12,12 +11,9 @@ log4js.configure({
 const logger = log4js.getLogger('cheese');
 
 const dialogflow = require('@google-cloud/dialogflow');
-const uuid = require('uuid');
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { Card, Suggestion } = require("dialogflow-fulfillment");
 const { sessionEntitiesHelper } = require('actions-on-google-dialogflow-session-entities-plugin');
-
-const { json } = require('body-parser');
 
 var app = express();
 
@@ -51,9 +47,6 @@ router.post("/dialogflow", express.json(), (req, res) => {
 	intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
 	intentMap.set("Prueba sesion", pruebaSesion);
 	agent.handleRequest(intentMap);
-	/*res.json({
-		"fulfillmentText": "Hola desde el back"
-	});*/
 });
 
 router.post("/dialogflow2", (req, res) => {
@@ -112,7 +105,13 @@ async function extraerTipoPrestamo(agent) {
 		var request = await fetch(urlBase + '/tipo_prestamo/' + nombreTipoPrestamo);    
 		var response = await request.json();
 		var idTipoPrestamo = response.result[0].idTipoPrestamo;
-		agent.request_.session.idTipoPrestamo = idTipoPrestamo;
+		agent.request_.body.queryResult.outputContexts[0].parameters['idTipoPrestamo'] = idTipoPrestamo;
+		const existingContext = agent.context.get("settipoprestamo");
+		agent.context.set({
+			'name': existingContext.name, 
+			'lifespan': 50,
+			'parameters' : {'idTipoPrestamo': idTipoPrestamo}
+		});
 	} catch (error) {
     	// handle error
 		logger.debug(error);
@@ -252,47 +251,46 @@ async function extraerInfoCliente(agent) {
 	if (agent.request_.session.sessionId == sessionId) {
 
 		const setInformacionCliente = agent.context.get('setinformacioncliente');
-		var nombres = setInformacionCliente.parameters['given-name.original'];
+		var nombres = setInformacionCliente.parameters['given-name.original'];		
 		var apellidos = setInformacionCliente.parameters['last-name.original'];
 		var telefono = setInformacionCliente.parameters['phone-number.original'];
 		var correo = setInformacionCliente.parameters['email.original'];
 
 		console.log(setInformacionCliente.parameters);
 
-		data = {
+		Cliente = {
+			"idSession": sessionId,
 			"nombres": nombres,
 			"apellidos": apellidos,
 			"telefono": telefono,
 			"correo": correo
-		}
+		};
 
-		try {			
-			var request = await fetch(urlBase + '/cliente', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(data)
-			});
-			var response = await request.json();
+		try {	
+			response = await saveOrUpdateCliente(sessionId, Cliente);
 			var result = response.result;
-			console.log(result);
-			logger.debug(result);
-
 			if (result.affectedRows == 1) {
-				agent.request_.session.idCliente = result.insertId;
+				if (typeof result.idCliente === "undefined") {
+					idCliente = result.insertId;
+				} else {
+					idCliente = result.idCliente;
+				}
+				const existingContext = agent.context.get("setinformacioncliente");
+				agent.context.set({
+					'name': existingContext.name, 
+					'lifespan': 50,
+					'parameters' : {'idCliente': idCliente}
+				});
 				agent.add('Gracias ' + nombres + " " + apellidos + " por respondernos");
 				agent.add("¿Qué monto necesitas?");
 
-				console.log("Datos guardados correctamente.");
-				logger.debug("Datos guardados correctamente.");				
+				console.log("Datos del cliente guardados correctamente.");
+				logger.debug("Datos del cliente guardados correctamente.");		
 			}
-
 		} catch (error) {
 			console.error(error);
 			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}		
-
+		}
 	} else {
 		console.log("Sesiones diferentes");
 		logger.debug("Sesiones diferentes");
@@ -300,7 +298,9 @@ async function extraerInfoCliente(agent) {
 	}
 }
 
-function extraerInfoInicial(agent) {	
+async function extraerInfoInicial(agent) {
+
+	const idSession = agent.session.split("/").reverse()[0];
 
 	let montoNecesitado = agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado.original'];
 	let tiempoNegocio = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
@@ -310,74 +310,46 @@ function extraerInfoInicial(agent) {
 	let comoVaUsar = agent.request_.body.queryResult.outputContexts[0].parameters['comoVaUsar.original'];
 	let cuanRapidoNecesita = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
 
-	console.log(agent.request_.body.queryResult.outputContexts[0]);
-
-	if (typeof agent.request_.session.prestamo_cliente === 'undefined'){
-		agent.request_.session.prestamo_cliente = [];
-	}	
+	const setInformacionCliente = agent.context.get('setinformacioncliente');
+	var idCliente = setInformacionCliente.parameters['idCliente'];
+	const setTipoPrestamo = agent.context.get('settipoprestamo');
+	var idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
 	
-	/*
-	agent.request_.session.queNegocioTiene = queNegocioTiene;
-	agent.request_.session.comoVaUsar = comoVaUsar;
-	agent.request_.session.cuanRapidoNecesita = cuanRapidoNecesita;*/	
+	TipoPrestamo = {
+		"idSession": idSession,
+		"montoNecesitado": montoNecesitado,
+		"tiempoNegocio": tiempoNegocio,
+		"ingresosAnuales": ingresosAnuales,
+		"puntajeCredito": puntajeCredito,
+		"queNegocioTiene": queNegocioTiene,
+		"comoVaUsar": comoVaUsar,
+		"cuanRapidoNecesita": cuanRapidoNecesita,
+		"idTipoPrestamo": idTipoPrestamo,
+		"idCliente": idCliente
+	};
 
-	if (montoNecesitado != "") {
-		agent.request_.session.montoNecesitado = montoNecesitado;
-		agent.request_.session.prestamo_cliente.push(montoNecesitado);
-		agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitadoS'] = montoNecesitado;
+	console.log(TipoPrestamo);
+	logger.debug(TipoPrestamo);
+
+	try {
+		var response = await saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
+		var result = response.result;
+		console.log(response);
+		logger.debug(response);
+
+		if (result.affectedRows == 1) {
+			agent.request_.body.queryResult.outputContexts[0].parameters['idPrestamoCliente'] = result.insertId;
+			agent.add('Gracias por responder las preguntas.');
+			agent.add('Uno de nuestros agentes se contactará contigo a la brevedad posible.');
+		} else {
+			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+		}
+
+	} catch (error) {
+		console.error(error);
+		logger.debug(error);
+		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
 	}
-	if (tiempoNegocio != "") {
-		agent.request_.session.tiempoNegocio = tiempoNegocio;
-		agent.request_.session.prestamo_cliente.push(tiempoNegocio);
-		agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocioS'] = tiempoNegocio;
-	}
-	if (ingresosAnuales != "") {
-		agent.request_.session.ingresosAnuales = ingresosAnuales;
-		agent.request_.session.prestamo_cliente.push(ingresosAnuales);
-		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnualesS'] = ingresosAnuales;
-	}	
-	if (puntajeCredito != "") {
-		agent.request_.session.puntajeCredito = puntajeCredito;
-		agent.request_.session.prestamo_cliente.push(puntajeCredito);
-		agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnualesS'] = ingresosAnuales;
-	}
-
-	
-
-	/*const existingContext = agent.context.get("setinformacioninicial");
-	agent.context.set({
-		'name': existingContext.name, 
-		'lifespan': 20,
-		'parameters': 
-	});*/
-
-	/*if (typeof agent.request_.session.montoNecesitado === 'undefined') {
-		agent.request_.session.montoNecesitado = montoNecesitado;
-		prestamo_cliente.push(montoNecesitado);
-	}
-	if (typeof agent.request_.session.tiempoNegocio === 'undefined') {
-		agent.request_.session.tiempoNegocio = tiempoNegocio;
-		prestamo_cliente.push(tiempoNegocio);
-	}
-	if (typeof agent.request_.session.ingresosAnuales === 'undefined') {
-		agent.request_.session.ingresosAnuales = ingresosAnuales;
-		prestamo_cliente.push(ingresosAnuales);
-	}	
-	if (typeof agent.request_.session.puntajeCredito === 'undefined') {
-		agent.request_.session.puntajeCredito = puntajeCredito;
-		prestamo_cliente.push(puntajeCredito);
-	}*/
-
-	console.log(agent.request_.body.queryResult.outputContexts[0]);
-	console.log(agent.request_.session);
-
-	if (agent.request_.session.prestamo_cliente.length == 4) {
-		agent.add("Se completaron los datos");
-	} else {
-		agent.add("Faltan por completar");
-	}
-
-	agent.add("Final");
 }
 
 async function pruebaSesion(agent) {
@@ -476,6 +448,72 @@ async function pruebaSesion(agent) {
 		// handle error
 		console.error(error)
   	} */
+}
+
+async function saveOrUpdateCliente (idSession, Cliente) {
+	try {		
+		var request = await fetch(urlBase + '/cliente/session/' + idSession);    
+		var response = await request.json();
+		console.log(response);
+		if (response.status == "success") {
+			var idCliente = response.result[0].idCliente;
+			var request = await fetch(urlBase + '/cliente/session/' + idSession, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(Cliente)
+			});
+			var response = await request.json();
+			response.result.idCliente = idCliente;
+			return response;
+		} else {
+			var request = await fetch(urlBase + '/cliente', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(Cliente)
+			});
+			var response = await request.json();
+			return response;
+		}
+	} catch (error) {
+		logger.debug(error);
+		throw new Error(error);
+  	}	
+}
+
+async function saveOrUpdatePrestamoCliente (idSession, PrestamoCliente) {
+	try {		
+		var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession);    
+		var response = await request.json();
+
+		if (response.status == "success") {
+			var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(PrestamoCliente)
+			});
+			var response = await request.json();
+			return response;
+		} else {
+			var request = await fetch(urlBase + '/prestamo_cliente', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(PrestamoCliente)
+			});
+			var response = await request.json();
+			return response;
+		}
+	} catch (error) {
+		logger.debug(error);
+		throw new Error(error);
+  	}	
 }
 
 module.exports = router;

@@ -36,6 +36,21 @@ prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
     }
 }
 
+
+prestamocliente.getByIdSession = async function (idSession) {
+    try {
+        var query = 'select * from prestamo_cliente where idSession=:idSession';
+        var result = await db_connect.query(query,{
+            idSession:idSession
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+
+
 prestamocliente.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
     try {
         var query = 'select * from prestamo_cliente where idTipoPrestamo=:idTipoPrestamo';
@@ -63,8 +78,7 @@ prestamocliente.getAllByIdCliente = async function (idCliente) {
 
 prestamocliente.create = async function (prestamocliente) {
     try {        
-        var query = `insert into prestamo_cliente (
-           
+        var query = `insert into prestamo_cliente (           
             montoNecesitado,
             tiempoNegocio,
             ingresosAnuales,
@@ -74,8 +88,8 @@ prestamocliente.create = async function (prestamocliente) {
             cuanRapidoNecesita,
             estado,
             idTipoPrestamo,
-            idCliente
-
+            idCliente,
+            idSession
         ) values (
             :montoNecesitado,
             :tiempoNegocio,
@@ -86,7 +100,8 @@ prestamocliente.create = async function (prestamocliente) {
             :cuanRapidoNecesita,
             1,
             :idTipoPrestamo,
-            :idCliente
+            :idCliente,
+            :idSession
         )`;
         var result = await db_connect.query(query, {
             montoNecesitado:prestamocliente.montoNecesitado,
@@ -97,14 +112,47 @@ prestamocliente.create = async function (prestamocliente) {
             comoVaUsar:prestamocliente.comoVaUsar,
             cuanRapidoNecesita:prestamocliente.cuanRapidoNecesita,
             idTipoPrestamo:prestamocliente.idTipoPrestamo,
-            idCliente:prestamocliente.idCliente
+            idCliente:prestamocliente.idCliente,
+            idSession:prestamocliente.idSession
         });        
         return result;        
 
     } catch(error) {
+        console.log(error);
         throw new Error(error);
     }
 }
+
+prestamocliente.updateIdSession = async function (idSession, prestamocliente) {
+    try {        
+        var query = `update prestamo_cliente set 
+            montoNecesitado=:montoNecesitado,
+            tiempoNegocio=:tiempoNegocio,
+            ingresosAnuales=:ingresosAnuales,
+            puntajeCredito=:puntajeCredito,
+            queNegocioTiene=:queNegocioTiene,
+            comoVaUsar=:comoVaUsar,
+            cuanRapidoNecesita=:cuanRapidoNecesita
+            where idSession=:idSession`; 
+        var result = await db_connect.query(query, {
+            montoNecesitado:prestamocliente.montoNecesitado,
+            tiempoNegocio:prestamocliente.tiempoNegocio,
+            ingresosAnuales:prestamocliente.ingresosAnuales,
+            puntajeCredito:prestamocliente.puntajeCredito,
+            queNegocioTiene:prestamocliente.queNegocioTiene,
+            comoVaUsar:prestamocliente.comoVaUsar,
+            cuanRapidoNecesita:prestamocliente.cuanRapidoNecesita,
+            idSession:idSession
+        });
+        return result;
+    } catch(error) {
+        console.log(error);
+        throw new Error(error);
+    }
+}
+
+
+
 /* 
 prestamocliente.update = async function (idRequisito, requisito) {
     try {        
