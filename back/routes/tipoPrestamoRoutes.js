@@ -9,7 +9,7 @@ router.get('/tipo_prestamo', controller.getAll);
 
 router.get('/tipo_prestamo/:nombreTipoPrestamo', controller.getIdTipoPrestamoByNombre);
 
-router.get('/tipo_prestamo/nombre/:nombreTipoPrestamo', controller.getAllPrestamoByNombre);
+router.get('/tipo_prestamo/nombre/:nombreTipoPrestamo', controller.getPrestamoByNombre);
 
 router.post('/tipo_prestamo', controller.create);
 
