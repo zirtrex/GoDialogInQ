@@ -57,12 +57,12 @@ tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
 
 
 
-tipoPrestamoController.getAllPrestamoByNombre = async function (req, res) {
+tipoPrestamoController.getPrestamoByNombre = async function (req, res) {
 
   var nombreTipoPrestamo = req.params.nombreTipoPrestamo;
 
   try {
-    var idTipoPrestamo = await model.getAllPrestamoByNombre(nombreTipoPrestamo);
+    var idTipoPrestamo = await model.getPrestamoByNombre(nombreTipoPrestamo);
 
     if (Object.entries(idTipoPrestamo).length === 0) {
       res.status(404).send({

@@ -25,7 +25,7 @@ tipoPrestamo.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     }
 }
 
-tipoPrestamo.getAllPrestamoByNombre = async function (nombreTipoPrestamo) {
+tipoPrestamo.getPrestamoByNombre = async function (nombreTipoPrestamo) {
     try {
         var query = 'select * from tipo_prestamo where nombreTipoPrestamo=:nombreTipoPrestamo';
         var result = await db_connect.query(query,{
