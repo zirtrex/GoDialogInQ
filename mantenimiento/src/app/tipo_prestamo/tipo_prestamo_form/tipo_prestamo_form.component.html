@@ -28,7 +28,34 @@
               Solo textos o números
             </mat-error>
             
-          </mat-form-field>          
+          </mat-form-field>   
+          
+          
+          <mat-form-field class="col-lg-12">
+            <input type="text" matInput formControlName="descripcionTipoPrestamo" id="descripcionTipoPrestamo" name="descripcionTipoPrestamo" placeholder="Descripción del Préstamo"  [errorStateMatcher]="errorStateMatcher" />
+
+            <!-- #idTipoPrestamo="ngModel" [(ngModel)]="tipoPrestamo.idTipoPrestamo" #tipoPrestamoForm="ngForm" #nombreTipoPrestamo="ngModel" [(ngModel)]="tipoPrestamo.nombreTipoPrestamo" required minlength="2"  [errorStateMatcher]="errorStateMatcher"-->
+            
+            <mat-error *ngIf="tipoPrestamoForm.get('descripcionTipoPrestamo').hasError('required')">
+              El campo es obligatorio
+            </mat-error>
+
+            <mat-error *ngIf="tipoPrestamoForm.get('descripcionTipoPrestamo').hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+
+            <mat-error *ngIf="tipoPrestamoForm.get('descripcionTipoPrestamo').hasError('maxlength')">
+              Máximo 2 caracteres
+            </mat-error> 
+            
+            <mat-error *ngIf="tipoPrestamoForm.get('descripcionTipoPrestamo').hasError('checkSpecialCharacters')">
+              Solo textos o números
+            </mat-error>
+            
+          </mat-form-field>  
+
+          
+
 
           <div class="form-group">
             <div class="col-lg-12 col-lg-offset-2">

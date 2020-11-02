@@ -41,13 +41,16 @@ tipoPrestamo.create = async function (tipoPrestamo) {
     try {        
         var query = `insert into tipo_prestamo (
             nombreTipoPrestamo,
+            descripcionTipoPrestamo,
             estado      
         ) values (
             :nombreTipoPrestamo,
+            :descripcionTipoPrestamo,
             1
         )`;
         var result = await db_connect.query(query, {
-            nombreTipoPrestamo:tipoPrestamo.nombreTipoPrestamo
+            nombreTipoPrestamo:tipoPrestamo.nombreTipoPrestamo,
+            descripcionTipoPrestamo:tipoPrestamo.descripcionTipoPrestamo
         });        
         return result;        
 
@@ -59,10 +62,12 @@ tipoPrestamo.create = async function (tipoPrestamo) {
 tipoPrestamo.update = async function (idTipoPrestamo, tipoprestamo) {
     try {        
         var query = `update tipo_prestamo set 
-            nombreTipoPrestamo=:nombreTipoPrestamo
+            nombreTipoPrestamo=:nombreTipoPrestamo,
+            descripcionTipoPrestamo=:descripcionTipoPrestamo
             where idTipoPrestamo=:idTipoPrestamo`; 
         var result = await db_connect.query(query, {
             nombreTipoPrestamo:tipoprestamo.nombreTipoPrestamo,
+            descripcionTipoPrestamo:tipoprestamo.descripcionTipoPrestamo,
             idTipoPrestamo:idTipoPrestamo
         });
         return result;
