@@ -13,14 +13,11 @@ const logger = log4js.getLogger('cheese');
 const dialogflow = require('@google-cloud/dialogflow');
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { Card, Suggestion } = require("dialogflow-fulfillment");
-const { sessionEntitiesHelper } = require('actions-on-google-dialogflow-session-entities-plugin');
 
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session);
-app.use(sessionEntitiesHelper);
 
 const urlBase = 'http://localhost:8081';
 
