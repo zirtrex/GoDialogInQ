@@ -1,0 +1,8 @@
+host: us-cdbr-east-02.cleardb.com
+usuario: bfcf921ad2d1d9
+clave: 547c03ba
+bd: heroku_2309d2c344b6aa6
+
+
+
+mysql://bfcf921ad2d1d9:547c03ba@us-cdbr-east-02.cleardb.com/heroku_2309d2c344b6aa6?reconnect=true

@@ -1,6 +1,6 @@
 #Vista Requisito y Tipo de Prestamo
 
-USE godialoginq;
+USE `heroku_2309d2c344b6aa6`;
 
 ALTER TABLE `requisito`
 ADD UNIQUE KEY `res_desReqPoridPrestamo` (`descripcionRequisito`,`idTipoPrestamo`);

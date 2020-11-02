@@ -3,20 +3,13 @@ var http = require('http');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
-var log4js = require('log4js');
-log4js.configure({
-  appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
-  categories: { default: { appenders: ['cheese'], level: 'debug' } }
-});
-const logger = log4js.getLogger('cheese');
-
 var app = express();
 var server = http.Server(app); //createServer
 var debug = require('debug')('myapp:server');
 
 app.use(methodOverride("_method"));
 
-var port = normalizePort(process.env.PORT || '8081');
+var port = normalizePort(process.env.PORT || '8083');
 app.set('port', port);
 
 app.use(bodyParser.json());
@@ -33,19 +26,9 @@ app.use((req, res, next) => {
 
 //imports
 const index = require('./routes/index');
-const tipoPrestamoRoutes = require('./routes/tipoPrestamoRoutes');
-const requisitoRoutes = require('./routes/requisitoRoutes');
-const clienteRoutes = require('./routes/clienteRoutes');
-const documentacionCliente = require('./routes/documentacionClienteRoutes');
-const prestamoCliente = require('./routes/prestamoClienteRoutes');
 
 //routes
 app.use(index);
-app.use(tipoPrestamoRoutes);
-app.use(requisitoRoutes);
-app.use(clienteRoutes);
-app.use(documentacionCliente);
-app.use(prestamoCliente);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -78,6 +61,7 @@ function normalizePort(val) {
     if (isNaN(port)) {
         return val;
     }
+
     if (port >= 0) {
         return port;
     }

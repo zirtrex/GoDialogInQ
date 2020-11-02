@@ -25,17 +25,32 @@ tipoPrestamo.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     }
 }
 
+tipoPrestamo.getPrestamoByNombre = async function (nombreTipoPrestamo) {
+    try {
+        var query = 'select * from tipo_prestamo where nombreTipoPrestamo=:nombreTipoPrestamo';
+        var result = await db_connect.query(query,{
+            nombreTipoPrestamo:nombreTipoPrestamo
+        });
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
 tipoPrestamo.create = async function (tipoPrestamo) {
     try {        
         var query = `insert into tipo_prestamo (
             nombreTipoPrestamo,
+            descripcionTipoPrestamo,
             estado      
         ) values (
             :nombreTipoPrestamo,
+            :descripcionTipoPrestamo,
             1
         )`;
         var result = await db_connect.query(query, {
-            nombreTipoPrestamo:tipoPrestamo.nombreTipoPrestamo
+            nombreTipoPrestamo:tipoPrestamo.nombreTipoPrestamo,
+            descripcionTipoPrestamo:tipoPrestamo.descripcionTipoPrestamo
         });        
         return result;        
 
@@ -47,10 +62,12 @@ tipoPrestamo.create = async function (tipoPrestamo) {
 tipoPrestamo.update = async function (idTipoPrestamo, tipoprestamo) {
     try {        
         var query = `update tipo_prestamo set 
-            nombreTipoPrestamo=:nombreTipoPrestamo
+            nombreTipoPrestamo=:nombreTipoPrestamo,
+            descripcionTipoPrestamo=:descripcionTipoPrestamo
             where idTipoPrestamo=:idTipoPrestamo`; 
         var result = await db_connect.query(query, {
             nombreTipoPrestamo:tipoprestamo.nombreTipoPrestamo,
+            descripcionTipoPrestamo:tipoprestamo.descripcionTipoPrestamo,
             idTipoPrestamo:idTipoPrestamo
         });
         return result;

@@ -1,12 +1,9 @@
 require('events').EventEmitter.prototype._maxListeners = 0;
 var express = require('express');
 var http = require('http');
-var router = express.Router();
-var session = require('express-session');
 var path = require('path');
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var Modulo = require('./models/prestamoModel').Modulo;
+
 var log4js = require('log4js');
 
 log4js.configure({
@@ -16,21 +13,13 @@ log4js.configure({
 
 const logger = log4js.getLogger('cheese');
 
-const index = require('./routes/index');
-
 var app = express();
 var server = http.Server(app); //createServer
 var debug = require('debug')('myapp:server');
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
-app.use(methodOverride("_method"));
-
-var COOKIE_SECRET = 'secretencode';
-var COOKIE_NAME = 'sid';
 
 var port = normalizePort(process.env.PORT || '8082');
 app.set('port', port);
@@ -39,8 +28,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+//imports
+const index = require('./routes/index');
 
-app.use('/', index);
+//routes
+app.use(index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

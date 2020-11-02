@@ -11,8 +11,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema godialoginq
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `godialoginq` DEFAULT CHARACTER SET utf8 ;
-USE `godialoginq` ;
+
+USE `heroku_2309d2c344b6aa6` ;
 
 -- -----------------------------------------------------
 -- Table `cliente`
@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `idTipoPrestamo` INT NOT NULL,
   `idCliente` INT NOT NULL,
   PRIMARY KEY (`idPrestamoCliente`, `idSession`),
-  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) VISIBLE,
-  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) VISIBLE,
+  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC),
+  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC),
   CONSTRAINT `fk_prestamo_cliente_tipo_prestamo`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idPrestamoCliente` INT NOT NULL,
   PRIMARY KEY (`idDocumentacionCliente`),
-  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC) VISIBLE,
+  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC),
   CONSTRAINT `fk_documentacion_cliente_prestamo_cliente1`
     FOREIGN KEY (`idPrestamoCliente`)
     REFERENCES `prestamo_cliente` (`idPrestamoCliente`)
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `requisito` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   PRIMARY KEY (`idRequisito`),
-  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC) VISIBLE,
+  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC),
   CONSTRAINT `fk_requisito_tipo_prestamo1`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -140,7 +140,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- Data for table `tipo_prestamo`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `godialoginq`;
+USE `heroku_2309d2c344b6aa6`;
 INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (1, 'Plazo fijo', 'Descripción Plazo fijo', '1');
 INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (2, 'Línea de crédito', 'Descripción Línea de crédito', '1');
 INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (3, 'Dinero por tus facturas', 'Descripción Dinero por tus facturas', '1');
@@ -156,7 +156,7 @@ COMMIT;
 -- Data for table `requisito`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `godialoginq`;
+USE `heroku_2309d2c344b6aa6`;
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Estados de cuenta bancario del negocio de los últimos 3 meses', '1', 1);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Aplicación firmada', '1', 1);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID estatal', '1', 1);

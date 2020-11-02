@@ -1,5 +1,5 @@
 {
-  "name": "godialoginq",
+  "name": "godialoginq-back",
   "version": "0.0.1",
   "private": true,
   "engines": {
@@ -8,14 +8,11 @@
   "scripts": {
     "dev": "nodemon --inspect ./bin/www.js",
     "start": "node ./bin/www.js",
-    "tunnel": "ngrok http 8081",
-    "test": "mocha --timeout 10000",
-    "devtest": "concurrently \"npm run start\" \"npm run test\""
+    "test": "mocha --timeout 10000"
   },
   "dependencies": {
     "@google-cloud/dialogflow": "^3.2.0",
     "actions-on-google": "^2.13.0",
-    "actions-on-google-dialogflow-session-entities-plugin": "^1.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "dialogflow-fulfillment": "^0.6.1",
@@ -28,8 +25,6 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "concurrently": "^5.3.0",
-    "ngrok": "^3.3.0",
     "node-fetch": "^2.6.1",
     "nodemon": "^1.19.4",
     "chai": "^4.2.0",

@@ -1,13 +1,12 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var router = express.Router();
-var Modulo = require('../models/prestamoModel').Modulo;
+
 var log4js = require('log4js');
 log4js.configure({
   appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
   categories: { default: { appenders: ['cheese'], level: 'debug' } }
 });
-
 const logger = log4js.getLogger('cheese');
 
 const dialogflow = require('@google-cloud/dialogflow');
