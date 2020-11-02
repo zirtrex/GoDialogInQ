@@ -75,7 +75,8 @@ tipoPrestamoController.getPrestamoByNombre = async function (req, res) {
         result: idTipoPrestamo
       });
     }
-  } catch (error) { 
+  } catch (error) {
+    console.log(error);
     res.status(500).send({
       status:'error',
       message: "Ha ocurrido un error fatal",

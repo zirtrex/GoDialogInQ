@@ -84,7 +84,7 @@ async function executeQueries(projectId, sessionId, query, languageCode) {
 		// Use the context from this response for next queries
 		context = intentResponse.outputContexts;
 		//console.log(intentResponse);
-		console.log(intentResponse.fulfillmentMessages[0].text);
+		console.log(intentResponse.fulfillmentMessages);
 
 		return 	intentResponse;
 

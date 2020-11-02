@@ -1,9 +1,8 @@
-'user strict';
-
-var mysql = require('mysql');
 var util = require('util');
+var mysql = require('mysql');
 
-var connection = mysql.createConnection({
+var pool = mysql.createPool({
+  connectionLimit: 10,
   host     : 'us-cdbr-east-02.cleardb.com',
   port     : '3306',
   user     : 'bfcf921ad2d1d9',
@@ -11,7 +10,38 @@ var connection = mysql.createConnection({
   database : 'heroku_2309d2c344b6aa6'
 });
 
-connection.config.queryFormat = function (query, values) {
+pool.getConnection((err, connection) => {
+  if (err) {
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      console.error('Database connection was closed.');
+    }
+    if (err.code === 'ER_CON_COUNT_ERROR') {
+      console.error('Database has too many connections.');
+    }
+    if (err.code === 'ECONNREFUSED') {
+      console.error('Database connection was refused.');
+    }
+  }
+
+  if (connection) {
+
+    connection.config.queryFormat = function (query, values) {
+      if (!values) return query;
+      return query.replace(/\:(\w+)/g, function (txt, key) {
+        if (values.hasOwnProperty(key)) {
+          return this.escape(values[key]);
+        }
+        return txt;
+      }.bind(this));
+    };
+
+    connection.release();
+  }
+
+  return;
+});
+
+/*pool.config.queryFormat = function (query, values) {
   if (!values) return query;
   return query.replace(/\:(\w+)/g, function (txt, key) {
     if (values.hasOwnProperty(key)) {
@@ -19,9 +49,8 @@ connection.config.queryFormat = function (query, values) {
     }
     return txt;
   }.bind(this));
-};
+};*/
 
-connection.query = util.promisify(connection.query);
-module.exports = connection;
+pool.query = util.promisify(pool.query);
 
-
+module.exports = pool;

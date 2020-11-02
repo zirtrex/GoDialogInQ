@@ -78,7 +78,7 @@ function serverMessage(response2) {
     
     if (typeof response2 === 'object') {
         response2.forEach(element => {
-            finalMessage += element.text.text[0] + "<br/>";
+            finalMessage += element.text.text[0] + "\n";
         });
     } else {
         finalMessage = response2;

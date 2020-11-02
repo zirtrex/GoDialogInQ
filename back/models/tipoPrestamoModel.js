@@ -21,6 +21,7 @@ tipoPrestamo.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
         });
         return result;
     } catch(error) {
+        console.log(error);
         throw new Error(error);
     }
 }
