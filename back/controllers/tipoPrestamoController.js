@@ -55,8 +55,6 @@ tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
   }
 }
 
-
-
 tipoPrestamoController.getPrestamoByNombre = async function (req, res) {
 
   var nombreTipoPrestamo = req.params.nombreTipoPrestamo;
@@ -85,7 +83,6 @@ tipoPrestamoController.getPrestamoByNombre = async function (req, res) {
     });  
   }
 }
-
 
 tipoPrestamoController.create = async function (req, res) {
   var tipoPrestamo = req.body;
@@ -120,7 +117,6 @@ tipoPrestamoController.create = async function (req, res) {
   }  
 }
 
-
 tipoPrestamoController.update = async function (req, res) {
   var idTipoPrestamo = req.params.idTipoPrestamo;
   var tipoPrestamo = req.body;
@@ -154,8 +150,6 @@ tipoPrestamoController.update = async function (req, res) {
   } 
 }
 
-
-
 tipoPrestamoController.delete = async function (req, res) {
   var idTipoPrestamo = req.params.idTipoPrestamo;
   try {
@@ -187,6 +181,5 @@ tipoPrestamoController.delete = async function (req, res) {
     });  
   } 
 }
-
 
 module.exports = tipoPrestamoController;

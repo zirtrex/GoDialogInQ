@@ -34,7 +34,7 @@ function listendom(no){
 $(window).load(function() {
     autoScroll(".messages");
     setTimeout(function() {
-        serverMessage("Hola, soy tu GodialogInq, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
+        serverMessage("Hola, soy GodialogInq, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
     }, 100);
 
 });
@@ -65,6 +65,8 @@ document.getElementById("mymsg").onsubmit = (e) => {
 }
 
 function serverMessage(response2) {
+
+    console.log(response2);
 
     if ($('.message-input').val() != '') {
         return false;

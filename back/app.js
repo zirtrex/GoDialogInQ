@@ -1,13 +1,9 @@
-require('events').EventEmitter.prototype._maxListeners = 0;
 var express = require('express');
 var http = require('http');
-
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var log4js = require('log4js');
 
+var log4js = require('log4js');
 log4js.configure({
   appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
   categories: { default: { appenders: ['cheese'], level: 'debug' } }
@@ -20,23 +16,9 @@ var debug = require('debug')('myapp:server');
 
 app.use(methodOverride("_method"));
 
-var COOKIE_SECRET = 'GoDialogSession';
-var COOKIE_NAME = 'godialogsession';
-
-var sessionMiddleware = session({
-    name: COOKIE_NAME,
-    secret: COOKIE_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    name: 'express.sid',
-    key: 'express.sid'
-});
-
 var port = normalizePort(process.env.PORT || '8081');
 app.set('port', port);
 
-app.use(cookieParser(COOKIE_SECRET));
-app.use(sessionMiddleware);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -64,7 +46,6 @@ app.use(requisitoRoutes);
 app.use(clienteRoutes);
 app.use(documentacionCliente);
 app.use(prestamoCliente);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -97,7 +78,6 @@ function normalizePort(val) {
     if (isNaN(port)) {
         return val;
     }
-
     if (port >= 0) {
         return port;
     }
@@ -137,4 +117,3 @@ function onListening() {
 }
 
 module.exports = app;
-

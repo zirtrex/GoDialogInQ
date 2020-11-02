@@ -12,6 +12,14 @@ const logger = log4js.getLogger('cheese');
 const dialogflow = require('@google-cloud/dialogflow');
 const uuid = require('uuid');
 
+var app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.json());
+
 router.get('/', function(req, res, next) {
 
 	var fecha = new Date();
@@ -25,23 +33,21 @@ router.get('/', function(req, res, next) {
 router.post('/send-message', async function(req, res, next) {	
 
 	if(typeof req.body.message !== 'undefined'){
-		try{
-			const response = await runInQSalesAgent(req.body.message);
-			res.json({Reply: response});
-		}catch (error) {
+		try {
+			const response = await runInQSalesAgent(req.body.message);		
+
+			if (response.fulfillmentMessages) {
+				res.json({Reply: response.fulfillmentMessages});
+			} else {
+				res.json({Reply: response.fulfillmentText});
+			}
+
+		} catch (error) {
 			console.log(error);
 		}		
 	}	
 
 });
-
-var app = express();
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
 
 async function runInQSalesAgent(message) {
 	const projectId = 'text-to-speech-api-232719';
@@ -49,8 +55,7 @@ async function runInQSalesAgent(message) {
 	const languageCode = 'es-ES';
 	const query = message;
 
-	return executeQueries(projectId, sessionId, query, languageCode);
-	
+	return executeQueries(projectId, sessionId, query, languageCode);	
 }
 
 // Keeping the context across queries let's us simulate an ongoing conversation with the bot
@@ -71,20 +76,22 @@ async function executeQueries(projectId, sessionId, query, languageCode) {
 		console.log('Detected intent');
 		console.log(`Query: ${intentResponse.queryText}`);
 		console.log(
-			`Fulfillment Text: ${intentResponse.queryResult.fulfillmentText}`
+			`Fulfillment Text: ${intentResponse.fulfillmentText}`
 		);
 		/*console.log(
 			`Intent: ${intentResponse.intent.displayName}`
 		);*/		
 		// Use the context from this response for next queries
-		context = intentResponse.queryResult.outputContexts;
-		
-		return 	intentResponse.queryResult.fulfillmentText;
+		context = intentResponse.outputContexts;
+		//console.log(intentResponse);
+		console.log(intentResponse.fulfillmentMessages[0].text);
+
+		return 	intentResponse;
+
 	} catch (error) {
 		console.log(error);
 		return 	error;
-	}
-	
+	}	
 }
 
 async function detectIntent (projectId, sessionId, query, contexts, languageCode) {
@@ -115,7 +122,7 @@ async function detectIntent (projectId, sessionId, query, contexts, languageCode
 	}
   
 	const responses = await sessionClient.detectIntent(request);
-	return responses[0];
+	return responses[0].queryResult;
 }
 
 module.exports = router;
