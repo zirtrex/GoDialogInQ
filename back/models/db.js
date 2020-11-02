@@ -4,11 +4,11 @@ var mysql = require('mysql');
 var util = require('util');
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
+  host     : 'us-cdbr-east-02.cleardb.com',
   port     : '3306',
-  user     : 'godialoginq',
-  password : 'godialoginq',
-  database : 'godialoginq'
+  user     : 'bfcf921ad2d1d9',
+  password : '547c03ba',
+  database : 'heroku_2309d2c344b6aa6'
 });
 
 connection.config.queryFormat = function (query, values) {

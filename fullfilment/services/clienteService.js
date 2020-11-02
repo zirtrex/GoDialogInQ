@@ -9,7 +9,7 @@ const logger = log4js.getLogger('cheese');
 
 var clienteService = {};
 
-const urlBase = 'http://localhost:8081';
+const urlBase = 'https://godialoginq.herokuapp.com';
 
 clienteService.saveOrUpdateCliente = async function (idSession, Cliente) {
   try {

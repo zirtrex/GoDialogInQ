@@ -9,7 +9,7 @@ const logger = log4js.getLogger('cheese');
 
 var requisitoService = {};
 
-const urlBase = 'http://localhost:8081';
+const urlBase = 'https://godialoginq.herokuapp.com';
 
 requisitoService.getRequisitosByIdTipoPrestamo = async function (idTipoPrestamo) {
   try {

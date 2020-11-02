@@ -10,7 +10,7 @@ const logger = log4js.getLogger('cheese');
 
 var prestamoClienteService = {};
 
-const urlBase = 'http://localhost:8081';
+const urlBase = 'https://godialoginq.herokuapp.com';
 
 prestamoClienteService.saveOrUpdatePrestamoCliente = async function (idSession, PrestamoCliente) {
 	try {		
