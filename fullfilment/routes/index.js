@@ -2,34 +2,36 @@ var express = require('express');
 var bodyParser = require("body-parser");
 var router = express.Router();
 const fetch   = require('node-fetch');
+
 var log4js = require('log4js');
 log4js.configure({
   appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
   categories: { default: { appenders: ['cheese'], level: 'debug' } }
 });
-
 const logger = log4js.getLogger('cheese');
 
 const dialogflow = require('@google-cloud/dialogflow');
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { Card, Suggestion } = require("dialogflow-fulfillment");
 
+const tipoPrestamoService = require("../services/tipoPrestamoService");
+const clienteService = require("../services/clienteService");
+const prestamoClienteService = require("../services/prestamoClienteService");
+
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const urlBase = 'http://localhost:8081';
-
 router.get("/", (req, res) => {	
 	res.json({
-		"godialoginq": "v1.0.0"
+		"godialoginq-fullfilment": "v1.0.0"
 	});    
 });
 
 router.get("/dialogflow", (req, res) => {	
 	res.json({
-		"godialoginq": "v1.0.0"
+		"godialoginq-fullfilment": "v1.0.0"
 	});    
 });
 
@@ -74,8 +76,7 @@ function defaultFallback(agent) {
 async function mostrarPrestamosSinIdea(agent) {
 
 	try {
-		var request = await fetch(urlBase + '/tipo_prestamo');
-		var response = await request.json();
+		var response = await tipoPrestamoService.getAll();
 
 		if (response.status == "success") {
 			agent.add('Los préstamos disponibles son: ');
@@ -87,13 +88,13 @@ async function mostrarPrestamosSinIdea(agent) {
 			agent.add('Indicanos en cual');
 
 		} else {
-			agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+			agent.add('Lo siento el préstamo ingresado no está disponible.');
 		}
+
 	} catch (error) {
-		console.error(error);
-		logger.debug(error);
-		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-  	} 
+		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+	}
+	 
 }
 
 async function guiarUsuarioYesCustom(agent) {
@@ -298,7 +299,7 @@ async function extraerInfoCliente(agent) {
 		};
 
 		try {	
-			response = await saveOrUpdateCliente(sessionId, Cliente);
+			response = await clienteService.saveOrUpdateCliente(sessionId, Cliente);
 			var result = response.result;
 			if (result.affectedRows == 1) {
 				if (typeof result.idCliente === "undefined") {
@@ -363,7 +364,7 @@ async function extraerInfoInicial(agent) {
 	logger.debug(TipoPrestamo);
 
 	try {
-		var response = await saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
+		var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
 		var result = response.result;
 		console.log(response);
 		logger.debug(response);
@@ -533,72 +534,6 @@ async function pruebaSesion(agent) {
 		// handle error
 		console.error(error)
   	} */
-}
-
-async function saveOrUpdateCliente (idSession, Cliente) {
-	try {		
-		var request = await fetch(urlBase + '/cliente/session/' + idSession);    
-		var response = await request.json();
-		console.log(response);
-		if (response.status == "success") {
-			var idCliente = response.result[0].idCliente;
-			var request = await fetch(urlBase + '/cliente/session/' + idSession, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(Cliente)
-			});
-			var response = await request.json();
-			response.result.idCliente = idCliente;
-			return response;
-		} else {
-			var request = await fetch(urlBase + '/cliente', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(Cliente)
-			});
-			var response = await request.json();
-			return response;
-		}
-	} catch (error) {
-		logger.debug(error);
-		throw new Error(error);
-  	}	
-}
-
-async function saveOrUpdatePrestamoCliente (idSession, PrestamoCliente) {
-	try {		
-		var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession);    
-		var response = await request.json();
-
-		if (response.status == "success") {
-			var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(PrestamoCliente)
-			});
-			var response = await request.json();
-			return response;
-		} else {
-			var request = await fetch(urlBase + '/prestamo_cliente', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(PrestamoCliente)
-			});
-			var response = await request.json();
-			return response;
-		}
-	} catch (error) {
-		logger.debug(error);
-		throw new Error(error);
-  	}	
 }
 
 module.exports = router;
