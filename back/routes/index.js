@@ -19,7 +19,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const urlBase = 'http://localhost:8081';
+const urlBase = 'http://localhost:8083';
 
 router.get("/", (req, res) => {	
 	res.json({
@@ -27,13 +27,13 @@ router.get("/", (req, res) => {
 	});    
 });
 
-router.get("/dialogflow", (req, res) => {	
+router.get("/dialogflowback", (req, res) => {	
 	res.json({
 		"godialoginq": "v1.0.0"
 	});    
 });
 
-router.post("/dialogflow", express.json(), (req, res) => {
+router.post("/dialogflowback", express.json(), (req, res) => {
     const agent = new WebhookClient({ request: req, response: res });
     let intentMap = new Map();
     intentMap.set("Default Welcome Intent", welcome);

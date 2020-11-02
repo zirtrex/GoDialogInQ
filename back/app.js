@@ -32,15 +32,6 @@ var sessionMiddleware = session({
     key: 'express.sid'
 });
 
-var sessionMiddleware = session({
-    name: COOKIE_NAME,
-    secret: COOKIE_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    name: 'express.sid',
-    key: 'express.sid'
-});
-
 var port = normalizePort(process.env.PORT || '8081');
 app.set('port', port);
 
