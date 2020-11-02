@@ -19,7 +19,7 @@ import {
 })
 export class TipoPrestamoComponent implements OnInit {
 
-  displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'acciones'];
+  displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'descripcionTipoPrestamo', 'acciones'];
   dataSource: MatTableDataSource<TipoPrestamo>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;

@@ -29,6 +29,13 @@
         <td mat-cell *matCellDef="let element"> {{element.nombreTipoPrestamo}} </td>
       </ng-container>      
 
+      <ng-container matColumnDef="descripcionTipoPrestamo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción Tipo de Prestamo </th>
+        <td mat-cell *matCellDef="let element"> {{element.descripcionTipoPrestamo}} </td>
+      </ng-container>
+
+      
+
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef> Acciones </th>
         <td mat-cell *matCellDef="let row">
