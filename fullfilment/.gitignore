@@ -57,6 +57,4 @@ typings/
 # dotenv environment variables file
 .env
 
-# Dialogflow files
-InQmatic-AI-Full-Access-56ff8d631b7f.json
 

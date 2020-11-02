@@ -2,13 +2,6 @@ var express = require('express');
 var http = require('http');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var log4js = require('log4js');
-
-log4js.configure({
-  appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
-  categories: { default: { appenders: ['cheese'], level: 'debug' } }
-});
-const logger = log4js.getLogger('cheese');
 
 var app = express();
 var server = http.Server(app); //createServer

@@ -11,10 +11,10 @@ log4js.configure({
 const logger = log4js.getLogger('cheese');
 
 const dialogflow = require('@google-cloud/dialogflow');
-const { WebhookClient } = require("dialogflow-fulfillment");
-const { Card, Suggestion } = require("dialogflow-fulfillment");
+const { WebhookClient, Card, Suggestion } = require("dialogflow-fulfillment");
 
 const tipoPrestamoService = require("../services/tipoPrestamoService");
+const requisitoService = require("../services/requisitoService");
 const clienteService = require("../services/clienteService");
 const prestamoClienteService = require("../services/prestamoClienteService");
 
@@ -40,12 +40,15 @@ router.post("/dialogflow", express.json(), (req, res) => {
     let intentMap = new Map();
     intentMap.set("Default Welcome Intent", welcome);
 	intentMap.set("Default Fallback Intent", defaultFallback);
-	intentMap.set("Mostrar prestamos sin idea de los prestamos", mostrarPrestamosSinIdea);
-	intentMap.set("Guiar al usuario para elegir un prestamo - yes - custom", guiarUsuarioYesCustom);
-	intentMap.set("Extraer monto necesitado", extraerMontoNecesitado);
+	intentMap.set("Extraer nombre del cliente", extraerNombreCliente);	
+	intentMap.set("Guiar al usuario para elegir un prestamo", guiarUsuario);
+	intentMap.set("Guiar al usuario para elegir un prestamo - si - custom", guiarUsuarioSiCustom);	
 	intentMap.set("Extraer el tipo de prestamo", extraerTipoPrestamo);
+	intentMap.set("Extraer el tipo de prestamo - mostrar prestamos", extraerTipoPrestamoMostrarPrestamos);
+	intentMap.set("Extraer el tipo de prestamo - mostrar requisitos - si", extraerTipoPrestamoMostrarRequisitosSi);	
 	intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
-	intentMap.set("Extraer informacion inicial requerida", extraerInfoInicial);
+	intentMap.set("Extraer monto necesitado", extraerMontoNecesitado);
+	intentMap.set("Extraer tiempo en el negocio", extraerTiempoNegocio);
 	intentMap.set("Prueba sesion", pruebaSesion);
 	agent.handleRequest(intentMap);
 });
@@ -69,11 +72,69 @@ function welcome(agent) {
 }
 
 function defaultFallback(agent) {
-	console.log("defaultFallback");
+	console.log(agent.action);
+	console.log(agent.conv());
     agent.add('Lo siento, no te entendí. ¿En qué te puedo ayudar?');
 }
 
-async function mostrarPrestamosSinIdea(agent) {
+async function extraerNombreCliente(agent) {
+
+	const sessionId = agent.session.split("/").reverse()[0];	
+
+	if (sessionId != null) {
+
+		const setNombreCliente = agent.context.get('setnombrecliente');
+		var nombres = setNombreCliente.parameters['given-name.original'];		
+		var apellidos = setNombreCliente.parameters['last-name.original'];
+
+		console.log(setNombreCliente.parameters);
+
+		Cliente = {
+			"idSession": sessionId,
+			"nombres": nombres,
+			"apellidos": apellidos
+		};
+
+		try {	
+			response = await clienteService.saveOrUpdateCliente(sessionId, Cliente);
+			var result = response.result;
+			if (result.affectedRows == 1) {
+				if (typeof result.idCliente === "undefined") {
+					idCliente = result.insertId;
+				} else {
+					idCliente = result.idCliente;
+				}
+				const existingContext = agent.context.get("setnombrecliente");
+				agent.context.set({
+					'name': existingContext.name, 
+					'lifespan': 100,
+					'parameters' : {'idCliente': idCliente}
+				});
+				agent.add('Gracias ' + nombres + " por respondernos");
+				let settipoprestamo = agent.context.get('settipoprestamo');
+
+				if (typeof settipoprestamo !== "undefined") {
+					idTipoPrestamo = settipoprestamo.parameters['idTipoPrestamo'];
+					let nombreTipoPrestamo = settipoprestamo.parameters['tipoPrestamo.original'];
+					if (idTipoPrestamo == "") {
+						agent.add("¿En qué podemos ayudarte?");
+					} else {
+						agent.add("Ya has elegido: " + nombreTipoPrestamo + ', si quieres continuar con el préstamo, por ingresa el monto del préstamo.');
+					}
+				} else {				
+					agent.add("¿En qué podemos ayudarte?");
+				}				
+
+				console.log("Datos del cliente guardados correctamente.");
+			}
+		} catch (error) {
+			console.error(error);
+			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+		}
+	}
+}
+
+async function guiarUsuario(agent) {
 
 	try {
 		var response = await tipoPrestamoService.getAll();
@@ -84,11 +145,10 @@ async function mostrarPrestamosSinIdea(agent) {
 				agent.add("- " + object.nombreTipoPrestamo);
 			});
 
-			agent.add('¿Estás interesado en alguno de ellos?');
-			agent.add('Indicanos en cual');
+			agent.add('¿Quieres que te mostremos una descripción básica de los préstamos?');
 
 		} else {
-			agent.add('Lo siento el préstamo ingresado no está disponible.');
+			agent.add('No tenemos préstamos disponibles.');
 		}
 
 	} catch (error) {
@@ -97,25 +157,25 @@ async function mostrarPrestamosSinIdea(agent) {
 	 
 }
 
-async function guiarUsuarioYesCustom(agent) {
+async function guiarUsuarioSiCustom(agent) {
 
-	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];
+	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoprestamo.original'];
 
-	frasesResponses = [];
-	frasesResponses.push("¿Estás interesado en alguno de ellos?");
+	var frasesResponses = [];
+	frasesResponses.push("¿Quieres que te mostremos los requisitos?");
 	frasesResponses.push("¿Resolvimos tus dudas?");
 	frasesResponses.push("¿Te podemos ayudar en algo más?");
 
 	try {
-		var request = await fetch(urlBase + '/tipo_prestamo/nombre/' + nombreTipoPrestamo);
-		var response = await request.json();
+		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 
 		if (response.status == "success") {
 			response.result.forEach(object => {				
 				agent.add("Descripción: " + object.descripcionTipoPrestamo);
 			});
 
-			message = frasesResponses[Math.floor(Math.random() * frasesResponses.lenght + 1)];
+			var indexRandom = Math.floor(Math.random() * frasesResponses.length);
+			var message = frasesResponses[indexRandom];
 
 			agent.add(message);
 
@@ -123,149 +183,143 @@ async function guiarUsuarioYesCustom(agent) {
 			agent.add('El préstamo ingresado no lo tenemos, por favor elige otro.');
 		}
 	} catch (error) {
-		console.error(error);
-		logger.debug(error);
+		console.log(error);
 		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
   	} 
 }
 
 async function extraerTipoPrestamo(agent) {
 
-	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];
+	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];	
 
-	try {		
-		var request = await fetch(urlBase + '/tipo_prestamo/' + nombreTipoPrestamo);    
-		var response = await request.json();
+	if (nombreTipoPrestamo == "") {
+
+		var REPROMPT_COUNT = agent.request_.body.queryResult.outputContexts[0].parameters['REPROMPT_COUNT'];
+
+		if(typeof REPROMPT_COUNT === 'undefined') {
+			const existingContext = agent.context.get("settipoprestamo");
+			agent.context.set({
+				'name': existingContext.name, 
+				'lifespan': 50,
+				'parameters' : {'REPROMPT_COUNT': 3}
+			});
+			agent.add("Por favor indica un préstamo válido");
+
+			try {
+				var response = await tipoPrestamoService.getAll();
+		
+				if (response.status == "success") {
+					agent.add('Los préstamos disponibles son: ');
+					response.result.forEach(object => {				
+						agent.add("- " + object.nombreTipoPrestamo);
+					});
+		
+					agent.add('Elige uno');
+		
+				} else {
+					agent.add('No se han encontrado préstamos disponibles.');
+				}
+		
+			} catch (error) {
+				agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+			}
+
+		} else {
+			if (REPROMPT_COUNT > 0) {
+				REPROMPT_COUNT = REPROMPT_COUNT - 1;
+				const existingContext = agent.context.get("settipoprestamo");
+				agent.context.set({
+					'name': existingContext.name, 
+					'lifespan': 50,
+					'parameters' : {'REPROMPT_COUNT': REPROMPT_COUNT}
+				});
+				agent.add("El préstamo ingresado no lo tenemos disponible.");
+			} else {
+				agent.context.set({
+					'name': existingContext.name, 
+					'lifespan': 50,
+					'parameters' : {'REPROMPT_COUNT': 3}
+				});
+			}
+		}
+		console.log(REPROMPT_COUNT);
+
+	} else {
+
+		agent.add("Has elegido: " + nombreTipoPrestamo);
+		agent.add("¿Quieres ver los requisitos?");
+
+	}	
+}
+
+async function extraerTipoPrestamoMostrarPrestamos(agent) {
+
+	try {
+		var response = await tipoPrestamoService.getAll();
+
+		if (response.status == "success") {
+			agent.add('Los préstamos disponibles son: ');
+			response.result.forEach(object => {				
+				agent.add("- " + object.nombreTipoPrestamo);
+			});
+
+			agent.add('¿Quieres que te mostremos una descripción básica de los préstamos?');
+
+		} else {
+			agent.add('No tenemos préstamos disponibles.');
+		}
+
+	} catch (error) {
+		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+	}
+
+}
+
+async function extraerTipoPrestamoMostrarRequisitosSi(agent) {
+
+	let nombreTipoPrestamo = agent.context.get('settipoprestamo').parameters['tipoPrestamo.original'];
+	let setnombrecliente = agent.context.get('setnombrecliente');
+	let nombres = "";
+
+	try {
+		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 		var idTipoPrestamo = response.result[0].idTipoPrestamo;
-		agent.request_.body.queryResult.outputContexts[0].parameters['idTipoPrestamo'] = idTipoPrestamo;
+		
 		const existingContext = agent.context.get("settipoprestamo");
 		agent.context.set({
 			'name': existingContext.name, 
 			'lifespan': 50,
 			'parameters' : {'idTipoPrestamo': idTipoPrestamo}
 		});
-	} catch (error) {
-    	// handle error
-		logger.debug(error);
-		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-  	}
-	
-	try {		
-		var request = await fetch(urlBase + '/requisito/tipo_prestamo/' + idTipoPrestamo);
-		var response = await request.json();
 
-		console.log(response);
-		logger.debug(response);
+		var response = await requisitoService.getRequisitosByIdTipoPrestamo(idTipoPrestamo);
 
 		if (response.status == "success") {
 
-			agent.add('Los requisitos son: ');
+			agent.add("Los requisitos para " + nombreTipoPrestamo + " son:");
 			response.result.forEach(object => {			
 				agent.add("- " + object.descripcionRequisito);
-			});
+			});			
 
-			agent.add('Si estás interesado, dime tu nombre');
-
-		} else {
-			agent.add('No tenemos los requisitos disponibles');
-			const existingContext = agent.context.get("settipoprestamo");
-			agent.context.set({'name': existingContext.name, 'lifespan': 0});
-
-			try {
-				var request = await fetch(urlBase + '/tipo_prestamo');
-				var response = await request.json();
-		
-				if (response.status == "success") {
-					agent.add('Pero quizás te interesa: ');
-					response.result.forEach(object => {				
-						agent.add("- " + object.nombreTipoPrestamo);
-					});
-		
-					agent.add('¿Estás interesado en alguno de ellos?');
-					agent.add('Indicanos en cual');
-		
+			if (typeof setnombrecliente !== "undefined") {
+				nombres = setnombrecliente.parameters['given-name.original'];
+				if (nombres == "") {
+					agent.add( 'Si estás interesado, por favor ingresa tus nombres');
 				} else {
-					agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+					agent.add(nombres + ', si quieres continuar con el préstamo, por ingresa el monto del préstamo.');
 				}
-			} catch (error) {
-				console.error(error);
-				agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-			}	
-		}
-	} catch (error) {
-		console.error(error);
-
-		try {
-			var request = await fetch(urlBase + '/tipo_prestamo');
-			var response = await request.json();
-	
-			if (response.status == "success") {
-				agent.add('Los préstamos disponibles son: ');
-				response.result.forEach(object => {				
-					agent.add("- " + object.nombreTipoPrestamo);
-				});
-	
-				agent.add('¿Estás interesado en alguno de ellos?');
-				agent.add('Indicanos en cual');
-	
-			} else {
-				agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+			} else {				
+				agent.add('Si estás interesado, por favor ingresa tus nombres');
 			}
-		} catch (error) {
-			console.error(error);
-			agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-		}
-  	} 
-}
-
-async function extraerTipoPrestamoOld(agent) {
-
-	let nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo.original'];
-	
-	//console.log(nombreTipoPrestamo);
-
-	try {
-		var request = await fetch(urlBase + '/requisito/tipo_prestamo/nombre/' + nombreTipoPrestamo);
-		var response = await request.json();
-		//console.log(requisitos);
-
-		if (response.status == "success") {
-			agent.add('Los requisitos son: ');
-			response.result.forEach(object => {				
-				agent.add("- " + object.descripcionRequisito);
-			});
-			
-			agent.add('Si estás interesado, dime tu nombre');
 
 		} else {
-			agent.add('No tenemos los requisitos disponibles');
-			const existingContext = agent.context.get("settipoprestamo");
-			agent.context.set({'name': existingContext.name, 'lifespan': 0});
-
-			try {
-				var request = await fetch(urlBase + '/tipo_prestamo');
-				var response = await request.json();
-		
-				if (response.status == "success") {
-					agent.add('Pero quizás te interesa: ');
-					response.result.forEach(object => {				
-						agent.add("- " + object.nombreTipoPrestamo);
-					});
-		
-					agent.add('¿Estás interesado en alguno de ellos?');
-					agent.add('Indicanos en cual');
-		
-				}else{
-					agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-				}
-			} catch (error) {
-				console.error(error);
-				agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-			}
+			agent.add('No se encontró el prestamo ingresado.');
 		}
+
 	} catch (error) {
-		console.error(error);		
-  	} 
+		logger.debug(error);
+		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+	}	
 }
 
 async function extraerInfoCliente(agent) {
@@ -330,6 +384,131 @@ async function extraerInfoCliente(agent) {
 	}
 }
 
+async function extraerMontoNecesitado(agent) {
+
+	const idSession = agent.session.split("/").reverse()[0];
+
+	let montoNecesitado = agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado.original'];
+
+	const setNombreCliente = agent.context.get('setnombrecliente');	
+	const setTipoPrestamo = agent.context.get('settipoprestamo');
+	
+	var frasesResponses = [];
+	frasesResponses.push("Hola, indicanos tu nombre por favor.");
+	frasesResponses.push("Por favor indicanos tu nombre por favor.");
+	frasesResponses.push("Hola, indicanos el préstamo de tu interés.");
+	frasesResponses.push("Por favor indicanos el préstamo de tu interés.");
+
+	if (typeof setNombreCliente === 'undefined' || typeof setTipoPrestamo === 'undefined') {
+		var indexRandom = Math.floor(Math.random() * frasesResponses.length);
+		var message = frasesResponses[indexRandom];
+		agent.add(message);
+	} else {
+		var idCliente = setNombreCliente.parameters['idCliente'];
+		var idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
+
+		TipoPrestamo = {
+			"idSession": idSession,
+			"montoNecesitado": montoNecesitado,
+			"idTipoPrestamo": idTipoPrestamo,
+			"idCliente": idCliente
+		};
+	
+		console.log(TipoPrestamo);
+	
+		try {
+			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
+			var result = response.result;
+			console.log(response);
+
+			var frasesInformacionResponses = [];
+			frasesInformacionResponses.push("¿Qué tiempo tienes en el negocio?");
+			frasesInformacionResponses.push("¿Cuáles son tus ingresos anuales?");
+			frasesInformacionResponses.push("¿Cuál es tu puntaje de crédito?");
+			frasesInformacionResponses.push("¿Qué negocio tienes?");
+			frasesInformacionResponses.push("¿Cómo vas a usar el dinero?");
+			frasesInformacionResponses.push("¿Cuán rápido quieres el préstamo?");
+	
+			if (result.affectedRows == 1) {
+				agent.add('Gracias');
+				var indexRandom = Math.floor(Math.random() * frasesInformacionResponses.length);
+				var message = frasesInformacionResponses[indexRandom];
+				agent.add(message);
+			} else {
+				agent.add("Estamos experimentando problemas, intenta de nuevo por favor. 1");
+			}
+	
+		} catch (error) {
+			console.error(error);
+			logger.debug(error);
+			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+		}
+	}
+}
+
+async function extraerTiempoNegocio(agent) {
+
+	const idSession = agent.session.split("/").reverse()[0];
+
+	let tiempoNegocio = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
+
+	const setNombreCliente = agent.context.get('setnombrecliente');
+	const setTipoPrestamo = agent.context.get('settipoprestamo');
+	
+	var frasesResponses = [];
+	frasesResponses.push("Hola, indicanos tu nombre por favor.");
+	frasesResponses.push("Por favor indicanos tu nombre por favor.");
+	frasesResponses.push("Hola, indicanos el préstamo de tu interés.");
+	frasesResponses.push("Por favor indicanos el préstamo de tu interés.");
+
+	if (typeof setNombreCliente === 'undefined' || typeof setTipoPrestamo === 'undefined') {
+		var indexRandom = Math.floor(Math.random() * frasesResponses.length);
+		var message = frasesResponses[indexRandom];
+		agent.add(message);
+	} else {
+		var idCliente = setNombreCliente.parameters['idCliente'];
+		var idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
+	
+		TipoPrestamo = {
+			"idSession": idSession,
+			"tiempoNegocio": tiempoNegocio,
+			"idTipoPrestamo": idTipoPrestamo,
+			"idCliente": idCliente
+		};
+
+		console.log(TipoPrestamo);
+
+		try {
+			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
+			var result = response.result;
+			console.log(response);
+			logger.debug(response);
+
+			var frasesInformacionResponses = [];
+			frasesInformacionResponses.push("¿Qué monto necesitas?");
+			frasesInformacionResponses.push("¿Cuáles son tus ingresos anuales?");
+			frasesInformacionResponses.push("¿Cuál es tu puntaje de crédito?");
+			frasesInformacionResponses.push("¿Qué negocio tienes?");
+			frasesInformacionResponses.push("¿Cómo vas a usar el dinero?");
+			frasesInformacionResponses.push("¿Cuán rápido quieres el préstamo?");
+	
+			if (result.affectedRows == 1) {
+				agent.add('Gracias');
+				var indexRandom = Math.floor(Math.random() * frasesInformacionResponses.length);
+				var message = frasesInformacionResponses[indexRandom];
+				agent.add(message);
+			} else {
+				agent.add("Ha ocurrido un error, intenta de nuevo por favor.");
+			}
+
+		} catch (error) {
+			console.error(error);
+			logger.debug(error);
+			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+		}
+	}
+}
+
 async function extraerInfoInicial(agent) {
 
 	const idSession = agent.session.split("/").reverse()[0];
@@ -365,60 +544,6 @@ async function extraerInfoInicial(agent) {
 
 	try {
 		var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
-		var result = response.result;
-		console.log(response);
-		logger.debug(response);
-
-		if (result.affectedRows == 1) {
-			agent.request_.body.queryResult.outputContexts[0].parameters['idPrestamoCliente'] = result.insertId;
-			agent.add('Gracias por responder las preguntas.');
-			agent.add('Uno de nuestros agentes se contactará contigo a la brevedad posible.');
-		} else {
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}
-
-	} catch (error) {
-		console.error(error);
-		logger.debug(error);
-		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-	}
-}
-
-async function extraerInfoInicialOld(agent) {
-
-	const idSession = agent.session.split("/").reverse()[0];
-
-	let montoNecesitado = agent.request_.body.queryResult.outputContexts[0].parameters['montoNecesitado.original'];
-	let tiempoNegocio = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
-	let ingresosAnuales = agent.request_.body.queryResult.outputContexts[0].parameters['ingresosAnuales.original'];
-	let puntajeCredito = agent.request_.body.queryResult.outputContexts[0].parameters['puntajeCredito.original'];
-	let queNegocioTiene = agent.request_.body.queryResult.outputContexts[0].parameters['queNegocioTiene.original'];
-	let comoVaUsar = agent.request_.body.queryResult.outputContexts[0].parameters['comoVaUsar.original'];
-	let cuanRapidoNecesita = agent.request_.body.queryResult.outputContexts[0].parameters['tiempoNegocio.original'];
-
-	const setInformacionCliente = agent.context.get('setinformacioncliente');
-	var idCliente = setInformacionCliente.parameters['idCliente'];
-	const setTipoPrestamo = agent.context.get('settipoprestamo');
-	var idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
-	
-	TipoPrestamo = {
-		"idSession": idSession,
-		"montoNecesitado": montoNecesitado,
-		"tiempoNegocio": tiempoNegocio,
-		"ingresosAnuales": ingresosAnuales,
-		"puntajeCredito": puntajeCredito,
-		"queNegocioTiene": queNegocioTiene,
-		"comoVaUsar": comoVaUsar,
-		"cuanRapidoNecesita": cuanRapidoNecesita,
-		"idTipoPrestamo": idTipoPrestamo,
-		"idCliente": idCliente
-	};
-
-	console.log(TipoPrestamo);
-	logger.debug(TipoPrestamo);
-
-	try {
-		var response = await saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
 		var result = response.result;
 		console.log(response);
 		logger.debug(response);
