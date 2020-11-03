@@ -1,7 +1,7 @@
-const util = require('util');
-const mysql = require('mysql');
+var util = require('util');
+var mysql = require('mysql');
 
-const pool = mysql.createPool({
+var pool = mysql.createPool({
   connectionLimit: 10,
   host     : 'us-cdbr-east-02.cleardb.com',
   port     : '3306',
@@ -25,9 +25,7 @@ pool.getConnection((err, connection) => {
 
   if (connection) {
 
-    connection.release();
-
-    /*connection.config.queryFormat = function (query, values) {
+    connection.config.queryFormat = function (query, values) {
       if (!values) return query;
       return query.replace(/\:(\w+)/g, function (txt, key) {
         if (values.hasOwnProperty(key)) {
@@ -35,14 +33,15 @@ pool.getConnection((err, connection) => {
         }
         return txt;
       }.bind(this));
-    }; */  
+    };
 
+    connection.release();
   }
 
   return;
 });
 
-/*pool.query.queryFormat = function (query, values) {
+/*pool.config.queryFormat = function (query, values) {
   if (!values) return query;
   return query.replace(/\:(\w+)/g, function (txt, key) {
     if (values.hasOwnProperty(key)) {
