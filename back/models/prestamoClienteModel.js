@@ -26,10 +26,10 @@ prestamocliente.getAllClienteTipoPrestamo = async function () {
 
 prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
     try {
-        var query = 'select * from prestamo_cliente where idPrestamoCliente=:idPrestamoCliente';
-        var result = await db_connect.query(query,{
-            idPrestamoCliente:idPrestamoCliente
-        });
+        var query = 'select * from prestamo_cliente where idPrestamoCliente=?';
+        var result = await db_connect.query(query,[
+            idPrestamoCliente
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -39,10 +39,10 @@ prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
 
 prestamocliente.getByIdSession = async function (idSession) {
     try {
-        var query = 'select * from prestamo_cliente where idSession=:idSession';
-        var result = await db_connect.query(query,{
-            idSession:idSession
-        });
+        var query = 'select * from prestamo_cliente where idSession=?';
+        var result = await db_connect.query(query,[
+            idSession
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -53,10 +53,10 @@ prestamocliente.getByIdSession = async function (idSession) {
 
 prestamocliente.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
     try {
-        var query = 'select * from prestamo_cliente where idTipoPrestamo=:idTipoPrestamo';
-        var result = await db_connect.query(query,{
-            idTipoPrestamo:idTipoPrestamo
-        });
+        var query = 'select * from prestamo_cliente where idTipoPrestamo=?';
+        var result = await db_connect.query(query,[
+            idTipoPrestamo
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -65,10 +65,10 @@ prestamocliente.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
 
 prestamocliente.getAllByIdCliente = async function (idCliente) {
     try {
-        var query = 'select * from prestamo_cliente where idCliente=:idCliente';
-        var result = await db_connect.query(query,{
-            idCliente:idCliente
-        });
+        var query = 'select * from prestamo_cliente where idCliente=?';
+        var result = await db_connect.query(query,[
+            idCliente
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -91,30 +91,30 @@ prestamocliente.create = async function (prestamocliente) {
             idCliente,
             idSession
         ) values (
-            :montoNecesitado,
-            :tiempoNegocio,
-            :ingresosAnuales,
-            :puntajeCredito,
-            :queNegocioTiene,
-            :comoVaUsar,
-            :cuanRapidoNecesita,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
             1,
-            :idTipoPrestamo,
-            :idCliente,
-            :idSession
+            ?,
+            ?,
+            ?
         )`;
-        var result = await db_connect.query(query, {
-            montoNecesitado:prestamocliente.montoNecesitado,
-            tiempoNegocio:prestamocliente.tiempoNegocio,
-            ingresosAnuales:prestamocliente.ingresosAnuales,
-            puntajeCredito:prestamocliente.puntajeCredito,
-            queNegocioTiene:prestamocliente.queNegocioTiene,
-            comoVaUsar:prestamocliente.comoVaUsar,
-            cuanRapidoNecesita:prestamocliente.cuanRapidoNecesita,
-            idTipoPrestamo:prestamocliente.idTipoPrestamo,
-            idCliente:prestamocliente.idCliente,
-            idSession:prestamocliente.idSession
-        });        
+        var result = await db_connect.query(query, [
+            prestamocliente.montoNecesitado,
+            prestamocliente.tiempoNegocio,
+            prestamocliente.ingresosAnuales,
+            prestamocliente.puntajeCredito,
+            prestamocliente.queNegocioTiene,
+            prestamocliente.comoVaUsar,
+            prestamocliente.cuanRapidoNecesita,
+            prestamocliente.idTipoPrestamo,
+            prestamocliente.idCliente,
+            prestamocliente.idSession
+        ]);        
         return result;        
 
     } catch(error) {
@@ -126,24 +126,24 @@ prestamocliente.create = async function (prestamocliente) {
 prestamocliente.updateIdSession = async function (idSession, prestamocliente) {
     try {        
         var query = `update prestamo_cliente set 
-            montoNecesitado=:montoNecesitado,
-            tiempoNegocio=:tiempoNegocio,
-            ingresosAnuales=:ingresosAnuales,
-            puntajeCredito=:puntajeCredito,
-            queNegocioTiene=:queNegocioTiene,
-            comoVaUsar=:comoVaUsar,
-            cuanRapidoNecesita=:cuanRapidoNecesita
-            where idSession=:idSession`; 
-        var result = await db_connect.query(query, {
-            montoNecesitado:prestamocliente.montoNecesitado,
-            tiempoNegocio:prestamocliente.tiempoNegocio,
-            ingresosAnuales:prestamocliente.ingresosAnuales,
-            puntajeCredito:prestamocliente.puntajeCredito,
-            queNegocioTiene:prestamocliente.queNegocioTiene,
-            comoVaUsar:prestamocliente.comoVaUsar,
-            cuanRapidoNecesita:prestamocliente.cuanRapidoNecesita,
-            idSession:idSession
-        });
+            montoNecesitado=?,
+            tiempoNegocio=?,
+            ingresosAnuales=?,
+            puntajeCredito=?,
+            queNegocioTiene=?,
+            comoVaUsar=?,
+            cuanRapidoNecesita=?
+            where idSession=?`; 
+        var result = await db_connect.query(query, [
+            prestamocliente.montoNecesitado,
+            prestamocliente.tiempoNegocio,
+            prestamocliente.ingresosAnuales,
+            prestamocliente.puntajeCredito,
+            prestamocliente.queNegocioTiene,
+            prestamocliente.comoVaUsar,
+            prestamocliente.cuanRapidoNecesita,
+            idSession
+        ]);
         return result;
     } catch(error) {
         console.log(error);

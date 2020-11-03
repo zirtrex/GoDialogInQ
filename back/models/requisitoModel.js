@@ -16,10 +16,10 @@ requisito.getAll = async function () {
 
 requisito.getByIdRequisito = async function (idRequisito) {
     try {
-        var query = 'select * from requisito where idRequisito=:idRequisito';
-        var result = await db_connect.query(query,{
-            idRequisito:idRequisito
-        });
+        var query = 'select * from requisito where idRequisito=?';
+        var result = await db_connect.query(query,[
+            idRequisito
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -28,12 +28,12 @@ requisito.getByIdRequisito = async function (idRequisito) {
 
 requisito.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
     try {
-        //var query = 'select * from requisito where idTipoPrestamo=:idTipoPrestamo';
-        var query = 'select * from vw_requisito_getAllByIdTipoPrestamo vr where vr.idTipoPrestamo=:idTipoPrestamo';
+       
+        var query = 'select * from vw_requisito_getAllByIdTipoPrestamo vr where vr.idTipoPrestamo=?';
         
-        var result = await db_connect.query(query,{
-            idTipoPrestamo:idTipoPrestamo
-        });
+        var result = await db_connect.query(query,[
+            idTipoPrestamo
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -43,11 +43,11 @@ requisito.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
 requisito.getAllTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     try {
    
-        var query = 'select * from vw_requisito_getAllByIdTipoPrestamo vr where vr.nombreTipoPrestamo=:nombreTipoPrestamo';
+        var query = 'select * from vw_requisito_getAllByIdTipoPrestamo vr where vr.nombreTipoPrestamo=?';
         
-        var result = await db_connect.query(query,{
-            nombreTipoPrestamo:nombreTipoPrestamo
-        });
+        var result = await db_connect.query(query,[
+            nombreTipoPrestamo
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -62,14 +62,14 @@ requisito.create = async function (requisito) {
             idTipoPrestamo,
             estado      
         ) values (
-            :descripcionRequisito,
-            :idTipoPrestamo,
+            ?,
+            ?,
             1
         )`;
-        var result = await db_connect.query(query, {
-            descripcionRequisito:requisito.descripcionRequisito,
-            idTipoPrestamo:requisito.idTipoPrestamo
-        });        
+        var result = await db_connect.query(query, [
+            requisito.descripcionRequisito,
+            requisito.idTipoPrestamo
+        ]);        
         return result;        
 
     } catch(error) {
@@ -80,14 +80,14 @@ requisito.create = async function (requisito) {
 requisito.update = async function (idRequisito, requisito) {
     try {        
         var query = `update requisito set 
-        descripcionRequisito=:descripcionRequisito,
-        idTipoPrestamo=:idTipoPrestamo
-    where idRequisito=:idRequisito`; 
-        var result = await db_connect.query(query, {
-            descripcionRequisito:requisito.descripcionRequisito,
-            idTipoPrestamo:requisito.idTipoPrestamo,
-            idRequisito:idRequisito
-        });
+        descripcionRequisito=?,
+        idTipoPrestamo=?
+    where idRequisito=?`; 
+        var result = await db_connect.query(query, [
+            requisito.descripcionRequisito,
+            requisito.idTipoPrestamo,
+            idRequisito
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -96,10 +96,11 @@ requisito.update = async function (idRequisito, requisito) {
 
 requisito.delete = async function (idRequisito) {
     try {        
-        var query = `delete from requisito where idRequisito=:idRequisito`; 
-        var result = await db_connect.query(query, {
-            idRequisito:idRequisito
-        });
+        var query = `delete from requisito where idRequisito=?`; 
+        var result = await db_connect.query(query, [
+            idRequisito
+        ]
+        );
         return result;
     } catch(error) {
         throw new Error(error);

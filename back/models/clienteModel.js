@@ -16,10 +16,10 @@ cliente.getAll = async function () {
 
 cliente.getByIdCliente = async function (idCliente) {
     try {
-        var query = 'select * from cliente where idCliente=:idCliente';
-        var result = await db_connect.query(query,{
-            idCliente:idCliente
-        });
+        var query = 'select * from cliente where idCliente=?';
+        var result = await db_connect.query(query,[
+            idCliente
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -28,10 +28,10 @@ cliente.getByIdCliente = async function (idCliente) {
 
 cliente.getByIdSession = async function (idSession) {
     try {
-        var query = 'select * from cliente where idSession=:idSession';
-        var result = await db_connect.query(query,{
-            idSession:idSession
-        });
+        var query = 'select * from cliente where idSession=?';
+        var result = await db_connect.query(query,[
+            idSession
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -41,10 +41,10 @@ cliente.getByIdSession = async function (idSession) {
 
 cliente.getByDocumento = async function (documento) {
     try {
-        var query = 'select * from cliente where documento=:documento';
-        var result = await db_connect.query(query,{
-            documento:documento
-        });
+        var query = 'select * from cliente where documento=?';
+        var result = await db_connect.query(query,[
+            documento
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -83,35 +83,35 @@ cliente.create = async function (cliente) {
             idSession,
             estado      
         ) values (
-            :apellidos,
-            :nombres,
-            :tipoDocumento,
-            :documento,
-            :fechaNacimiento,
-            :sexo,
-            :telefono,
-            :correo,
-            :movil,
-            :direccion,
-            :razonSocial,
-            :idSession,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
             1
             
         )`;
-        var result = await db_connect.query(query, {
-            apellidos: cliente.apellidos,
-            nombres: cliente.nombres,
-            tipoDocumento: cliente.tipoDocumento,
-            documento: cliente.documento,
-            fechaNacimiento: cliente.fechaNacimiento,
-            sexo: cliente.sexo,
-            telefono: cliente.telefono,
-            correo: cliente.correo,
-            movil: cliente.movil,
-            direccion: cliente.direccion,
-            razonSocial: cliente.razonSocial,
-            idSession:cliente.idSession
-        });        
+        var result = await db_connect.query(query, [
+             cliente.apellidos,
+             cliente.nombres,
+             cliente.tipoDocumento,
+             cliente.documento,
+             cliente.fechaNacimiento,
+             cliente.sexo,
+             cliente.telefono,
+             cliente.correo,
+             cliente.movil,
+             cliente.direccion,
+             cliente.razonSocial,
+            cliente.idSession
+        ]);        
         return result;        
 
     } catch(error) {
@@ -122,32 +122,32 @@ cliente.create = async function (cliente) {
 cliente.update = async function (idCliente, cliente) {
     try {        
         var query = `update cliente set 
-            apellidos=:apellidos,
-            nombres=:nombres,
-            tipoDocumento=:tipoDocumento,
-            documento=:documento,
-            fechaNacimiento=:fechaNacimiento,
-            sexo=:sexo,
-            telefono=:telefono,
-            correo=:correo,
-            movil=:movil,
-            direccion=:direccion,
-            razonSocial=:razonSocial
-            where idCliente=:idCliente`; 
-        var result = await db_connect.query(query, {
-            apellidos:cliente.apellidos,
-            nombres:cliente.nombres,
-            tipoDocumento:cliente.tipoDocumento,
-            documento:cliente.documento,
-            fechaNacimiento:cliente.fechaNacimiento,
-            sexo:cliente.sexo,
-            telefono:cliente.telefono,
-            correo:cliente.correo,
-            movil:cliente.movil,
-            direccion:cliente.direccion,
-            razonSocial:cliente.razonSocial,
-            idCliente:idCliente
-        });
+            apellidos=?,
+            nombres=?,
+            tipoDocumento=?,
+            documento=?,
+            fechaNacimiento=?,
+            sexo=?,
+            telefono=?,
+            correo=?,
+            movil=?,
+            direccion=?,
+            razonSocial=?
+            where idCliente=?`; 
+        var result = await db_connect.query(query, [
+            cliente.apellidos,
+            cliente.nombres,
+            cliente.tipoDocumento,
+            cliente.documento,
+            cliente.fechaNacimiento,
+            cliente.sexo,
+            cliente.telefono,
+            cliente.correo,
+            cliente.movil,
+            cliente.direccion,
+            cliente.razonSocial,
+            idCliente
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -158,32 +158,32 @@ cliente.update = async function (idCliente, cliente) {
 cliente.updateIdSession = async function (idSession, cliente) {
     try {        
         var query = `update cliente set 
-            apellidos=:apellidos,
-            nombres=:nombres,
-            tipoDocumento=:tipoDocumento,
-            documento=:documento,
-            fechaNacimiento=:fechaNacimiento,
-            sexo=:sexo,
-            telefono=:telefono,
-            correo=:correo,
-            movil=:movil,
-            direccion=:direccion,
-            razonSocial=:razonSocial
-            where idSession=:idSession`; 
-        var result = await db_connect.query(query, {
-            apellidos:cliente.apellidos,
-            nombres:cliente.nombres,
-            tipoDocumento:cliente.tipoDocumento,
-            documento:cliente.documento,
-            fechaNacimiento:cliente.fechaNacimiento,
-            sexo:cliente.sexo,
-            telefono:cliente.telefono,
-            correo:cliente.correo,
-            movil:cliente.movil,
-            direccion:cliente.direccion,
-            razonSocial:cliente.razonSocial,
-            idSession:idSession
-        });
+            apellidos=?,
+            nombres=?,
+            tipoDocumento=?,
+            documento=?,
+            fechaNacimiento=?,
+            sexo=?,
+            telefono=?,
+            correo=?,
+            movil=?,
+            direccion=?,
+            razonSocial=?
+            where idSession=?`; 
+        var result = await db_connect.query(query, [
+            cliente.apellidos,
+            cliente.nombres,
+            cliente.tipoDocumento,
+            cliente.documento,
+            cliente.fechaNacimiento,
+            cliente.sexo,
+            cliente.telefono,
+            cliente.correo,
+            cliente.movil,
+            cliente.direccion,
+            cliente.razonSocial,
+            idSession
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -195,10 +195,10 @@ cliente.updateIdSession = async function (idSession, cliente) {
 
 cliente.delete = async function (idCliente) {
     try {        
-        var query = `delete from cliente where idCliente=:idCliente`; 
-        var result = await db_connect.query(query, {
-            idCliente:idCliente
-        });
+        var query = `delete from cliente where idCliente=?`; 
+        var result = await db_connect.query(query, [
+            idCliente
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);

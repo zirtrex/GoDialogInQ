@@ -16,10 +16,10 @@ documentacioncliente.getAll = async function () {
 
 documentacioncliente.getByIdDocumentacionCliente = async function (idDocumentacionCliente) {
     try {
-        var query = 'select * from documentacion_cliente where idDocumentacionCliente=:idDocumentacionCliente';
-        var result = await db_connect.query(query,{
-            idDocumentacionCliente:idDocumentacionCliente
-        });
+        var query = 'select * from documentacion_cliente where idDocumentacionCliente=?';
+        var result = await db_connect.query(query,[
+            idDocumentacionCliente
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -28,10 +28,10 @@ documentacioncliente.getByIdDocumentacionCliente = async function (idDocumentaci
 
 documentacioncliente.getAllByIdPrestamoCliente = async function (idPrestamoCliente) {
     try {
-        var query = 'select * from documentacion_cliente where idPrestamoCliente=:idPrestamoCliente';
-        var result = await db_connect.query(query,{
-            idPrestamoCliente:idPrestamoCliente
-        });
+        var query = 'select * from documentacion_cliente where idPrestamoCliente=?';
+        var result = await db_connect.query(query,[
+            idPrestamoCliente
+        ]);
         return result;
     } catch(error) {
         throw new Error(error);
@@ -50,16 +50,16 @@ documentacioncliente.create = async function (documentacioncliente) {
             idPrestamoCliente
 
         ) values (
-            :nombreDocumentacion,
-            :valor,
+            ?,
+            ?,
             1,
-            :idPrestamoCliente
+            ?
         )`;
-        var result = await db_connect.query(query, {
-            nombreDocumentacion:documentacioncliente.nombreDocumentacion,
-            valor:documentacioncliente.valor,
-            idPrestamoCliente:documentacioncliente.idPrestamoCliente
-        });        
+        var result = await db_connect.query(query, [
+            documentacioncliente.nombreDocumentacion,
+            documentacioncliente.valor,
+            documentacioncliente.idPrestamoCliente
+        ]);        
         return result;        
 
     } catch(error) {
