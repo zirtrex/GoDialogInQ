@@ -49,8 +49,6 @@ prestamocliente.getByIdSession = async function (idSession) {
     }
 }
 
-
-
 prestamocliente.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
     try {
         var query = 'select * from prestamo_cliente where idTipoPrestamo=?';

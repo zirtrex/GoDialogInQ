@@ -7,13 +7,15 @@ log4js.configure({
 });
 const logger = log4js.getLogger('cheese');
 
+var config = require('../public/config.json');
+
 var clienteService = {};
 
-const urlBase = 'https://godialoginq.herokuapp.com';
+const urlBase = config.ipServidor;
 
 clienteService.saveOrUpdateCliente = async function (idSession, Cliente) {
   try {
-		var request = await fetch(urlBase + '/cliente/session/' + idSession);    
+		var request = await fetch(urlBase + '/cliente/session/' + idSession);
 		var response = await request.json();
 		console.log(response);
 		if (response.status == "success") {

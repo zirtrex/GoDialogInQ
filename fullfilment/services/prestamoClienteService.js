@@ -44,5 +44,16 @@ prestamoClienteService.saveOrUpdatePrestamoCliente = async function (idSession, 
   	}
 }
 
+prestamoClienteService.getPrestamoCliente = async function (idSession) {
+	try {		
+		var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession);
+		var response = await request.json();
+		return response;
+	} catch (error) {
+		logger.debug(error);
+		throw new Error(error);
+  	}
+}
+
 module.exports = prestamoClienteService;
 
