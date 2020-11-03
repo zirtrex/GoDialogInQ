@@ -41,7 +41,8 @@ router.post("/dialogflow", express.json(), (req, res) => {
     intentMap.set("Default Welcome Intent", welcome);
 	intentMap.set("Default Fallback Intent", defaultFallback);
 	intentMap.set("Extraer nombre del cliente", extraerNombreCliente);	
-	intentMap.set("Guiar al usuario para elegir un prestamo", guiarUsuario);
+	intentMap.set("Guiar al usuario", guiarUsuario);
+
 	intentMap.set("Guiar al usuario para elegir un prestamo - si - custom", guiarUsuarioSiCustom);	
 	intentMap.set("Extraer el tipo de prestamo", extraerTipoPrestamo);
 	intentMap.set("Extraer el tipo de prestamo - mostrar prestamos", extraerTipoPrestamoMostrarPrestamos);
@@ -145,7 +146,7 @@ async function guiarUsuario(agent) {
 				agent.add("- " + object.nombreTipoPrestamo);
 			});
 
-			agent.add('¿Quieres que te mostremos una descripción básica de los préstamos?');
+			agent.add('¿Quieres ver la descripción básica de alguno de los préstamos?');
 
 		} else {
 			agent.add('No tenemos préstamos disponibles.');
@@ -201,7 +202,7 @@ async function extraerTipoPrestamo(agent) {
 			agent.context.set({
 				'name': existingContext.name, 
 				'lifespan': 50,
-				'parameters' : {'REPROMPT_COUNT': 3}
+				'parameters' : {'REPROMPT_COUNT': 2}
 			});
 			agent.add("Por favor indica un préstamo válido");
 
@@ -214,7 +215,7 @@ async function extraerTipoPrestamo(agent) {
 						agent.add("- " + object.nombreTipoPrestamo);
 					});
 		
-					agent.add('Elige uno');
+					agent.add('Elige uno por favor.');
 		
 				} else {
 					agent.add('No se han encontrado préstamos disponibles.');
