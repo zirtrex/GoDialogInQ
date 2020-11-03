@@ -40,14 +40,17 @@ router.post("/dialogflow", express.json(), (req, res) => {
     let intentMap = new Map();
     intentMap.set("Default Welcome Intent", welcome);
 	intentMap.set("Default Fallback Intent", defaultFallback);
-	intentMap.set("Extraer nombre del cliente", extraerNombreCliente);	
-	intentMap.set("Guiar al usuario", guiarUsuario);
 
-	intentMap.set("Guiar al usuario para elegir un prestamo - si - custom", guiarUsuarioSiCustom);	
+	intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
+	intentMap.set("Extraer nombre del cliente", extraerNombreCliente);	
+
+	intentMap.set("Guiar al usuario", guiarUsuario);
+	intentMap.set("Guiar al usuario - mostrar descripcion - si - custom", guiarUsuarioSiCustom);
+
 	intentMap.set("Extraer el tipo de prestamo", extraerTipoPrestamo);
 	intentMap.set("Extraer el tipo de prestamo - mostrar prestamos", extraerTipoPrestamoMostrarPrestamos);
-	intentMap.set("Extraer el tipo de prestamo - mostrar requisitos - si", extraerTipoPrestamoMostrarRequisitosSi);	
-	intentMap.set("Extraer informacion del cliente", extraerInfoCliente);
+	intentMap.set("Extraer el tipo de prestamo - mostrar requisitos - si", extraerTipoPrestamoMostrarRequisitosSi);
+	
 	intentMap.set("Extraer monto necesitado", extraerMontoNecesitado);
 	intentMap.set("Extraer tiempo en el negocio", extraerTiempoNegocio);
 	intentMap.set("Prueba sesion", pruebaSesion);
