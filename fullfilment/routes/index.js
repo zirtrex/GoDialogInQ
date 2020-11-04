@@ -48,6 +48,9 @@ router.post("/", express.json(), (req, res) => {
 	intentMap.set("Extraer tiempo en el negocio", prestamoClienteFullfilment.extraerTiempoNegocio);
 	intentMap.set("Extraer ingresos anuales", prestamoClienteFullfilment.extraerIngresosAnuales);
 	intentMap.set("Extraer cuan rapido necesita", prestamoClienteFullfilment.extraerCuanRapidoNecesita);
+	intentMap.set("Extraer tiempo en el negocio", prestamoClienteFullfilment.extraerTiempoNegocio);
+	intentMap.set("Extraer ingresos anuales", prestamoClienteFullfilment.extraerIngresosAnuales);
+	intentMap.set("Extraer cuan rapido necesita", prestamoClienteFullfilment.extraerCuanRapidoNecesita);
 
 	agent.handleRequest(intentMap);
 });
