@@ -10,17 +10,28 @@ const messagesUtil = require("../utils/messagesUtil");
 
 var clienteFullfilment = {};
 
+
 clienteFullfilment.extraerNombreCliente = async function (agent) {
     
     const idSession = agent.session.split("/").reverse()[0];	
 
+    //contextos
     const setClienteContext = agent.context.get('setcliente');
     const setNombreClienteContext = agent.context.get('setnombrecliente');
 
-    var nombres = setNombreCliente.parameters['given-name.original'];		
-    var apellidos = setNombreCliente.parameters['last-name.original'];
-    var saludo = setNombreCliente.parameters['saludo'];
+    //variables
+    var nombres = setNombreClienteContext.parameters['given-name.original'];		
+    var apellidos = setNombreClienteContext.parameters['last-name.original'];
+    var saludo = setNombreClienteContext.parameters['saludo'];
+    var telefono="";
+    var correo="";
 
+    if (typeof setClienteContext !== 'undefined') {
+        telefono = setClienteContext.parameters['phone-number.original'];
+        correo = setClienteContext.parameters['email.original'];
+    }
+    
+    //Objeto cliente a guardar
     Cliente = {
         "idSession": idSession,
         "nombres": nombres,
@@ -39,14 +50,17 @@ clienteFullfilment.extraerNombreCliente = async function (agent) {
             } else {
                 idCliente = response.result.idCliente;
             }
-            const existingContext = agent.context.get("setcliente");
+            
+            //creando variable contexto setcliente se dispara a Dialogflow session setcliente
             agent.context.set({
-                'name': existingContext.name,
+                'name': "setcliente",
                 'lifespan': 50,
                 'parameters' : {
                     'idCliente': idCliente,
                     'nombres': nombres,
                     'apellidos': apellidos,
+                    "telefono": telefono,
+                    "correo": correo
                 }
             });
 
@@ -81,6 +95,9 @@ clienteFullfilment.extraerNombreCliente = async function (agent) {
     }	
 
 }
+
+
+
 
 clienteFullfilment.extraerTelefonoCliente = async function (agent) {
     
@@ -153,6 +170,8 @@ clienteFullfilment.extraerTelefonoCliente = async function (agent) {
 
 }
 
+
+
 clienteFullfilment.extraerCorreoCliente = async function (agent) {
     
     const idSession = agent.session.split("/").reverse()[0];	
@@ -216,5 +235,7 @@ clienteFullfilment.extraerCorreoCliente = async function (agent) {
     }	
 
 }
+
+
 
 module.exports = clienteFullfilment;

@@ -105,4 +105,7 @@ messagesUtil.getMessageForTipoPrestamo = function () {
 	return message;
 }
 
+
+
+
 module.exports = messagesUtil;
