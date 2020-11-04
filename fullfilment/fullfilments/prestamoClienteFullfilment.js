@@ -52,6 +52,8 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 			"idCliente": idCliente
 		};	
 		console.log(TipoPrestamo);
+
+
 	
 		try {
 			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
@@ -184,7 +186,7 @@ prestamoClienteFullfilment.extraerIngresosAnuales = async function (agent) {
 			"cuanRapidoNecesita": cuanRapidoNecesita,
 			"idTipoPrestamo": idTipoPrestamo,
 			"idCliente": idCliente
-		};	
+		};
 		console.log(TipoPrestamo);
 	
 		try {
