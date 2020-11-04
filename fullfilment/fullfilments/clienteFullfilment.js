@@ -42,7 +42,7 @@ clienteFullfilment.extraerNombreCliente = async function (agent) {
                 'parameters' : {'idCliente': idCliente}
             });
 
-            agent.add(saludo + " " + nombres + ", gracias por escribirnos");
+            agent.add(saludo + " " + nombres + " " + apellidos + ", gracias por escribirnos");
 
             //Detectar si ya eligió un tipo de préstamo
             var setTipoPrestamoContext = agent.context.get('settipoprestamo');
@@ -55,7 +55,7 @@ clienteFullfilment.extraerNombreCliente = async function (agent) {
 
                 if (typeof idTipoPrestamo !== 'undefined') {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
-                    var message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
+                    //var message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
                     console.log(message);
                     agent.add(message);
                 } else {

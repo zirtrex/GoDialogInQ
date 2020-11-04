@@ -1,9 +1,7 @@
 var express = require('express');
-var bodyParser = require("body-parser");
 var router = express.Router();
-const fetch   = require('node-fetch');
 
-const dialogflow = require('@google-cloud/dialogflow');
+//const dialogflow = require('@google-cloud/dialogflow');
 const { WebhookClient, Card, Suggestion } = require("dialogflow-fulfillment");
 
 const logger = require("../utils/loggerUtil");
@@ -17,10 +15,6 @@ const clienteFullfilment = require("../fullfilments/clienteFullfilment");
 const tipoPrestamoFullfilment = require("../fullfilments/tipoPrestamoFullfilment");
 const prestamoClienteFullfilment = require("../fullfilments/prestamoClienteFullfilment");
 
-var app = express();
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 router.get("/", (req, res) => {	
 	res.json({
@@ -129,7 +123,7 @@ async function guiarUsuarioMostrarDescSiPrestamo(agent) {
                 'lifespan': 50,
                 'parameters' : { 
 					'idTipoPrestamo': prestamo.idTipoPrestamo,
-					'tipoPrestamo': prestamo.nombreTipoPrestamo
+					'nombreTipoPrestamo': prestamo.nombreTipoPrestamo
 				}
             });
 

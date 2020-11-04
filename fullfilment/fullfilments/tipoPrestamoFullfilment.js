@@ -22,8 +22,18 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
 
         if (typeof setTipoPrestamoPrevContext !== 'undefined') {
 
-            idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-            nombreTipoPrestamo = setTipoPrestamoPrevContext.parameters['tipoPrestamo'];
+            idTipoPrestamo = setTipoPrestamoPrevContext.parameters['idTipoPrestamo'];
+            nombreTipoPrestamo = setTipoPrestamoPrevContext.parameters['nombreTipoPrestamo'];
+
+            const existingContext = agent.context.get('settipoprestamo');
+            agent.context.set({
+                'name': existingContext.name,
+                'lifespan': 50,
+                'parameters' : {
+                    'idTipoPrestamo': idTipoPrestamo,
+                    'tipoPrestamo': nombreTipoPrestamo
+                }
+            });
 
             agent.add("Ya has elegido: " + nombreTipoPrestamo);
             agent.add("¿Quieres ver los requisitos?");
@@ -46,7 +56,13 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
                     }
                 });
 
-                agent.add("Has elegido: " + nombreTipoPrestamo);
+                if (existingContext.parameters.tipoPrestamo == existingContext.parameters.tipoPrestamo.original) {
+                    agent.add("Has elegido: " + nombreTipoPrestamo);
+                    
+                } else {
+                    agent.add("El préstamo más cercano es: " + nombreTipoPrestamo);
+                }
+
                 agent.add("¿Quieres ver los requisitos?");
     
             } else {
@@ -142,7 +158,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi = async function 
 	try {
 		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 		var idTipoPrestamo = response.result[0].idTipoPrestamo;
-		
+		console.log(idTipoPrestamo);
 		const setTipoPrestamoContext = agent.context.get("settipoprestamo");
 		agent.context.set({
 			'name': setTipoPrestamoContext.name, 
@@ -167,7 +183,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi = async function 
 					agent.add('Si estás interesado, por favor ingresa tus nombres');
 				} else {
                     agent.add(nombres + " " + apellidos);
-                    //message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
+                    message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
                     console.log(message);
 					agent.add(message);
 				}
