@@ -26,10 +26,40 @@ tipoPrestamoController.getAll = async function (req, res) {
     }  
 }
 
+
+tipoPrestamoController.getByIdTipoPrestamo = async function (req, res) {
+
+  var idTipoPrestamo = req.params.idTipoPrestamo;
+
+  try {
+    var idTipoPrestamo = await model.getByIdTipoPrestamo(idTipoPrestamo);
+
+    if (Object.entries(idTipoPrestamo).length === 0) {
+      res.status(404).send({
+          status:'failed',
+          message: "No se pudo encontrar el recurso necesario",
+          result: []
+      });
+    }else {
+      res.status(200).send({
+        status:'success',
+        message: "",
+        result: idTipoPrestamo
+      });
+    }
+  } catch (error) { 
+    res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error fatal",
+      result: error      
+    });  
+  }
+}
+
+
+
 tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
-
   var nombreTipoPrestamo = req.params.nombreTipoPrestamo;
-
   try {
     var idTipoPrestamo = await model.getIdTipoPrestamoByNombre(nombreTipoPrestamo);
 
@@ -54,6 +84,8 @@ tipoPrestamoController.getIdTipoPrestamoByNombre = async function (req, res) {
     });  
   }
 }
+
+
 
 tipoPrestamoController.getPrestamoByNombre = async function (req, res) {
 
