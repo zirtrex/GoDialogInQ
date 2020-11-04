@@ -9,24 +9,22 @@ const logger = require("./loggerUtil");
 
 var messagesUtil = {};
 
-messagesUtil.getFieldsByComplete = async function (idSession) {
+messagesUtil.getFieldsByComplete = function (idSession, agent) {
 
-	var response = await prestamoClienteService.getPrestamoCliente(idSession);
+	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
 
 	var newPrestamoClienteArray = ['montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita'];
 	
-	if (response.status == "success") {
-
-		var result = response.result[0];
+	if (typeof setPrestamoClienteContext !== "undefined") {
 
 		var prestamoClienteArray = [
-			result['montoNecesitado'],
-			result['tiempoNegocio'],
-			result['ingresosAnuales'],
-			result['puntajeCredito'],
-			result['queNegocioTiene'],
-			result['comoVaUsar'],
-			result['cuanRapidoNecesita']
+			setPrestamoClienteContext.parameters['montoNecesitado'],
+			setPrestamoClienteContext.parameters['tiempoNegocio'],
+			setPrestamoClienteContext.parameters['ingresosAnuales'],
+			setPrestamoClienteContext.parameters['puntajeCredito'],
+			setPrestamoClienteContext.parameters['queNegocioTiene'],
+			setPrestamoClienteContext.parameters['comoVaUsar'],
+			setPrestamoClienteContext.parameters['cuanRapidoNecesita']
 		];
 
 		console.log(prestamoClienteArray);
@@ -46,24 +44,24 @@ messagesUtil.getFieldsByComplete = async function (idSession) {
     
 }
 
-messagesUtil.getMessageForRequisitosPrestamoCliente = async function (idSession) {
+messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent) {
     var answers = [];
 	answers.push(['montoNecesitado', "¿Qué monto requieres?"]);
-	//answers.push(['montoNecesitado', "¿Cuál es el monto requerido?"]);
+	answers.push(['montoNecesitado', "¿Cuál es el monto requerido?"]);
 	answers.push(['tiempoNegocio', "¿Qué tiempo tienes en el negocio?"]);
-	//answers.push(['tiempoNegocio', "¿Cuánto tiempo tienes en el negocio?"]);
+	answers.push(['tiempoNegocio', "¿Cuánto tiempo tienes en el negocio?"]);
 	answers.push(['ingresosAnuales', "¿Cuáles son tus ingresos anuales?"]);
-	//answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio?"]);
+	answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio?"]);
 	answers.push(['puntajeCredito', "¿Cuál es tu puntaje de crédito?"]);
-	//answers.push(['puntajeCredito', "¿Cuál es tu fico scord?"]);
+	answers.push(['puntajeCredito', "¿Cuál es tu fico scord?"]);
 	answers.push(['queNegocioTiene', "¿Qué negocio tienes?"]);
-	//answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio?"]);
+	answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio?"]);
 	answers.push(['comoVaUsar', "¿Cómo vas a usar el dinero?"]);
-	//answers.push(['comoVaUsar', "¿Para qué vas a usar el dinero?"]);
+	answers.push(['comoVaUsar', "¿Para qué vas a usar el dinero?"]);
 	answers.push(['tiempoNegocio', "¿Cuán rápido quieres el préstamo?"]);
-	//answers.push(['tiempoNegocio', "¿Qué tan rápido requieres el préstamo?"]);
+	answers.push(['tiempoNegocio', "¿Qué tan rápido requieres el préstamo?"]);
 
-	var requisitosInicialesRestantesArray = await messagesUtil.getFieldsByComplete(idSession);
+	var requisitosInicialesRestantesArray = messagesUtil.getFieldsByComplete(idSession, agent);
 
 	var requisitosRandom = requisitosInicialesRestantesArray[Math.floor(Math.random() * requisitosInicialesRestantesArray.length)];
 
