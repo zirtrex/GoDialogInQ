@@ -30,17 +30,19 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 		console.log(prestamoClienteArray);
 
 		var i = 0;
+		var newArray = [];
 		prestamoClienteArray.forEach(element => {
-			if (element != "") {
-				newPrestamoClienteArray.splice(i, 1);				
+			console.log(element);
+			if (element === '') {
+				newArray.push(newPrestamoClienteArray[i]);
 			}
 			i++;
 		});
 	}
 
-	console.log(newPrestamoClienteArray);
+	console.log(newArray);
 
-    return newPrestamoClienteArray;
+    return newArray;
     
 }
 
@@ -63,26 +65,31 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 
 	var requisitosInicialesRestantesArray = messagesUtil.getFieldsByComplete(idSession, agent);
 
-	var requisitosRandom = requisitosInicialesRestantesArray[Math.floor(Math.random() * requisitosInicialesRestantesArray.length)];
+	if (requisitosInicialesRestantesArray.length > 0) {
 
-	console.log(requisitosRandom);
+		var requisitosRandom = requisitosInicialesRestantesArray[Math.floor(Math.random() * requisitosInicialesRestantesArray.length)];
 
-	var newFrasesArray = [];
+		console.log(requisitosRandom);
 
-	answers.forEach(element => {
-		console.log(element);
-		if (element[0] == requisitosRandom)	{
-			newFrasesArray.push(element[1]);
-		}
-	});
+		var newFrasesArray = [];
 
-	console.log(newFrasesArray);
+		answers.forEach(element => {
+			console.log(element);
+			if (element[0] == requisitosRandom)	{
+				newFrasesArray.push(element[1]);
+			}
+		});
 
-	var randomIndex = Math.floor(Math.random() * newFrasesArray.length); console.log(randomIndex);
+		console.log(newFrasesArray);
 
-	var message = newFrasesArray[randomIndex];
+		var randomIndex = Math.floor(Math.random() * newFrasesArray.length); console.log(randomIndex);
 
-	return message;
+		var message = newFrasesArray[randomIndex];
+
+		return message;
+	} else {
+		return "Gracias por confiar en InQmatic";
+	}
 }
 
 messagesUtil.getMessageForNombres = function () {
