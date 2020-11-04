@@ -1,13 +1,17 @@
-var util = require('util');
-var mysql = require('mysql');
+const util = require('util');
+const mysql = require('mysql');
+
+const config = require('config');
+
+console.log(config);
 
 var pool = mysql.createPool({
-  connectionLimit: 10,
-  host     : 'us-cdbr-east-02.cleardb.com',
-  port     : '3306',
-  user     : 'bfcf921ad2d1d9',
-  password : '547c03ba',
-  database : 'heroku_2309d2c344b6aa6'
+    connectionLimit: 10,
+    host     : config.get("mysql_connection.host"),
+    port     : config.get("mysql_connection.port"),
+    user     : config.get("mysql_connection.user"),
+    password : config.get("mysql_connection.password"),
+    database : config.get("mysql_connection.database")
 });
 
 pool.getConnection((err, connection) => {
@@ -29,16 +33,6 @@ pool.getConnection((err, connection) => {
 
   return;
 });
-
-/*pool.config.queryFormat = function (query, values) {
-  if (!values) return query;
-  return query.replace(/\:(\w+)/g, function (txt, key) {
-    if (values.hasOwnProperty(key)) {
-      return this.escape(values[key]);
-    }
-    return txt;
-  }.bind(this));
-};*/
 
 pool.query = util.promisify(pool.query);
 

@@ -3,11 +3,13 @@
 const fetch   = require('node-fetch');
 const logger = require("../utils/loggerUtil");
 
-var config = require('../public/config.json');
+const config = require('config');
+
+console.log(config);
 
 var clienteService = {};
 
-const urlBase = config.ipServidor;
+const urlBase = config.get("ipServidor");
 
 clienteService.saveOrUpdateCliente = async function (idSession, Cliente) {
   try {

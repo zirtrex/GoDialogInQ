@@ -3,11 +3,13 @@
 const fetch = require('node-fetch');
 const logger = require("../utils/loggerUtil");
 
-var config = require('../public/config.json');
+const config = require('config');
+
+console.log(config);
 
 var tipoPrestamoService = {};
 
-const urlBase = config.ipServidor;
+const urlBase = config.get("ipServidor");
 
 tipoPrestamoService.getAll = async function () {
 	try {
