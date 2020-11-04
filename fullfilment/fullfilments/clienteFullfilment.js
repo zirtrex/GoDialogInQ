@@ -77,7 +77,7 @@ clienteFullfilment.extraerNombreCliente = async function (agent) {
 
                 if (typeof idTipoPrestamo !== 'undefined') {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
-                    //var message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
+                    var message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
                     console.log(message);
                     agent.add(message);
                 } else {

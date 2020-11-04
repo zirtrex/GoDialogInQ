@@ -183,7 +183,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi = async function 
 					agent.add('Si estás interesado, por favor ingresa tus nombres');
 				} else {
                     agent.add(nombres + " " + apellidos);
-                    //message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
+                    message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
                     console.log(message);
 					agent.add(message);
 				}
