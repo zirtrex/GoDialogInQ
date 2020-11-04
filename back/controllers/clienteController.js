@@ -115,6 +115,8 @@ clienteController.getByDocumento = async function (req, res) {
 }
 
 
+
+
 clienteController.create = async function (req, res) {
   var cliente = req.body;
   try {
