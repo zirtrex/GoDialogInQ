@@ -31,7 +31,7 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 
 		var i = 0;
 		prestamoClienteArray.forEach(element => {
-			if (element != null) {
+			if (element != "") {
 				newPrestamoClienteArray.splice(i, 1);				
 			}
 			i++;
@@ -58,12 +58,14 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 	answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio?"]);
 	answers.push(['comoVaUsar', "¿Cómo vas a usar el dinero?"]);
 	answers.push(['comoVaUsar', "¿Para qué vas a usar el dinero?"]);
-	answers.push(['tiempoNegocio', "¿Cuán rápido quieres el préstamo?"]);
-	answers.push(['tiempoNegocio', "¿Qué tan rápido requieres el préstamo?"]);
+	answers.push(['cuanRapidoNecesita', "¿Cuán rápido quieres el préstamo?"]);
+	answers.push(['cuanRapidoNecesita', "¿Qué tan rápido requieres el préstamo?"]);
 
 	var requisitosInicialesRestantesArray = messagesUtil.getFieldsByComplete(idSession, agent);
 
 	var requisitosRandom = requisitosInicialesRestantesArray[Math.floor(Math.random() * requisitosInicialesRestantesArray.length)];
+
+	console.log(requisitosRandom);
 
 	var newFrasesArray = [];
 
@@ -76,7 +78,9 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 
 	console.log(newFrasesArray);
 
-	var message = newFrasesArray[Math.floor(Math.random() * newFrasesArray.length)];
+	var randomIndex = Math.floor(Math.random() * newFrasesArray.length); console.log(randomIndex);
+
+	var message = newFrasesArray[randomIndex];
 
 	return message;
 }
