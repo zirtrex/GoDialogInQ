@@ -1,23 +1,18 @@
 'use strict';
-const fetch = require('node-fetch');
 
-var log4js = require('log4js');
-log4js.configure({
-  appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
-  categories: { default: { appenders: ['cheese'], level: 'debug' } }
-});
-const logger = log4js.getLogger('cheese');
+const fetch = require('node-fetch');
+const logger = require("../utils/loggerUtil");
+
+var config = require('../public/config.json');
 
 var tipoPrestamoService = {};
 
-const urlBase = 'https://godialoginq.herokuapp.com';
+const urlBase = config.ipServidor;
 
 tipoPrestamoService.getAll = async function () {
 	try {
 		var request = await fetch(urlBase + '/tipo_prestamo');
-		var response = await request.json();
-		console.log(response);
-		logger.debug(response);
+		var response = await request.json();	
 		return response;
 	} catch (error) {
 		console.log(error);
@@ -31,7 +26,6 @@ tipoPrestamoService.getByNombre = async function (nombreTipoPrestamo) {
 		var request = await fetch(urlBase + '/tipo_prestamo/nombre/' + nombreTipoPrestamo);
 		var response = await request.json();
 		console.log(response);
-		logger.debug(response);
 		return response;
 	} catch (error) {
 		console.log(error);

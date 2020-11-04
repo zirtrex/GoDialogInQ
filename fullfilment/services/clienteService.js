@@ -1,11 +1,7 @@
 'use strict';
-const fetch = require('node-fetch');
-var log4js = require('log4js');
-log4js.configure({
-  appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
-  categories: { default: { appenders: ['cheese'], level: 'debug' } }
-});
-const logger = log4js.getLogger('cheese');
+
+const fetch   = require('node-fetch');
+const logger = require("../utils/loggerUtil");
 
 var config = require('../public/config.json');
 
@@ -29,6 +25,7 @@ clienteService.saveOrUpdateCliente = async function (idSession, Cliente) {
 			});
 			var response = await request.json();
 			response.result.idCliente = idCliente;
+			console.log(response);
 			return response;
 		} else {
 			var request = await fetch(urlBase + '/cliente', {
@@ -39,6 +36,7 @@ clienteService.saveOrUpdateCliente = async function (idSession, Cliente) {
 				body: JSON.stringify(Cliente)
 			});
 			var response = await request.json();
+			console.log(response);
 			return response;
 		}
 	} catch (error) {

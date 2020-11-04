@@ -5,6 +5,7 @@ const requisitoService = require("../services/requisitoService");
 const clienteService = require("../services/clienteService");
 const prestamoClienteService = require("../services/prestamoClienteService");
 
+const logger = require("../utils/loggerUtil");
 const messagesUtil = require("../utils/messagesUtil");
 
 var tipoPrestamoFullfilment = {};
@@ -14,76 +15,96 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
     var nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo'];
 
     try {
-        var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);			
 
-        if (response.status == "success") {
+        let setTipoPrestamoPrevContext = agent.context.get('settipoprestamoprev');
 
-            var idTipoPrestamo = response.result[0].idTipoPrestamo;
+        var idTipoPrestamo;
 
-            const existingContext = agent.context.get("settipoprestamo");
-            agent.context.set({
-                'name': existingContext.name, 
-                'lifespan': 50,
-                'parameters' : {'idTipoPrestamo': idTipoPrestamo}
-            });
+        if (typeof setTipoPrestamoPrevContext !== 'undefined') {
 
-            agent.add("Has elegido: " + nombreTipoPrestamo);
+            idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
+            nombreTipoPrestamo = setTipoPrestamoPrevContext.parameters['tipoPrestamo'];
+
+            agent.add("Ya has elegido: " + nombreTipoPrestamo);
             agent.add("¿Quieres ver los requisitos?");
 
         } else {
 
-            let REPROMPT_COUNT = agent.request_.body.queryResult.outputContexts[0].parameters['REPROMPT_COUNT'];
+            var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 
-            if (typeof REPROMPT_COUNT === 'undefined') {
+            if (response.status == "success") {
 
-                const existingContext = agent.context.get("settipoprestamo");
+                idTipoPrestamo = response.result[0].idTipoPrestamo;
+    
+                const existingContext = agent.context.get('settipoprestamo');
                 agent.context.set({
-                    'name': existingContext.name, 
+                    'name': existingContext.name,
                     'lifespan': 50,
-                    'parameters' : {'REPROMPT_COUNT': 2}
+                    'parameters' : {
+                        'idTipoPrestamo': idTipoPrestamo,
+                        'tipoPrestamo': nombreTipoPrestamo
+                    }
                 });
-                agent.add("Por favor indica un préstamo válido");
-                
-                var response = await tipoPrestamoService.getAll();
-        
-                if (response.status == "success") {
-                    agent.add('Los préstamos disponibles son: ');
-                    response.result.forEach(object => {				
-                        agent.add("- " + object.nombreTipoPrestamo);
-                    });
-        
-                    agent.add('Elige uno por favor.');
-        
-                } else {
-                    agent.add('No se han encontrado préstamos disponibles.');
-                }               
 
+                agent.add("Has elegido: " + nombreTipoPrestamo);
+                agent.add("¿Quieres ver los requisitos?");
+    
             } else {
-                if (REPROMPT_COUNT > 0) {
-                    REPROMPT_COUNT = REPROMPT_COUNT - 1;
+
+                var REPROMPT_COUNT = agent.request_.body.queryResult.outputContexts[0].parameters['REPROMPT_COUNT'];
+    
+                if (typeof REPROMPT_COUNT === 'undefined') {
+    
                     const existingContext = agent.context.get("settipoprestamo");
-                    agent.context.set({
-                        'name': existingContext.name, 
-                        'lifespan': 50,
-                        'parameters' : {'REPROMPT_COUNT': REPROMPT_COUNT}
-                    });
-                    agent.add("El préstamo ingresado no lo tenemos disponible.");
-                } else {
                     agent.context.set({
                         'name': existingContext.name, 
                         'lifespan': 50,
                         'parameters' : {'REPROMPT_COUNT': 3}
                     });
-                }
-            }
-            console.log(REPROMPT_COUNT);
+                    
+                    agent.add("El préstamo ingresado no lo tenemos disponible.");
+
+                    var response = await tipoPrestamoService.getAll();            
+                    if (response.status == "success") {
+                        agent.add('Los préstamos disponibles son: ');
+                        response.result.forEach(object => {				
+                            agent.add(" " + object.nombreTipoPrestamo);
+                        });
             
-        }			
+                        agent.add('Elige uno por favor.');
+            
+                    } else {
+                        agent.add('No se han encontrado préstamos disponibles.');
+                    }               
+    
+                } else {
+                    if (REPROMPT_COUNT > 0) {
+                        REPROMPT_COUNT = REPROMPT_COUNT - 1;
+                        const existingContext = agent.context.get("settipoprestamo");
+                        agent.context.set({
+                            'name': existingContext.name, 
+                            'lifespan': 50,
+                            'parameters' : {'REPROMPT_COUNT': REPROMPT_COUNT}
+                        });
+                        agent.add("Por favor indica un préstamo válido");
+                    } else {
+                        agent.context.set({
+                            'name': existingContext.name, 
+                            'lifespan': 50,
+                            'parameters' : {'REPROMPT_COUNT': 2}
+                        });
+                    }
+                }
+                console.log("Prompt:" + REPROMPT_COUNT);
+                
+            }
+        } 			
         
     } catch (error) {
-        logger.debug(error);
-        agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-    }   	
+        console.log(error);
+        logger.debug(error);        
+        agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');        
+    } 
 
 }
 
@@ -103,6 +124,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarPrestamos = async function (ag
 		}
 
 	} catch (error) {
+        console.log(error);
 		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
 	}    	
 
@@ -112,17 +134,18 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi = async function 
     
     const idSession = agent.session.split("/").reverse()[0];
 
-	let nombreTipoPrestamo = agent.context.get('settipoprestamo').parameters['tipoPrestamo'];
-	let setnombrecliente = agent.context.get('setnombrecliente');
-	let nombres = "";
+	var nombreTipoPrestamo = agent.context.get('settipoprestamo').parameters['tipoPrestamo'];
+	var setNombreClienteContext = agent.context.get('setnombrecliente');
+    var nombres = "";
+    var apellidos = "";
 
 	try {
 		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 		var idTipoPrestamo = response.result[0].idTipoPrestamo;
 		
-		const existingContext = agent.context.get("settipoprestamo");
+		const setTipoPrestamoContext = agent.context.get("settipoprestamo");
 		agent.context.set({
-			'name': existingContext.name, 
+			'name': setTipoPrestamoContext.name, 
 			'lifespan': 50,
 			'parameters' : {'idTipoPrestamo': idTipoPrestamo}
 		});
@@ -133,18 +156,19 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi = async function 
 
 			agent.add("Los requisitos para " + nombreTipoPrestamo + " son:");
 			response.result.forEach(object => {			
-				agent.add("- " + object.descripcionRequisito);
+				agent.add(" " + object.descripcionRequisito);
 			});			
 
-			if (typeof setnombrecliente !== "undefined") {
-                nombres = setnombrecliente.parameters['given-name.original'];
-                apellidos = setnombrecliente.parameters['last-name.original'];
+			if (typeof setNombreClienteContext !== "undefined") {
+                nombres = setNombreClienteContext.parameters['given-name.original'];
+                apellidos = setNombreClienteContext.parameters['last-name.original'];
                 
 				if (nombres == "") {
 					agent.add('Si estás interesado, por favor ingresa tus nombres');
 				} else {
                     agent.add(nombres + " " + apellidos);
-					message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
+                    //message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession);
+                    console.log(message);
 					agent.add(message);
 				}
 			} else {				
@@ -156,8 +180,9 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi = async function 
 		}
 
 	} catch (error) {
+        console.log(error);
 		logger.debug(error);
-		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
+        agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
 	}	    	
 
 }

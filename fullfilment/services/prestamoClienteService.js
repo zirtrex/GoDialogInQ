@@ -1,22 +1,19 @@
 'use strict';
-const fetch = require('node-fetch');
 
-var log4js = require('log4js');
-log4js.configure({
-  appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
-  categories: { default: { appenders: ['cheese'], level: 'debug' } }
-});
-const logger = log4js.getLogger('cheese');
+const fetch = require('node-fetch');
+const logger = require("../utils/loggerUtil");
+
+var config = require('../public/config.json');
 
 var prestamoClienteService = {};
 
-const urlBase = 'https://godialoginq.herokuapp.com';
+const urlBase = config.ipServidor;
 
 prestamoClienteService.saveOrUpdatePrestamoCliente = async function (idSession, PrestamoCliente) {
 	try {		
 		var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession);    
 		var response = await request.json();
-
+		console.log(response);
 		if (response.status == "success") {
 			var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession, {
 				method: 'PUT',
@@ -39,6 +36,7 @@ prestamoClienteService.saveOrUpdatePrestamoCliente = async function (idSession, 
 			return response;
 		}
 	} catch (error) {
+		console.log(response);
 		logger.debug(error);
 		throw new Error(error);
   	}
@@ -50,6 +48,7 @@ prestamoClienteService.getPrestamoCliente = async function (idSession) {
 		var response = await request.json();
 		return response;
 	} catch (error) {
+		console.log(response);
 		logger.debug(error);
 		throw new Error(error);
   	}
