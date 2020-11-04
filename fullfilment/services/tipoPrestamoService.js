@@ -25,7 +25,7 @@ tipoPrestamoService.getAll = async function () {
 
 tipoPrestamoService.getByNombre = async function (nombreTipoPrestamo) {
 	try {
-		var request = await fetch(urlBase + '/tipo_prestamo/nombre/' + nombreTipoPrestamo);
+		var request = await fetch(urlBase + '/tipo_prestamo/nombretipoprestamo/' + nombreTipoPrestamo);
 		var response = await request.json();
 		console.log(response);
 		return response;
