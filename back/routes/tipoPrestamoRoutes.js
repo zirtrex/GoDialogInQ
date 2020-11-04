@@ -7,7 +7,9 @@ var controller = require('../controllers/tipoPrestamoController');
 
 router.get('/tipo_prestamo', controller.getAll);
 
-router.get('/tipo_prestamo/:nombreTipoPrestamo', controller.getIdTipoPrestamoByNombre);
+router.get('/tipo_prestamo/:idTipoPrestamo', controller.getByIdTipoPrestamo);
+
+router.get('/tipo_prestamo/nombretipoprestamo/:nombreTipoPrestamo', controller.getIdTipoPrestamoByNombre);
 
 router.get('/tipo_prestamo/nombre/:nombreTipoPrestamo', controller.getPrestamoByNombre);
 

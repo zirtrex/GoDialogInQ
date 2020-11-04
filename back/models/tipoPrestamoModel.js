@@ -13,6 +13,21 @@ tipoPrestamo.getAll = async function () {
     }
 }
 
+
+tipoPrestamo.getByIdTipoPrestamo = async function (idTipoPrestamo) {
+    try {
+        var query = 'select * from tipo_prestamo where idTipoPrestamo=?';
+        var result = await db_connect.query(query,[
+            idTipoPrestamo
+        ]);
+        return result;
+    } catch(error) {
+        console.log(error);
+        throw new Error(error);
+    }
+}
+
+
 tipoPrestamo.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     try {
         var query = 'select idTipoPrestamo from tipo_prestamo where nombreTipoPrestamo=?';
