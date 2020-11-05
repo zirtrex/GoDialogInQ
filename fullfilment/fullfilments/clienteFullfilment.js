@@ -77,7 +77,7 @@ clienteFullfilment.extraerNombreCliente = async function (agent) {
 
                 if (typeof idTipoPrestamo !== 'undefined') {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
-                    var message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+                    var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
                     console.log(message);
                     agent.add(message);
                 } else {
@@ -146,7 +146,7 @@ clienteFullfilment.extraerTelefonoCliente = async function (agent) {
 
                     if (typeof idTipoPrestamo !== 'undefined') {
                         agent.add("Has elegido: " + nombreTipoPrestamo);
-                        var message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+                        var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
                         console.log(message);
                         agent.add(message);
                     } else {
@@ -217,7 +217,7 @@ clienteFullfilment.extraerCorreoCliente = async function (agent) {
 
                 if (typeof idTipoPrestamo !== 'undefined') {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
-                    var message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+                    var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
                     console.log(message);
                     agent.add(message);
                 } else {
