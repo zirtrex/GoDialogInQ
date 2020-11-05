@@ -1,3 +1,4 @@
+
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
 const clienteService = require("../services/clienteService");
@@ -11,12 +12,12 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 
 	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
 
-	let newPrestamoClienteArray = ['montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita'];
+	const newPrestamoClienteArray = ['montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita'];
 	let newArray = [];
-	
+
 	if (typeof setPrestamoClienteContext !== "undefined") {
 
-		let prestamoClienteArray = [
+		const prestamoClienteArray = [
 			setPrestamoClienteContext.parameters['montoNecesitado'],
 			setPrestamoClienteContext.parameters['tiempoNegocio'],
 			setPrestamoClienteContext.parameters['ingresosAnuales'],
@@ -28,18 +29,19 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 
 		//console.log(prestamoClienteArray);
 
-		let i = 0;
-		
+		var i = 0;		
 		prestamoClienteArray.forEach(element => {
-			console.log(element);
-			if (element === '') {
+			//console.log(element);
+			if (element == '' || element == null) {
 				newArray.push(newPrestamoClienteArray[i]);
 			}
 			i++;
 		});
+	} else {
+		newArray = newPrestamoClienteArray.concat();
 	}
 
-	console.log(newArray);
+	//console.log(newArray);
 
     return newArray;
     
@@ -69,12 +71,12 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 
 		let requisitosRandom = requisitosInicialesRestantesArray[Math.floor(Math.random() * requisitosLength)];
 
-		console.log(requisitosRandom);
+		//console.log(requisitosRandom);
 
 		let newFrasesArray = [];
 
 		answers.forEach(element => {
-			console.log(element);
+			//console.log(element);
 			if (element[0] == requisitosRandom)	{
 				newFrasesArray.push(element[1]);
 			}
@@ -113,8 +115,5 @@ messagesUtil.getMessageForTipoPrestamo = function () {
 
 	return message;
 }
-
-
-
 
 module.exports = messagesUtil;

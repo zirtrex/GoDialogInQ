@@ -10,32 +10,30 @@ const messagesUtil = require("../utils/messagesUtil");
 
 var prestamoClienteFullfilment = {};
 
-prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
+prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
     
     const idSession = agent.session.split("/").reverse()[0];
 	
 	//Contextos
 	const setTipoPrestamoContext = agent.context.get('settipoprestamo');
-	const setNombreClienteContext = agent.context.get('setnombrecliente');	
 	const setClienteContext = agent.context.get('setcliente');
 	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
-	const setMontoNecesitadoContext = agent.context.get('setmontonecesitado');
 
-	if (typeof setNombreClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
+	if (typeof setClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
 
-		if (typeof setNombreClienteContext === 'undefined') {
+		if (typeof setClienteContext.parameters['nombres'] === 'undefined') {
 			var message = messagesUtil.getMessageForNombres();
-			agent.add(message);
+			return message;
 		} else {
 			var message = messagesUtil.getMessageForTipoPrestamo();
-			agent.add(message);
+			return message;
 		}
 		
 	} else {
 		var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-		var idCliente = setNombreClienteContext.parameters['idCliente'];		
+		var idCliente = setClienteContext.parameters['idCliente'];
 
-		var montoNecesitado = setMontoNecesitadoContext.parameters['montoNecesitado.original'];
+		var montoNecesitado = null;
 		var tiempoNegocio = null;
 		var ingresosAnuales = null;
 		var puntajeCredito = null;
@@ -44,6 +42,7 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 		var cuanRapidoNecesita = null;
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
+			montoNecesitado = setPrestamoClienteContext.parameters['montoNecesitado'];
 			tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
 			ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
 			puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
@@ -63,535 +62,119 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 			"cuanRapidoNecesita": cuanRapidoNecesita,
 			"idTipoPrestamo": idTipoPrestamo,
 			"idCliente": idCliente
-		};	
+		};
 		console.log(TipoPrestamo);
 
 		try {
-			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
-			var result = response.result;
-			console.log(response);
-	
-			if (result.affectedRows == 1) {
-				//Cuando guardamos el monto guardamos los datos al contexto setprestamocliente
-				agent.context.set({
-					'name': "setprestamocliente",
-					'lifespan': 50,
-					'parameters' : {
-						"montoNecesitado": montoNecesitado,
-						"tiempoNegocio": tiempoNegocio,
-						"ingresosAnuales": ingresosAnuales,
-						"puntajeCredito": puntajeCredito,
-						"queNegocioTiene": queNegocioTiene,
-						"comoVaUsar": comoVaUsar,
-						"cuanRapidoNecesita": cuanRapidoNecesita,
-						"idTipoPrestamo": idTipoPrestamo,
-						"idCliente": idCliente
-					}
-				});
 
-				agent.add('Gracias');
-				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-				console.log(message);
-				agent.add(message);
+			agent.context.set({
+				'name': "setprestamocliente",
+				'lifespan': 50,
+				'parameters' : {
+					"montoNecesitado": montoNecesitado,
+					"tiempoNegocio": tiempoNegocio,
+					"ingresosAnuales": ingresosAnuales,
+					"puntajeCredito": puntajeCredito,
+					"queNegocioTiene": queNegocioTiene,
+					"comoVaUsar": comoVaUsar,
+					"cuanRapidoNecesita": cuanRapidoNecesita,
+					"idTipoPrestamo": idTipoPrestamo,
+					"idCliente": idCliente
+				}
+			});
+
+			var tipoPrestamoArray = (Object.values(TipoPrestamo));
+
+			console.log(tipoPrestamoArray);
+
+			let newArray = [];
+
+			tipoPrestamoArray.forEach(element => {
+				if (element == null || element == '') {
+					newArray.push(tipoPrestamoArray);
+				}	
+			});
+
+			console.log(newArray);
+
+			if (newArray.length > 0 ) {
+				
+				return message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+
 			} else {
-				agent.add("Ha ocurrido un error.");
-			}
+				var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
+				var result = response.result;
+				console.log(response);
+	
+				if (result.affectedRows == 1) {
+					
+					return "Gracias por completar las preguntas";
+					
+				} else {
+					//agent.add("Ha ocurrido un error al guardar su información.");
+					console.log("No se han guardado los datos");
+				}
+			}		
 	
 		} catch (error) {
 			console.error(error);
 			logger.debug(error);
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+			return "Estamos experimentando problemas, intenta de nuevo por favor.";
 		}
 	}
+
+}
+
+prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
+    
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
+	agent.add(message);
 
 }
 
 prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
     
-	const idSession = agent.session.split("/").reverse()[0];
-	
-	//Contextos
-	const setTipoPrestamoContext = agent.context.get('settipoprestamo');
-	const setNombreClienteContext = agent.context.get('setnombrecliente');	
-	const setClienteContext = agent.context.get('setcliente');
-	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
-	const setTiempoNegocioContext = agent.context.get('settiemponegocio');
-
-	if (typeof setNombreClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
-
-		if (typeof setNombreClienteContext === 'undefined') {
-			var message = messagesUtil.getMessageForNombres();
-			agent.add(message);
-		} else {
-			var message = messagesUtil.getMessageForTipoPrestamo();
-			agent.add(message);
-		}
-		
-	} else {
-		var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-		var idCliente = setNombreClienteContext.parameters['idCliente'];		
-
-		var montoNecesitado = null;
-		var tiempoNegocio = setTiempoNegocioContext.parameters['tiempoNegocio.original'];
-		var ingresosAnuales = null;
-		var puntajeCredito = null;
-		var queNegocioTiene = null;
-		var comoVaUsar = null;
-		var cuanRapidoNecesita = null;
-
-		if (typeof setPrestamoClienteContext !== 'undefined') {
-			montoNecesitado = setPrestamoClienteContext.parameters['montoNecesitado'];
-			//tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			queNegocioTiene = setPrestamoClienteContext.parameters['queNegocioTiene'];
-			comoVaUsar = setPrestamoClienteContext.parameters['comoVaUsar'];
-			cuanRapidoNecesita = setPrestamoClienteContext.parameters['cuanRapidoNecesita'];
-		}
-
-		TipoPrestamo = {
-			"idSession": idSession,
-			"montoNecesitado": montoNecesitado,
-			"tiempoNegocio": tiempoNegocio,
-			"ingresosAnuales": ingresosAnuales,
-			"puntajeCredito": puntajeCredito,
-			"queNegocioTiene": queNegocioTiene,
-			"comoVaUsar": comoVaUsar,
-			"cuanRapidoNecesita": cuanRapidoNecesita,
-			"idTipoPrestamo": idTipoPrestamo,
-			"idCliente": idCliente
-		};	
-		console.log(TipoPrestamo);
-
-		try {
-			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
-			var result = response.result;
-			console.log(response);
-	
-			if (result.affectedRows == 1) {
-				//Cuando guardamos el monto guardamos los datos al contexto setprestamocliente
-				agent.context.set({
-					'name': "setprestamocliente",
-					'lifespan': 50,
-					'parameters' : {
-						"montoNecesitado": montoNecesitado,
-						"tiempoNegocio": tiempoNegocio,
-						"ingresosAnuales": ingresosAnuales,
-						"puntajeCredito": puntajeCredito,
-						"queNegocioTiene": queNegocioTiene,
-						"comoVaUsar": comoVaUsar,
-						"cuanRapidoNecesita": cuanRapidoNecesita,
-						"idTipoPrestamo": idTipoPrestamo,
-						"idCliente": idCliente
-					}
-				});
-
-				agent.add('Gracias');
-				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-				console.log(message);
-				agent.add(message);
-			} else {
-				agent.add("Ha ocurrido un error.");
-			}
-	
-		} catch (error) {
-			console.error(error);
-			logger.debug(error);
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}
-	}
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
+	agent.add(message);
 
 }
 
 prestamoClienteFullfilment.extraerIngresosAnuales = async function (agent) {
     
-	const idSession = agent.session.split("/").reverse()[0];
-	
-	//Contextos
-	const setTipoPrestamoContext = agent.context.get('settipoprestamo');
-	const setNombreClienteContext = agent.context.get('setnombrecliente');	
-	const setClienteContext = agent.context.get('setcliente');
-	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
-	const setIngresosAnualesContext = agent.context.get('setingresosanuales');
-
-	if (typeof setNombreClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
-
-		if (typeof setNombreClienteContext === 'undefined') {
-			var message = messagesUtil.getMessageForNombres();
-			agent.add(message);
-		} else {
-			var message = messagesUtil.getMessageForTipoPrestamo();
-			agent.add(message);
-		}
-		
-	} else {
-		var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-		var idCliente = setNombreClienteContext.parameters['idCliente'];		
-
-		var montoNecesitado = null;
-		var tiempoNegocio = null;
-		var ingresosAnuales = setIngresosAnualesContext.parameters['ingresosAnuales.original'];
-		var puntajeCredito = null;
-		var queNegocioTiene = null;
-		var comoVaUsar = null;
-		var cuanRapidoNecesita = null;
-
-		if (typeof setPrestamoClienteContext !== 'undefined') {
-			montoNecesitado = setPrestamoClienteContext.parameters['montoNecesitado'];
-			tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			//ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			queNegocioTiene = setPrestamoClienteContext.parameters['queNegocioTiene'];
-			comoVaUsar = setPrestamoClienteContext.parameters['comoVaUsar'];
-			cuanRapidoNecesita = setPrestamoClienteContext.parameters['cuanRapidoNecesita'];
-		}
-
-		TipoPrestamo = {
-			"idSession": idSession,
-			"montoNecesitado": montoNecesitado,
-			"tiempoNegocio": tiempoNegocio,
-			"ingresosAnuales": ingresosAnuales,
-			"puntajeCredito": puntajeCredito,
-			"queNegocioTiene": queNegocioTiene,
-			"comoVaUsar": comoVaUsar,
-			"cuanRapidoNecesita": cuanRapidoNecesita,
-			"idTipoPrestamo": idTipoPrestamo,
-			"idCliente": idCliente
-		};	
-		console.log(TipoPrestamo);
-
-		try {
-			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
-			var result = response.result;
-			console.log(response);
-	
-			if (result.affectedRows == 1) {
-				//Cuando guardamos el monto guardamos los datos al contexto setprestamocliente
-				agent.context.set({
-					'name': "setprestamocliente",
-					'lifespan': 50,
-					'parameters' : {
-						"montoNecesitado": montoNecesitado,
-						"tiempoNegocio": tiempoNegocio,
-						"ingresosAnuales": ingresosAnuales,
-						"puntajeCredito": puntajeCredito,
-						"queNegocioTiene": queNegocioTiene,
-						"comoVaUsar": comoVaUsar,
-						"cuanRapidoNecesita": cuanRapidoNecesita,
-						"idTipoPrestamo": idTipoPrestamo,
-						"idCliente": idCliente
-					}
-				});
-
-				agent.add('Gracias');
-				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-				console.log(message);
-				agent.add(message);
-			} else {
-				agent.add("Ha ocurrido un error.");
-			}
-	
-		} catch (error) {
-			console.error(error);
-			logger.debug(error);
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}
-	}
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
+	agent.add(message);
 
 }
 
 prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
     
-	const idSession = agent.session.split("/").reverse()[0];
-	
-	//Contextos
-	const setTipoPrestamoContext = agent.context.get('settipoprestamo');
-	const setNombreClienteContext = agent.context.get('setnombrecliente');	
-	const setClienteContext = agent.context.get('setcliente');
-	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
-	const setPuntajeCreditoContext = agent.context.get('setpuntajecredito');
-
-	if (typeof setNombreClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
-
-		if (typeof setNombreClienteContext === 'undefined') {
-			var message = messagesUtil.getMessageForNombres();
-			agent.add(message);
-		} else {
-			var message = messagesUtil.getMessageForTipoPrestamo();
-			agent.add(message);
-		}
-		
-	} else {
-		var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-		var idCliente = setNombreClienteContext.parameters['idCliente'];		
-
-		var montoNecesitado = null;
-		var tiempoNegocio = null;
-		var ingresosAnuales = null;
-		var puntajeCredito = setPuntajeCreditoContext.parameters['puntajeCredito.original'];
-		var queNegocioTiene = null;
-		var comoVaUsar = null;
-		var cuanRapidoNecesita = null;
-
-		if (typeof setPrestamoClienteContext !== 'undefined') {
-			montoNecesitado = setPrestamoClienteContext.parameters['montoNecesitado'];
-			tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			//puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			queNegocioTiene = setPrestamoClienteContext.parameters['queNegocioTiene'];
-			comoVaUsar = setPrestamoClienteContext.parameters['comoVaUsar'];
-			cuanRapidoNecesita = setPrestamoClienteContext.parameters['cuanRapidoNecesita'];
-		}
-
-		TipoPrestamo = {
-			"idSession": idSession,
-			"montoNecesitado": montoNecesitado,
-			"tiempoNegocio": tiempoNegocio,
-			"ingresosAnuales": ingresosAnuales,
-			"puntajeCredito": puntajeCredito,
-			"queNegocioTiene": queNegocioTiene,
-			"comoVaUsar": comoVaUsar,
-			"cuanRapidoNecesita": cuanRapidoNecesita,
-			"idTipoPrestamo": idTipoPrestamo,
-			"idCliente": idCliente
-		};	
-		console.log(TipoPrestamo);
-
-		try {
-			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
-			var result = response.result;
-			console.log(response);
-	
-			if (result.affectedRows == 1) {
-				//Cuando guardamos el monto guardamos los datos al contexto setprestamocliente
-				agent.context.set({
-					'name': "setprestamocliente",
-					'lifespan': 50,
-					'parameters' : {
-						"montoNecesitado": montoNecesitado,
-						"tiempoNegocio": tiempoNegocio,
-						"ingresosAnuales": ingresosAnuales,
-						"puntajeCredito": puntajeCredito,
-						"queNegocioTiene": queNegocioTiene,
-						"comoVaUsar": comoVaUsar,
-						"cuanRapidoNecesita": cuanRapidoNecesita,
-						"idTipoPrestamo": idTipoPrestamo,
-						"idCliente": idCliente
-					}
-				});
-
-				agent.add('Gracias');
-				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-				console.log(message);
-				agent.add(message);
-			} else {
-				agent.add("Ha ocurrido un error.");
-			}
-	
-		} catch (error) {
-			console.error(error);
-			logger.debug(error);
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}
-	}
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
+	agent.add(message);
 
 }
 
 prestamoClienteFullfilment.extraerQueNegocioTiene = async function (agent) {
     
-	const idSession = agent.session.split("/").reverse()[0];
-	
-	//Contextos
-	const setTipoPrestamoContext = agent.context.get('settipoprestamo');
-	const setNombreClienteContext = agent.context.get('setnombrecliente');	
-	const setClienteContext = agent.context.get('setcliente');
-	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
-	const setQueNegocioTieneContext = agent.context.get('setquenegociotiene');
-
-	if (typeof setNombreClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
-
-		if (typeof setNombreClienteContext === 'undefined') {
-			var message = messagesUtil.getMessageForNombres();
-			agent.add(message);
-		} else {
-			var message = messagesUtil.getMessageForTipoPrestamo();
-			agent.add(message);
-		}
-		
-	} else {
-		var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-		var idCliente = setNombreClienteContext.parameters['idCliente'];		
-
-		var montoNecesitado = null;
-		var tiempoNegocio = null;
-		var ingresosAnuales = null;
-		var puntajeCredito = null;
-		var queNegocioTiene = setQueNegocioTieneContext.parameters['queNegocioTiene.original'];
-		var comoVaUsar = null;
-		var cuanRapidoNecesita = null;
-
-		if (typeof setPrestamoClienteContext !== 'undefined') {
-			montoNecesitado = setPrestamoClienteContext.parameters['montoNecesitado'];
-			tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			//queNegocioTiene = setPrestamoClienteContext.parameters['queNegocioTiene'];
-			comoVaUsar = setPrestamoClienteContext.parameters['comoVaUsar'];
-			cuanRapidoNecesita = setPrestamoClienteContext.parameters['cuanRapidoNecesita'];
-		}
-
-		TipoPrestamo = {
-			"idSession": idSession,
-			"montoNecesitado": montoNecesitado,
-			"tiempoNegocio": tiempoNegocio,
-			"ingresosAnuales": ingresosAnuales,
-			"puntajeCredito": puntajeCredito,
-			"queNegocioTiene": queNegocioTiene,
-			"comoVaUsar": comoVaUsar,
-			"cuanRapidoNecesita": cuanRapidoNecesita,
-			"idTipoPrestamo": idTipoPrestamo,
-			"idCliente": idCliente
-		};	
-		console.log(TipoPrestamo);
-
-		try {
-			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
-			var result = response.result;
-			console.log(response);
-	
-			if (result.affectedRows == 1) {
-				//Cuando guardamos el monto guardamos los datos al contexto setprestamocliente
-				agent.context.set({
-					'name': "setprestamocliente",
-					'lifespan': 50,
-					'parameters' : {
-						"montoNecesitado": montoNecesitado,
-						"tiempoNegocio": tiempoNegocio,
-						"ingresosAnuales": ingresosAnuales,
-						"puntajeCredito": puntajeCredito,
-						"queNegocioTiene": queNegocioTiene,
-						"comoVaUsar": comoVaUsar,
-						"cuanRapidoNecesita": cuanRapidoNecesita,
-						"idTipoPrestamo": idTipoPrestamo,
-						"idCliente": idCliente
-					}
-				});
-
-				agent.add('Gracias');
-				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-				console.log(message);
-				agent.add(message);
-			} else {
-				agent.add("Ha ocurrido un error.");
-			}
-	
-		} catch (error) {
-			console.error(error);
-			logger.debug(error);
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}
-	}
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
+	agent.add(message);
 
 }
 
 prestamoClienteFullfilment.extraerComoVaUsar = async function (agent) {
     
-	const idSession = agent.session.split("/").reverse()[0];
-	
-	//Contextos
-	const setTipoPrestamoContext = agent.context.get('settipoprestamo');
-	const setNombreClienteContext = agent.context.get('setnombrecliente');	
-	const setClienteContext = agent.context.get('setcliente');
-	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
-	const setComoVaUsarContext = agent.context.get('setcomovausar');
-
-	if (typeof setNombreClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
-
-		if (typeof setNombreClienteContext === 'undefined') {
-			var message = messagesUtil.getMessageForNombres();
-			agent.add(message);
-		} else {
-			var message = messagesUtil.getMessageForTipoPrestamo();
-			agent.add(message);
-		}
-		
-	} else {
-		var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-		var idCliente = setNombreClienteContext.parameters['idCliente'];		
-
-		var montoNecesitado = null;
-		var tiempoNegocio = null;
-		var ingresosAnuales = null;
-		var puntajeCredito = null;
-		var queNegocioTiene = null;
-		var comoVaUsar = setComoVaUsarContext.parameters['comoVaUsar.original'];
-		var cuanRapidoNecesita = null;
-
-		if (typeof setPrestamoClienteContext !== 'undefined') {
-			montoNecesitado = setPrestamoClienteContext.parameters['montoNecesitado'];
-			tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			queNegocioTiene = setPrestamoClienteContext.parameters['queNegocioTiene'];
-			//comoVaUsar = setPrestamoClienteContext.parameters['comoVaUsar'];
-			cuanRapidoNecesita = setPrestamoClienteContext.parameters['cuanRapidoNecesita'];
-		}
-
-		TipoPrestamo = {
-			"idSession": idSession,
-			"montoNecesitado": montoNecesitado,
-			"tiempoNegocio": tiempoNegocio,
-			"ingresosAnuales": ingresosAnuales,
-			"puntajeCredito": puntajeCredito,
-			"queNegocioTiene": queNegocioTiene,
-			"comoVaUsar": comoVaUsar,
-			"cuanRapidoNecesita": cuanRapidoNecesita,
-			"idTipoPrestamo": idTipoPrestamo,
-			"idCliente": idCliente
-		};	
-		console.log(TipoPrestamo);
-
-		try {
-			var response = await prestamoClienteService.saveOrUpdatePrestamoCliente(idSession, TipoPrestamo);
-			var result = response.result;
-			console.log(response);
-	
-			if (result.affectedRows == 1) {
-				//Cuando guardamos el monto guardamos los datos al contexto setprestamocliente
-				agent.context.set({
-					'name': "setprestamocliente",
-					'lifespan': 50,
-					'parameters' : {
-						"montoNecesitado": montoNecesitado,
-						"tiempoNegocio": tiempoNegocio,
-						"ingresosAnuales": ingresosAnuales,
-						"puntajeCredito": puntajeCredito,
-						"queNegocioTiene": queNegocioTiene,
-						"comoVaUsar": comoVaUsar,
-						"cuanRapidoNecesita": cuanRapidoNecesita,
-						"idTipoPrestamo": idTipoPrestamo,
-						"idCliente": idCliente
-					}
-				});
-
-				agent.add('Gracias');
-				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-				console.log(message);
-				agent.add(message);
-			} else {
-				agent.add("Ha ocurrido un error.");
-			}
-	
-		} catch (error) {
-			console.error(error);
-			logger.debug(error);
-			agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-		}
-	}
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "comoVaUsar");
+	agent.add(message);
 
 }
 
 prestamoClienteFullfilment.extraerCuanRapidoNecesita = async function (agent) {
+    
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "cuanRapidoNecesita");
+	agent.add(message);
+
+}
+
+/*prestamoClienteFullfilment.extraerCuanRapidoNecesita = async function (agent) {
     
 	const idSession = agent.session.split("/").reverse()[0];
 	
@@ -686,6 +269,6 @@ prestamoClienteFullfilment.extraerCuanRapidoNecesita = async function (agent) {
 		}
 	}
 
-}
+}*/
 
 module.exports = prestamoClienteFullfilment;

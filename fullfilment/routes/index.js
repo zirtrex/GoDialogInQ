@@ -106,7 +106,7 @@ async function guiarUsuarioMostrarDescSiPrestamo(agent) {
 
 	var nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo'];
 
-	var frasesResponses = [];
+	let frasesResponses = [];
 	frasesResponses.push("¿Tienes alguna otra duda?");
 	frasesResponses.push("¿Deseas alguna otra información?");
 	frasesResponses.push("¿Te podemos ayudar en algo más?");

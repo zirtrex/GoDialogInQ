@@ -11,8 +11,10 @@ const messagesUtil = require("../utils/messagesUtil");
 var tipoPrestamoFullfilment = {};
 
 tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
+
+    let setTipoPrestamoContext = agent.context.get('settipoprestamo');
     
-    var nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo'];
+    var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];
 
     try {
 
@@ -56,14 +58,14 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
                     }
                 });
 
-                if (existingContext.parameters.tipoPrestamo == existingContext.parameters.tipoPrestamo.original) {
+                if (existingContext.parameters['tipoPrestamo'] == existingContext.parameters['tipoPrestamo.original']) {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
                     
                 } else {
                     agent.add("El préstamo más cercano es: " + nombreTipoPrestamo);
                 }
 
-                agent.add("¿Quieres ver los requisitos?");
+                agent.add("¿Estás interesado en este préstamo?");
     
             } else {
 
