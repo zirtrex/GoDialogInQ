@@ -1,5 +1,3 @@
-'user strict';
-
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
 const clienteService = require("../services/clienteService");
@@ -13,11 +11,12 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 
 	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
 
-	var newPrestamoClienteArray = ['montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita'];
+	let newPrestamoClienteArray = ['montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita'];
+	let newArray = [];
 	
 	if (typeof setPrestamoClienteContext !== "undefined") {
 
-		var prestamoClienteArray = [
+		let prestamoClienteArray = [
 			setPrestamoClienteContext.parameters['montoNecesitado'],
 			setPrestamoClienteContext.parameters['tiempoNegocio'],
 			setPrestamoClienteContext.parameters['ingresosAnuales'],
@@ -27,10 +26,10 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 			setPrestamoClienteContext.parameters['cuanRapidoNecesita']
 		];
 
-		console.log(prestamoClienteArray);
+		//console.log(prestamoClienteArray);
 
-		var i = 0;
-		var newArray = [];
+		let i = 0;
+		
 		prestamoClienteArray.forEach(element => {
 			console.log(element);
 			if (element === '') {
@@ -47,7 +46,7 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 }
 
 messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent) {
-    var answers = [];
+    let answers = [];
 	answers.push(['montoNecesitado', "¿Qué monto requieres?"]);
 	answers.push(['montoNecesitado', "¿Cuál es el monto requerido?"]);
 	answers.push(['tiempoNegocio', "¿Qué tiempo tienes en el negocio?"]);
@@ -63,15 +62,16 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 	answers.push(['cuanRapidoNecesita', "¿Cuán rápido quieres el préstamo?"]);
 	answers.push(['cuanRapidoNecesita', "¿Qué tan rápido requieres el préstamo?"]);
 
-	var requisitosInicialesRestantesArray = messagesUtil.getFieldsByComplete(idSession, agent);
+	let requisitosInicialesRestantesArray = messagesUtil.getFieldsByComplete(idSession, agent);
+	const requisitosLength = requisitosInicialesRestantesArray.length;
 
-	if (requisitosInicialesRestantesArray.length > 0) {
+	if (requisitosLength > 0) {
 
-		var requisitosRandom = requisitosInicialesRestantesArray[Math.floor(Math.random() * requisitosInicialesRestantesArray.length)];
+		let requisitosRandom = requisitosInicialesRestantesArray[Math.floor(Math.random() * requisitosLength)];
 
 		console.log(requisitosRandom);
 
-		var newFrasesArray = [];
+		let newFrasesArray = [];
 
 		answers.forEach(element => {
 			console.log(element);
@@ -80,7 +80,7 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 			}
 		});
 
-		console.log(newFrasesArray);
+		//console.log(newFrasesArray);
 
 		var randomIndex = Math.floor(Math.random() * newFrasesArray.length); console.log(randomIndex);
 
@@ -93,7 +93,7 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 }
 
 messagesUtil.getMessageForNombres = function () {
-    var answers = [];
+    let answers = [];
 	answers.push("Hola, indicanos tu nombre por favor.");
 	answers.push("Por favor indicanos tu nombre.");
 	answers.push("¿Cuál es tu nombre?");
@@ -104,7 +104,7 @@ messagesUtil.getMessageForNombres = function () {
 }
 
 messagesUtil.getMessageForTipoPrestamo = function () {
-    var answers = [];
+    let answers = [];
 	answers.push("Hola, indicanos el préstamo de tu interés.");
 	answers.push("Por favor indicanos el préstamo de tu interés.");
 	answers.push("¿Qué préstamo deseas?");

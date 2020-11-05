@@ -90,7 +90,7 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 				});
 
 				agent.add('Gracias');
-				message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
 				console.log(message);
 				agent.add(message);
 			} else {
@@ -187,7 +187,7 @@ prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
 				});
 
 				agent.add('Gracias');
-				message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
 				console.log(message);
 				agent.add(message);
 			} else {
@@ -284,7 +284,7 @@ prestamoClienteFullfilment.extraerIngresosAnuales = async function (agent) {
 				});
 
 				agent.add('Gracias');
-				message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
 				console.log(message);
 				agent.add(message);
 			} else {
@@ -381,7 +381,7 @@ prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
 				});
 
 				agent.add('Gracias');
-				message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
 				console.log(message);
 				agent.add(message);
 			} else {
@@ -478,7 +478,7 @@ prestamoClienteFullfilment.extraerQueNegocioTiene = async function (agent) {
 				});
 
 				agent.add('Gracias');
-				message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
 				console.log(message);
 				agent.add(message);
 			} else {
@@ -575,7 +575,7 @@ prestamoClienteFullfilment.extraerComoVaUsar = async function (agent) {
 				});
 
 				agent.add('Gracias');
-				message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
 				console.log(message);
 				agent.add(message);
 			} else {
@@ -672,7 +672,7 @@ prestamoClienteFullfilment.extraerCuanRapidoNecesita = async function (agent) {
 				});
 
 				agent.add('Gracias');
-				message = await messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+				message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
 				console.log(message);
 				agent.add(message);
 			} else {
