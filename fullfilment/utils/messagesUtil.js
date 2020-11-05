@@ -90,7 +90,7 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 
 		return message;
 	} else {
-		return "Gracias por confiar en InQmatic";
+		return "";
 	}
 }
 

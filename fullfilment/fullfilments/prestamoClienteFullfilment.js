@@ -21,7 +21,7 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
 
 	if (typeof setClienteContext === 'undefined' || typeof setTipoPrestamoContext === 'undefined') {
 
-		if (typeof setClienteContext.parameters['nombres'] === 'undefined') {
+		if (typeof setClienteContext !== 'undefined') {
 			var message = messagesUtil.getMessageForNombres();
 			return message;
 		} else {
@@ -108,7 +108,7 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
 	
 				if (result.affectedRows == 1) {
 					
-					return "Gracias por completar las preguntas";
+					return "Success";
 					
 				} else {
 					//agent.add("Ha ocurrido un error al guardar su información.");
@@ -128,7 +128,27 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
 prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
     
 	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
-	agent.add(message);
+
+	if (message == "success"){
+		const setPrestamoClienteContext = agent.context.get('setprestamocliente');
+
+		if (typeof setPrestamoClienteContext !== 'undefined') {
+
+			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+
+			if (tiempoNegocio > 1 && ingresosAnuales > 5000 && puntajeCredito > 500) {
+				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+			} else {
+				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+			}
+			
+		}	
+	} else {
+
+		agent.add(message);
+	}
 
 }
 
@@ -147,9 +167,35 @@ prestamoClienteFullfilment.extraerIngresosAnuales = async function (agent) {
 }
 
 prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
-    
-	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
-	agent.add(message);
+
+	const idSession = agent.session.split("/").reverse()[0];
+	
+	const setPuntajeCreditoContext = agent.context.get('setpuntajecredito');
+
+	if (typeof setPuntajeCreditoContext !== 'undefined') {
+
+		var puntajeCredito = setPuntajeCreditoContext.parameters['puntajeCredito'];
+
+		if (puntajeCredito  == '') {
+
+			let answer = [];
+			answer.push("El puntaje de crédito es básicamente un medidor o un record de comportamiento financiero, es una calificación.");
+			answer.push("Esta calificación varia entre 300 y 850 puntos y en Estados Unidos que es una economía basada en crédito, este puntaje es uno de los datos más importantes de cualquier persona.");
+			answer.push("Normalmente, las aplicaciones bancarias que tienes en tu celular te permiten inscribirte para monitorear tu puntaje de crédito de manera gratuita y sin afectarlo. También puedes consultarlo en http://creditkarma.com y http://creditchecktotal.com.");
+			answer.push("Puedes obtener mas informacion en: https://inqmatic.com/10-preguntas-sobre-el-puntaje-de-credito/");
+
+			var indexRandom = Math.floor(Math.random() * answer.length);
+			var message = answer[indexRandom];
+			agent.add(message);
+
+		} else {
+
+			var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
+			agent.add(message);
+
+		}
+		
+	}
 
 }
 
