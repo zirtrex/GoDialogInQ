@@ -8,6 +8,18 @@ const prestamoClienteService = require("../services/prestamoClienteService");
 const logger = require("../utils/loggerUtil");
 const messagesUtil = require("../utils/messagesUtil");
 
+const clienteUtil = require("../utils/clienteUtil");
+
+/* 
+var respuestaCorreo = clienteUtil.getValidateEmail("jorgésys.boc+al@hotflow.cs");
+console.log(respuestaCorreo);
+var respuestaTelefono = clienteUtil.getValidatePhoneNumber("123");
+console.log(respuestaTelefono);
+ */
+
+
+
+
 var clienteFullfilment = {};
 
 
@@ -103,20 +115,36 @@ clienteFullfilment.extraerTelefonoCliente = async function (agent) {
     
     const idSession = agent.session.split("/").reverse()[0];	
 
-    const setNombreCliente = agent.context.get('setnombrecliente');
-    var nombres = setNombreCliente.parameters['given-name.original'];		
-    var apellidos = setNombreCliente.parameters['last-name.original'];
-    var saludo = setNombreCliente.parameters['saludo'];
+    //contextos
+    const setClienteContext = agent.context.get('setcliente');
+    const setTelefonoClienteContext = agent.context.get('settelefonocliente');
 
+    //variables
+    var nombres = "";		
+    var apellidos = "";
+    var saludo = "";
+    var telefono = setTelefonoClienteContext.parameters['phone-number.original'];
+    var correo = "";
+
+    if (typeof setClienteContext !== 'undefined') {
+        nombres = setClienteContext.parameters['given-name.original'];		
+        apellidos = setClienteContext.parameters['last-name.original'];
+        saludo = setClienteContext.parameters['saludo'];
+        correo = setClienteContext.parameters['email.original'];
+    }
+
+    //Objeto cliente a guardar
     Cliente = {
         "idSession": idSession,
         "nombres": nombres,
-        "apellidos": apellidos
+        "apellidos": apellidos,
+        "telefono": telefono,
+        "correo": correo
     };
 
     try {
 
-        if (comprobarcorreo) {
+        if (clienteUtil.getValidatePhoneNumber(telefono)=="success") {
             var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
 
             if (response.result.affectedRows == 1) {
@@ -126,11 +154,18 @@ clienteFullfilment.extraerTelefonoCliente = async function (agent) {
                 } else {
                     idCliente = response.result.idCliente;
                 }
-                const existingContext = agent.context.get("setnombrecliente");
+
+                 //creando variable contexto setcliente se dispara a Dialogflow session setcliente
                 agent.context.set({
-                    'name': existingContext.name,
+                    'name': "setcliente",
                     'lifespan': 50,
-                    'parameters' : {'idCliente': idCliente}
+                    'parameters' : {
+                        'idCliente': idCliente,
+                        'nombres': nombres,
+                        'apellidos': apellidos,
+                        "telefono": telefono,
+                        "correo": correo
+                    }
                 });
 
                 agent.add(saludo + " " + nombres + ", gracias por escribirnos");
@@ -160,6 +195,57 @@ clienteFullfilment.extraerTelefonoCliente = async function (agent) {
             }
         } else {
            //Pront 
+           var REPROMPT_COUNT = agent.request_.body.queryResult.outputContexts[0].parameters['REPROMPT_COUNT'];
+    
+        if (typeof REPROMPT_COUNT === 'undefined') {
+
+            const existingContext = agent.context.get("settipoprestamo");
+            agent.context.set({
+                'name': existingContext.name, 
+                'lifespan': 50,
+                'parameters' : {'REPROMPT_COUNT': 3}
+            });
+            
+            agent.add("El préstamo ingresado no lo tenemos disponible.");
+
+            var response = await tipoPrestamoService.getAll();            
+            if (response.status == "success") {
+                agent.add('Los préstamos disponibles son: ');
+                response.result.forEach(object => {				
+                    agent.add(" " + object.nombreTipoPrestamo);
+                });
+    
+                agent.add('Elige uno por favor.');
+    
+            } else {
+                agent.add('No se han encontrado préstamos disponibles.');
+            }               
+
+        } else {
+            if (REPROMPT_COUNT > 0) {
+                REPROMPT_COUNT = REPROMPT_COUNT - 1;
+                const existingContext = agent.context.get("settipoprestamo");
+                agent.context.set({
+                    'name': existingContext.name, 
+                    'lifespan': 50,
+                    'parameters' : {'REPROMPT_COUNT': REPROMPT_COUNT}
+                });
+                agent.add("Por favor indica un préstamo válido");
+            } else {
+                agent.context.set({
+                    'name': existingContext.name, 
+                    'lifespan': 50,
+                    'parameters' : {'REPROMPT_COUNT': 2}
+                });
+            }
+        }
+        console.log("Prompt:" + REPROMPT_COUNT);
+        
+
+
+
+
+
         }
 
         
@@ -176,18 +262,36 @@ clienteFullfilment.extraerCorreoCliente = async function (agent) {
     
     const idSession = agent.session.split("/").reverse()[0];	
 
-    const setNombreCliente = agent.context.get('setcorreocliente');
-    var nombres = setNombreCliente.parameters['given-name.original'];		
-    var apellidos = setNombreCliente.parameters['last-name.original'];
-    var saludo = setNombreCliente.parameters['saludo'];
-
-    Cliente = {
-        "idSession": idSession,
-        "nombres": nombres,
-        "apellidos": apellidos
-    };
+     //contextos
+     const setClienteContext = agent.context.get('setcliente');
+     const setCorreoClienteContext = agent.context.get('setcorreocliente');
+ 
+     //variables
+     var nombres = "";		
+     var apellidos = "";
+     var saludo = "";
+     var telefono = "";
+     var correo = setCorreoClienteContext.parameters['email.original'];
+ 
+     if (typeof setClienteContext !== 'undefined') {
+         nombres = setClienteContext.parameters['given-name.original'];		
+         apellidos = setClienteContext.parameters['last-name.original'];
+         saludo = setClienteContext.parameters['saludo'];
+         telefono = setClienteContext.parameters['phone-number.original'];
+     }
+ 
+     //Objeto cliente a guardar
+     Cliente = {
+         "idSession": idSession,
+         "nombres": nombres,
+         "apellidos": apellidos,
+         "telefono": telefono,
+         "correo": correo
+     };
 
     try {
+
+        if (clienteUtil.getValidateEmail(correo)=="success") {
         var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
 
         if (response.result.affectedRows == 1) {
@@ -197,12 +301,21 @@ clienteFullfilment.extraerCorreoCliente = async function (agent) {
             } else {
                 idCliente = response.result.idCliente;
             }
-            const existingContext = agent.context.get("setnombrecliente");
+
+
+            //creando variable contexto setcliente se dispara a Dialogflow session setcliente
             agent.context.set({
-                'name': existingContext.name,
+                'name': "setcliente",
                 'lifespan': 50,
-                'parameters' : {'idCliente': idCliente}
+                'parameters' : {
+                    'idCliente': idCliente,
+                    'nombres': nombres,
+                    'apellidos': apellidos,
+                    "telefono": telefono,
+                    "correo": correo
+                }
             });
+
 
             agent.add(saludo + " " + nombres + ", gracias por escribirnos");
 
@@ -229,6 +342,60 @@ clienteFullfilment.extraerCorreoCliente = async function (agent) {
 
             console.log("Datos del cliente guardados correctamente.");
         }
+
+    }else
+    {
+
+        //Pront 
+        var REPROMPT_COUNT = agent.request_.body.queryResult.outputContexts[0].parameters['REPROMPT_COUNT'];
+    
+        if (typeof REPROMPT_COUNT === 'undefined') {
+
+            const existingContext = agent.context.get("settipoprestamo");
+            agent.context.set({
+                'name': existingContext.name, 
+                'lifespan': 50,
+                'parameters' : {'REPROMPT_COUNT': 3}
+            });
+            
+            agent.add("El préstamo ingresado no lo tenemos disponible.");
+
+            var response = await tipoPrestamoService.getAll();            
+            if (response.status == "success") {
+                agent.add('Los préstamos disponibles son: ');
+                response.result.forEach(object => {				
+                    agent.add(" " + object.nombreTipoPrestamo);
+                });
+    
+                agent.add('Elige uno por favor.');
+    
+            } else {
+                agent.add('No se han encontrado préstamos disponibles.');
+            }               
+
+        } else {
+            if (REPROMPT_COUNT > 0) {
+                REPROMPT_COUNT = REPROMPT_COUNT - 1;
+                const existingContext = agent.context.get("settipoprestamo");
+                agent.context.set({
+                    'name': existingContext.name, 
+                    'lifespan': 50,
+                    'parameters' : {'REPROMPT_COUNT': REPROMPT_COUNT}
+                });
+                agent.add("Por favor indica un préstamo válido");
+            } else {
+                agent.context.set({
+                    'name': existingContext.name, 
+                    'lifespan': 50,
+                    'parameters' : {'REPROMPT_COUNT': 2}
+                });
+            }
+        }
+        console.log("Prompt:" + REPROMPT_COUNT);
+        
+
+    }
+
     } catch (error) {
         console.error(error);
         agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
