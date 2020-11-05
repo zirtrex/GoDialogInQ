@@ -22,7 +22,7 @@ clienteUtil.getValidateEmail = function (correo)
 clienteUtil.getValidatePhoneNumber = function (correo)
 {
     var resul="";
-    if (/^([0-9])*$/.test(correo)) {
+     if (/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(correo)) {
         return resul = "success";
     } else {
         return resul = "error";
