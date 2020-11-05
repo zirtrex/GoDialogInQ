@@ -38,7 +38,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
             });
 
             agent.add("Ya has elegido: " + nombreTipoPrestamo);
-            agent.add("¿Quieres ver los requisitos?");
+            agent.add("¿Estás interesado en este préstamo?");
 
         } else {
 

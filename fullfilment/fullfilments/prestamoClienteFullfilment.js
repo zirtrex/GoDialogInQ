@@ -108,7 +108,7 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
 	
 				if (result.affectedRows == 1) {
 					
-					return "Success";
+					return "success";
 					
 				} else {
 					//agent.add("Ha ocurrido un error al guardar su información.");
@@ -129,7 +129,7 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
     
 	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
 
-	if (message == "success"){
+	if (message === "success") {
 		const setPrestamoClienteContext = agent.context.get('setprestamocliente');
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
@@ -137,14 +137,16 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
 			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
 			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-
-			if (tiempoNegocio > 1 && ingresosAnuales > 5000 && puntajeCredito > 500) {
+			//tiempoNegocio > 1 && 
+			if (ingresosAnuales > 5000 && puntajeCredito > 500) {
 				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
 			} else {
 				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
 			}
 			
-		}	
+		} else {
+			agent.add('');
+		}
 	} else {
 
 		agent.add(message);
