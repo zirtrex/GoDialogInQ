@@ -17,6 +17,9 @@ clienteFullfilment.verifyAndSave = async function (agent) {
     const idSession = agent.session.split("/").reverse()[0];	
     //contextos
     const setClienteContext = agent.context.get('setcliente');
+    const setNombreClienteContext = agent.context.get('setnombrecliente');
+    const setTelefonoClienteContext = agent.context.get('settelefonocliente');
+    const setCorreoClienteContext = agent.context.get('setcorreocliente');
     
     //variables
     var saludo = "";
@@ -25,12 +28,16 @@ clienteFullfilment.verifyAndSave = async function (agent) {
     var telefono = "";
     var correo = "";
 
-    if (typeof setClienteContext !== 'undefined') {
-        saludo = setClienteContext.parameters['saludo'];
-        nombres = setClienteContext.parameters['given-name.original'];		
-        apellidos = setClienteContext.parameters['last-name.original'];
-        telefono = setClienteContext.parameters['phone-number.original'];
-        correo = setClienteContext.parameters['email.original'];
+    if (typeof setNombreClienteContext !== 'undefined') {
+        saludo = setNombreClienteContext.parameters['saludo'];
+        nombres = setNombreClienteContext.parameters['given-name.original'];		
+        apellidos = setNombreClienteContext.parameters['last-name.original'];
+    }
+    if (typeof setTelefonoClienteContext !== 'undefined') {
+        correo = setTelefonoClienteContext.parameters['phone-number.original'];
+    }
+    if (typeof setCorreoClienteContext !== 'undefined') {
+        correo = setCorreoClienteContext.parameters['email.original'];
     }
     
     //Objeto cliente a guardar
@@ -98,39 +105,44 @@ clienteFullfilment.verifyAndSave = async function (agent) {
  
 }
 
-
 clienteFullfilment.extraerNombreCliente = async function (agent) {
+
     await clienteFullfilment.verifyAndSave(agent);
     
 }
 
-
 clienteFullfilment.extraerTelefonoCliente = async function (agent) {
+
+    const setTelefonoClienteContext = agent.context.get('settelefonocliente');
+
+    var telefono = setTelefonoClienteContext.parameters['phone-number'];    
     
-    if (clienteUtil.getValidatePhoneNumber(telefono) == "success")
-    {
+    if (clienteUtil.getValidatePhoneNumber(telefono) == "success") {
+
         await clienteFullfilment.verifyAndSave(agent);
-        
-    }else
-    {
-        promptUtil.getPromptCliente(agent, "setcliente", "El teléfono no es válido.", "Por favor, debes ingresar un teléfono válido");
+
+    } else {        
+
+        promptUtil.getPromptCliente(agent, "settelefonocliente", "El teléfono no es válido.", "Ingrese un numero con el siguiente formato: 9999999999");
     }
         
 }
 
 clienteFullfilment.extraerCorreoCliente = async function (agent) {
+
+    const setCorreoClienteContext = agent.context.get('setcorreocliente');
     
-    if (clienteUtil.getValidateEmail(correo)=="success")
-    {
+    var correo = setCorreoClienteContext.parameters['email'];
+    
+    if (clienteUtil.getValidateEmail(correo) == "success") {
+
         await clienteFullfilment.verifyAndSave(agent);
-        
-    }else
-    {
-        promptUtil.getPromptCliente(agent, "setcliente", "El correo no es válido.", "Por favor, debes ingresar un correo válido");
+
+    } else {       
+
+        promptUtil.getPromptCliente(agent, "setcorreocliente", "El correo no es válido.", "Por favor, debes ingresar un correo válido");
     }
 
 }
-
-
 
 module.exports = clienteFullfilment;

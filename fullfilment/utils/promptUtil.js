@@ -19,7 +19,7 @@ promptUtil.getPromptCliente = async function (agent, context, message, message2)
 			'parameters' : {'REPROMPT_COUNT': 2}
 		});
 		
-		agent.add(message + " " + REPROMPT_COUNT);
+		agent.add(message + " ");
 
 	} else {
 		if (REPROMPT_COUNT > 0) {

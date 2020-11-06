@@ -13,7 +13,7 @@ const urlBase = config.get("ipServidor");
 
 prestamoClienteService.saveOrUpdatePrestamoCliente = async function (idSession, PrestamoCliente) {
 	try {		
-		var request = await fetch(urlBase + '/prestamo_cliente/session/' + idSession);    
+		var request = await fetch(urlBase + '/prestamo_cliente/session/' + 1);
 		var response = await request.json();
 		console.log(response);
 		if (response.status == "success") {

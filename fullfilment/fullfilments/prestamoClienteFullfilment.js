@@ -134,14 +134,27 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
 
-			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			//tiempoNegocio > 1 && 
-			if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+			const setClienteContext = agent.context.get('setcliente');
+
+			if (typeof setClienteContext !== 'undefined') {
+
+				if (setClienteContext.parameters.parameters['telefono'] == "") {
+					agent.add("Ingrese por favor su teléfono.");
+				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+					agent.add("Ingrese por favor su correo.");
+				} else {
+					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+					var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+					var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+					//tiempoNegocio > 1 && 
+					if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+						agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+					} else {
+						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+					}
+				}
 			} else {
-				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+				agent.add("Ingrese por favor su teléfono.");
 			}
 			
 		} else {
@@ -163,14 +176,27 @@ prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
 
-			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			//tiempoNegocio > 1 && 
-			if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+			const setClienteContext = agent.context.get('setcliente');
+
+			if (typeof setClienteContext !== 'undefined') {
+
+				if (setClienteContext.parameters.parameters['telefono'] == "") {
+					agent.add("Ingrese por favor su teléfono.");
+				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+					agent.add("Ingrese por favor su correo.");
+				} else {
+					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+					var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+					var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+					//tiempoNegocio > 1 && 
+					if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+						agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+					} else {
+						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+					}
+				}
 			} else {
-				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+				agent.add("Ingrese por favor su teléfono.");
 			}
 			
 		} else {
@@ -192,14 +218,27 @@ prestamoClienteFullfilment.extraerIngresosAnuales = async function (agent) {
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
 
-			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			//tiempoNegocio > 1 && 
-			if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+			const setClienteContext = agent.context.get('setcliente');
+
+			if (typeof setClienteContext !== 'undefined') {
+
+				if (setClienteContext.parameters.parameters['telefono'] == "") {
+					agent.add("Ingrese por favor su teléfono.");
+				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+					agent.add("Ingrese por favor su correo.");
+				} else {
+					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+					var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+					var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+					//tiempoNegocio > 1 && 
+					if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+						agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+					} else {
+						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+					}
+				}
 			} else {
-				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+				agent.add("Ingrese por favor su teléfono.");
 			}
 			
 		} else {
@@ -243,14 +282,27 @@ prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
 
 				if (typeof setPrestamoClienteContext !== 'undefined') {
 
-					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-					var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-					var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-					//tiempoNegocio > 1 && 
-					if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-						agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+					const setClienteContext = agent.context.get('setcliente');
+		
+					if (typeof setClienteContext !== 'undefined') {
+		
+						if (setClienteContext.parameters.parameters['telefono'] == "") {
+							agent.add("Ingrese por favor su teléfono.");
+						} else if (setClienteContext.parameters.parameters['correo'] == "") {
+							agent.add("Ingrese por favor su correo.");
+						} else {
+							var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+							var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+							var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+							//tiempoNegocio > 1 && 
+							if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+								agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+							} else {
+								agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+							}
+						}
 					} else {
-						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+						agent.add("Ingrese por favor su teléfono.");
 					}
 					
 				} else {
@@ -276,14 +328,27 @@ prestamoClienteFullfilment.extraerQueNegocioTiene = async function (agent) {
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
 
-			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			//tiempoNegocio > 1 && 
-			if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+			const setClienteContext = agent.context.get('setcliente');
+
+			if (typeof setClienteContext !== 'undefined') {
+
+				if (setClienteContext.parameters.parameters['telefono'] == "") {
+					agent.add("Ingrese por favor su teléfono.");
+				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+					agent.add("Ingrese por favor su correo.");
+				} else {
+					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+					var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+					var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+					//tiempoNegocio > 1 && 
+					if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+						agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+					} else {
+						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+					}
+				}
 			} else {
-				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+				agent.add("Ingrese por favor su teléfono.");
 			}
 			
 		} else {
@@ -305,14 +370,27 @@ prestamoClienteFullfilment.extraerComoVaUsar = async function (agent) {
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
 
-			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			//tiempoNegocio > 1 && 
-			if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+			const setClienteContext = agent.context.get('setcliente');
+
+			if (typeof setClienteContext !== 'undefined') {
+
+				if (setClienteContext.parameters.parameters['telefono'] == "") {
+					agent.add("Ingrese por favor su teléfono.");
+				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+					agent.add("Ingrese por favor su correo.");
+				} else {
+					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+					var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+					var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+					//tiempoNegocio > 1 && 
+					if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+						agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+					} else {
+						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+					}
+				}
 			} else {
-				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+				agent.add("Ingrese por favor su teléfono.");
 			}
 			
 		} else {
@@ -330,18 +408,31 @@ prestamoClienteFullfilment.extraerCuanRapidoNecesita = async function (agent) {
 	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
 
 	if (message === "success") {
-		const setPrestamoClienteContext = agent.context.get('setprestamocliente');
+		const setPrestamoClienteContext = agent.context.get('setprestamocliente');		
 
 		if (typeof setPrestamoClienteContext !== 'undefined') {
 
-			var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-			var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-			var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-			//tiempoNegocio > 1 && 
-			if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-				agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+			const setClienteContext = agent.context.get('setcliente');
+
+			if (typeof setClienteContext !== 'undefined') {
+
+				if (setClienteContext.parameters.parameters['telefono'] == "") {
+					agent.add("Ingrese por favor su teléfono.");
+				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+					agent.add("Ingrese por favor su correo.");
+				} else {
+					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+					var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+					var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+					//tiempoNegocio > 1 && 
+					if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+						agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+					} else {
+						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+					}
+				}
 			} else {
-				agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+				agent.add("Ingrese por favor su teléfono.");
 			}
 			
 		} else {
