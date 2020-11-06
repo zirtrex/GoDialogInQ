@@ -10,35 +10,25 @@ const messagesUtil = require("../utils/messagesUtil");
 const clienteUtil = require("../utils/clienteUtil");
 const promptUtil = require("../utils/promptUtil");
 
-/* 
-var respuestaCorreo = clienteUtil.getValidateEmail("jorgésys.boc+al@hotflow.cs");
-console.log(respuestaCorreo);
-var respuestaTelefono = clienteUtil.getValidatePhoneNumber("123");
-console.log(respuestaTelefono);
- */
-
-
-
-
 var clienteFullfilment = {};
 
-
-clienteFullfilment.extraerNombreCliente = async function (agent) {
-    
+clienteFullfilment.verifyAndSave = async function (agent) {
+ 
     const idSession = agent.session.split("/").reverse()[0];	
-
     //contextos
     const setClienteContext = agent.context.get('setcliente');
-    const setNombreClienteContext = agent.context.get('setnombrecliente');
-
+    
     //variables
-    var nombres = setNombreClienteContext.parameters['given-name.original'];		
-    var apellidos = setNombreClienteContext.parameters['last-name.original'];
-    var saludo = setNombreClienteContext.parameters['saludo'];
+    var saludo = "";
+    var nombres = "";		
+    var apellidos = "";
     var telefono = "";
     var correo = "";
 
     if (typeof setClienteContext !== 'undefined') {
+        saludo = setClienteContext.parameters['saludo'];
+        nombres = setClienteContext.parameters['given-name.original'];		
+        apellidos = setClienteContext.parameters['last-name.original'];
         telefono = setClienteContext.parameters['phone-number.original'];
         correo = setClienteContext.parameters['email.original'];
     }
@@ -105,200 +95,38 @@ clienteFullfilment.extraerNombreCliente = async function (agent) {
         console.error(error);
         agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
     }	
+ 
+}
 
+
+clienteFullfilment.extraerNombreCliente = async function (agent) {
+    await clienteFullfilment.verifyAndSave(agent);
+    
 }
 
 
 clienteFullfilment.extraerTelefonoCliente = async function (agent) {
     
-    const idSession = agent.session.split("/").reverse()[0];
-
-    //contextos
-    const setClienteContext = agent.context.get('setcliente');
-    const setTelefonoClienteContext = agent.context.get('settelefonocliente');
-
-    //variables
-    var nombres = "";		
-    var apellidos = "";
-    var saludo = "";
-    var telefono = setTelefonoClienteContext.parameters['phone-number.original'];
-    var correo = "";
-
-    if (typeof setClienteContext !== 'undefined') {
-        nombres = setClienteContext.parameters['given-name.original'];		
-        apellidos = setClienteContext.parameters['last-name.original'];
-        saludo = setClienteContext.parameters['saludo'];
-        correo = setClienteContext.parameters['email.original'];
-    }
-
-    //Objeto cliente a guardar
-    Cliente = {
-        "idSession": idSession,
-        "nombres": nombres,
-        "apellidos": apellidos,
-        "telefono": telefono,
-        "correo": correo
-    };
-
-    try {
-
-        if (clienteUtil.getValidatePhoneNumber(telefono) == "success") {
-
-            var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
-
-            if (response.result.affectedRows == 1) {
-                let idCliente;
-                if (typeof response.result.idCliente === "undefined") {
-                    idCliente = response.result.insertId;
-                } else {
-                    idCliente = response.result.idCliente;
-                }
-
-                 //creando variable contexto setcliente se dispara a Dialogflow session setcliente
-                agent.context.set({
-                    'name': "setcliente",
-                    'lifespan': 50,
-                    'parameters' : {
-                        'idCliente': idCliente,
-                        'nombres': nombres,
-                        'apellidos': apellidos,
-                        "telefono": telefono,
-                        "correo": correo
-                    }
-                });
-
-                agent.add(saludo + " " + nombres + ", gracias por escribirnos");
-
-                //Detectar si ya eligió un tipo de préstamo
-                var setTipoPrestamoContext = agent.context.get('settipoprestamo');
-
-                if (typeof setTipoPrestamoContext !== 'undefined') {
-                    var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-                    var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];              
-
-                    console.log("idPrestamo " + idTipoPrestamo);
-
-                    if (typeof idTipoPrestamo !== 'undefined') {
-                        agent.add("Has elegido: " + nombreTipoPrestamo);
-                        var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-                        console.log(message);
-                        agent.add(message);
-                    } else {
-                        agent.add("¿En qué podemos ayudarte?");
-                    }
-                } else {				
-                    agent.add("¿En qué podemos ayudarte?");
-                }
-
-                console.log("Datos del cliente guardados correctamente.");
-            }
-        } else {
-           //Pront           
-           promptUtil.getPromptCliente(agent, "setcliente", "El teléfono no es válido.", "Por favor, debes ingresar un teléfono válido");
-        }
-
+    if (clienteUtil.getValidatePhoneNumber(telefono) == "success")
+    {
+        await clienteFullfilment.verifyAndSave(agent);
         
-    } catch (error) {
-        console.error(error);
-        agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-    }	
-
+    }else
+    {
+        promptUtil.getPromptCliente(agent, "setcliente", "El teléfono no es válido.", "Por favor, debes ingresar un teléfono válido");
+    }
+        
 }
 
 clienteFullfilment.extraerCorreoCliente = async function (agent) {
     
-    const idSession = agent.session.split("/").reverse()[0];	
-
-     //contextos
-     const setClienteContext = agent.context.get('setcliente');
-     const setCorreoClienteContext = agent.context.get('setcorreocliente');
- 
-     //variables
-     var nombres = "";		
-     var apellidos = "";
-     var saludo = "";
-     var telefono = "";
-     var correo = setCorreoClienteContext.parameters['email.original'];
- 
-     if (typeof setClienteContext !== 'undefined') {
-         nombres = setClienteContext.parameters['given-name.original'];		
-         apellidos = setClienteContext.parameters['last-name.original'];
-         saludo = setClienteContext.parameters['saludo'];
-         telefono = setClienteContext.parameters['phone-number.original'];
-     }
- 
-     //Objeto cliente a guardar
-     Cliente = {
-         "idSession": idSession,
-         "nombres": nombres,
-         "apellidos": apellidos,
-         "telefono": telefono,
-         "correo": correo
-     };
-
-    try {
-
-        if (clienteUtil.getValidateEmail(correo)=="success") {
-
-            var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
-
-            if (response.result.affectedRows == 1) {
-                let idCliente;
-                if (typeof response.result.idCliente === "undefined") {
-                    idCliente = response.result.insertId;
-                } else {
-                    idCliente = response.result.idCliente;
-                }
-
-
-                //creando variable contexto setcliente se dispara a Dialogflow session setcliente
-                agent.context.set({
-                    'name': "setcliente",
-                    'lifespan': 50,
-                    'parameters' : {
-                        'idCliente': idCliente,
-                        'nombres': nombres,
-                        'apellidos': apellidos,
-                        "telefono": telefono,
-                        "correo": correo
-                    }
-                });
-
-
-                agent.add(saludo + " " + nombres + ", gracias por escribirnos");
-
-                //Detectar si ya eligió un tipo de préstamo
-                var setTipoPrestamoContext = agent.context.get('settipoprestamo');
-
-                if (typeof setTipoPrestamoContext !== 'undefined') {
-                    var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-                    var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];              
-
-                    console.log("idPrestamo " + idTipoPrestamo);
-
-                    if (typeof idTipoPrestamo !== 'undefined') {
-                        agent.add("Has elegido: " + nombreTipoPrestamo);
-                        var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-                        console.log(message);
-                        agent.add(message);
-                    } else {
-                        agent.add("¿En qué podemos ayudarte?");
-                    }
-                } else {				
-                    agent.add("¿En qué podemos ayudarte?");
-                }
-
-                console.log("Datos del cliente guardados correctamente.");
-            }
-
-        } else {
-            //Pront           
-            promptUtil.getPromptCliente(agent, "setcliente", "El correo no es válido.", "Por favor, debes ingresar un teléfono válido");
-        }
-
-    } catch (error) {
-        console.error(error);
-        agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+    if (clienteUtil.getValidateEmail(correo)=="success")
+    {
+        await clienteFullfilment.verifyAndSave(agent);
+        
+    }else
+    {
+        promptUtil.getPromptCliente(agent, "setcliente", "El correo no es válido.", "Por favor, debes ingresar un correo válido");
     }
 
 }
