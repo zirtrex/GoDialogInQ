@@ -15,6 +15,13 @@ const clienteFullfilment = require("../fullfilments/clienteFullfilment");
 const tipoPrestamoFullfilment = require("../fullfilments/tipoPrestamoFullfilment");
 const prestamoClienteFullfilment = require("../fullfilments/prestamoClienteFullfilment");
 
+/* 
+const clienteUtil = require("../utils/clienteUtil");
+
+var respuestaTelefono = clienteUtil.getValidatePhoneNumber("223-456-7890");
+console.log(respuestaTelefono); */
+
+
 
 router.get("/", (req, res) => {	
 	res.json({
