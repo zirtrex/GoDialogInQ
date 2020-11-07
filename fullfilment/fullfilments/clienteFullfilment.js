@@ -98,7 +98,26 @@ clienteFullfilment.verifyAndSave = async function (agent) {
             }
 
             console.log("Datos del cliente guardados correctamente.");
-        }       
+        }
+
+        
+
+       /*  if (typeof setTelefonoClienteContext !== 'undefined') {
+
+            if (typeof setCorreoClienteContext !== 'undefined') {
+
+               
+            
+            }else
+            {
+                agent.add("Ingrese por favor su correo.");
+            }
+            
+        }else
+        {
+            agent.add("Ingrese por favor su teléfono.");
+        } 
+        */
 
         
     } catch (error) {
