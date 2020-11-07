@@ -138,9 +138,9 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 
 			if (typeof setClienteContext !== 'undefined') {
 
-				if (setClienteContext.parameters.parameters['telefono'] == "") {
+				if (setClienteContext.parameters['telefono'] == "") {
 					agent.add("Ingrese por favor su teléfono.");
-				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+				} else if (setClienteContext.parameters['correo'] == "") {
 					agent.add("Ingrese por favor su correo.");
 				} else {
 					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
@@ -180,9 +180,10 @@ prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
 
 			if (typeof setClienteContext !== 'undefined') {
 
-				if (setClienteContext.parameters.parameters['telefono'] == "") {
+				console.log("setClienteContext es distinto a vacio");
+				if (setClienteContext.parameters['telefono'] == "") {
 					agent.add("Ingrese por favor su teléfono.");
-				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+				} else if (setClienteContext.parameters['correo'] == "") {
 					agent.add("Ingrese por favor su correo.");
 				} else {
 					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
@@ -196,6 +197,7 @@ prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
 					}
 				}
 			} else {
+				console.log("setClienteContext es igual a vacio");
 				agent.add("Ingrese por favor su teléfono.");
 			}
 			
@@ -222,9 +224,9 @@ prestamoClienteFullfilment.extraerIngresosAnuales = async function (agent) {
 
 			if (typeof setClienteContext !== 'undefined') {
 
-				if (setClienteContext.parameters.parameters['telefono'] == "") {
+				if (setClienteContext.parameters['telefono'] == "") {
 					agent.add("Ingrese por favor su teléfono.");
-				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+				} else if (setClienteContext.parameters['correo'] == "") {
 					agent.add("Ingrese por favor su correo.");
 				} else {
 					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
@@ -286,9 +288,9 @@ prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
 		
 					if (typeof setClienteContext !== 'undefined') {
 		
-						if (setClienteContext.parameters.parameters['telefono'] == "") {
+						if (setClienteContext.parameters['telefono'] == "") {
 							agent.add("Ingrese por favor su teléfono.");
-						} else if (setClienteContext.parameters.parameters['correo'] == "") {
+						} else if (setClienteContext.parameters['correo'] == "") {
 							agent.add("Ingrese por favor su correo.");
 						} else {
 							var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
@@ -332,9 +334,9 @@ prestamoClienteFullfilment.extraerQueNegocioTiene = async function (agent) {
 
 			if (typeof setClienteContext !== 'undefined') {
 
-				if (setClienteContext.parameters.parameters['telefono'] == "") {
+				if (setClienteContext.parameters['telefono'] == "") {
 					agent.add("Ingrese por favor su teléfono.");
-				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+				} else if (setClienteContext.parameters['correo'] == "") {
 					agent.add("Ingrese por favor su correo.");
 				} else {
 					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
@@ -374,9 +376,9 @@ prestamoClienteFullfilment.extraerComoVaUsar = async function (agent) {
 
 			if (typeof setClienteContext !== 'undefined') {
 
-				if (setClienteContext.parameters.parameters['telefono'] == "") {
+				if (setClienteContext.parameters['telefono'] == "") {
 					agent.add("Ingrese por favor su teléfono.");
-				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+				} else if (setClienteContext.parameters['correo'] == "") {
 					agent.add("Ingrese por favor su correo.");
 				} else {
 					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
@@ -416,9 +418,9 @@ prestamoClienteFullfilment.extraerCuanRapidoNecesita = async function (agent) {
 
 			if (typeof setClienteContext !== 'undefined') {
 
-				if (setClienteContext.parameters.parameters['telefono'] == "") {
+				if (setClienteContext.parameters['telefono'] == "") {
 					agent.add("Ingrese por favor su teléfono.");
-				} else if (setClienteContext.parameters.parameters['correo'] == "") {
+				} else if (setClienteContext.parameters['correo'] == "") {
 					agent.add("Ingrese por favor su correo.");
 				} else {
 					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
