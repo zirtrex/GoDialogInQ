@@ -125,7 +125,9 @@ clienteFullfilment.verifyAndSave = async function (agent) {
 
 clienteFullfilment.extraerNombreCliente = async function (agent) {
 
-    await clienteFullfilment.verifyAndSave(agent);
+    agent.add("Espera por favor");
+
+    //await clienteFullfilment.verifyAndSave(agent);
     
 }
 

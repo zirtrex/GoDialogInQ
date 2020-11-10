@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const util = require("util");
 
 //const dialogflow = require('@google-cloud/dialogflow');
 const { WebhookClient, Card, Suggestion } = require("dialogflow-fulfillment");
@@ -14,6 +15,7 @@ const prestamoClienteService = require("../services/prestamoClienteService");
 const clienteFullfilment = require("../fullfilments/clienteFullfilment");
 const tipoPrestamoFullfilment = require("../fullfilments/tipoPrestamoFullfilment");
 const prestamoClienteFullfilment = require("../fullfilments/prestamoClienteFullfilment");
+const { log } = require('../utils/loggerUtil');
 
 /* 
 const clienteUtil = require("../utils/clienteUtil");
@@ -37,6 +39,7 @@ router.post("/", express.json(), (req, res) => {
 
 	//Fullfilments para guiar al usuario a elegir un préstamo
 	intentMap.set("Guiar al usuario", guiarUsuario);
+	intentMap.set("Guiar al usuario event", guiarUsuarioEvent);
 	intentMap.set("Guiar al usuario - mostrar descripcion - si - prestamo", guiarUsuarioMostrarDescSiPrestamo);
 	intentMap.set("Guiar al usuario - mostrar descripcion - si - no prestamo", guiarUsuarioMostrarDescSiNoPrestamo);
 	
@@ -86,26 +89,74 @@ function defaultFallback(agent) {
     agent.add('Lo siento, no te entendí. ¿En qué te puedo ayudar?');
 }
 
+async function checkResponse(agent, response, last) {
+
+	console.log(util.inspect(response).includes("pending"));
+
+	if (!util.inspect(response).includes("pending")) {
+
+		response.then(
+			(data) => {
+				console.log(data);
+				if (data.status == "success") {
+					agent.add('Los préstamos disponibles son: ');
+					data.result.forEach(object => {				
+						agent.add(" " + object.nombreTipoPrestamo);
+					});
+		
+					agent.add('¿Quieres ver la descripción básica de alguno de los préstamos?');
+		
+				} else {
+					agent.add('No tenemos préstamos disponibles.');
+				}
+			}
+		)
+		.catch(
+			(error) => {agent.add('Ha ocurrido un error');}
+		);
+		
+	} else {
+		if (!last) {
+			console.log('Yendo al intent 2');
+			agent.add('Yendo al intent 2');
+
+			agent.setFollowupEvent({
+				"name": "guiar_usuario_event",
+				"parameters": {
+				"parameter-name-1": "parameter-value-1",
+				"parameter-name-2": "parameter-value-2"
+				},
+				"languageCode": "en-US"
+			});
+		} else {
+			agent.add('No se han encontrado préstamos.');	
+		}
+	}
+
+	//agent.add('No se han encontrado préstamos.');
+}
+
+var response;
 async function guiarUsuario(agent) {
 
 	try {
-		var response = await tipoPrestamoService.getAll();
-
-		if (response.status == "success") {
-			agent.add('Los préstamos disponibles son: ');
-			response.result.forEach(object => {				
-				agent.add(" " + object.nombreTipoPrestamo);
-			});
-
-			agent.add('¿Quieres ver la descripción básica de alguno de los préstamos?');
-
-		} else {
-			agent.add('No tenemos préstamos disponibles.');
-		}
-
+		response = tipoPrestamoService.getAll();	
 	} catch (error) {
-		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
-	}
+		console.log("Estamos experimentando problemas, intenta de nuevo por favor.");	
+	}	
+	console.log(response);
+
+	//agent.add('Respuesta del I1');
+	
+	setTimeout((obj) => checkResponse(obj.agent, obj.response, obj.last), 4500, {"agent": agent, "response":response, "last": false});
+	 
+}
+
+async function guiarUsuarioEvent(agent) {
+
+	console.log(response);
+
+	setTimeout((obj) => checkResponse(obj.agent, obj.response, obj.last), 2000, {"agent": agent, "response":response, "last": true});
 	 
 }
 

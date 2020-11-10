@@ -134,7 +134,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarPrestamos = async function (ag
 		if (response.status == "success") {
 			agent.add('Los préstamos disponibles son: ');
 			response.result.forEach(object => {				
-				agent.add("- " + object.nombreTipoPrestamo);
+				agent.add(" " + object.nombreTipoPrestamo);
 			});
 
 		} else {
