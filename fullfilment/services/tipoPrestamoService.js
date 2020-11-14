@@ -2,11 +2,7 @@
 
 const fetch = require('node-fetch');
 const logger = require("../utils/loggerUtil");
-const {
-	performance,
-	PerformanceObserver
-  } = require('perf_hooks');
-
+const { performance, PerformanceObserver } = require('perf_hooks');
 const config = require('config');
 
 console.log(config);

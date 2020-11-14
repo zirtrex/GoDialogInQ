@@ -8,7 +8,7 @@ import { GenericObject } from '../models/generic_object';
 @Injectable()
 export class RequisitoService {
 
-    private REST_API_SERVER_DEV = "https://godialoginq.herokuapp.com/requisito";
+    private REST_API_SERVER_DEV = "http://localhost:8081/requisito";
     private REST_API_SERVER_PROD = "";
 
     constructor(private http:HttpClient) { }

@@ -25,7 +25,8 @@ console.log(respuestaTelefono); */
 
 
 
-router.get("/", (req, res) => {	
+router.get("/", (req, res) => {
+
 	res.json({
 		"godialoginq-fullfilment": "v1.0.0"
 	});    
@@ -70,10 +71,10 @@ router.post("/suma", (req, res) => {
         let num1 = parseFloat(req.body.queryResult.parameters.number1);
         let num2 = parseFloat(req.body.queryResult.parameters.number2);
         let sum = num1 + num2;
-		response = num1 + " + " + num2 + " es " + sum;
-		console.log("fulfillmentText:" + response);
+		responseGuiarUsuario = num1 + " + " + num2 + " es " + sum;
+		console.log("fulfillmentText:" + responseGuiarUsuario);
         res.json({
-            "fulfillmentText": response
+            "fulfillmentText": responseGuiarUsuario
         });
     }
 });
@@ -89,17 +90,22 @@ function defaultFallback(agent) {
     agent.add('Lo siento, no te entendí. ¿En qué te puedo ayudar?');
 }
 
-async function checkResponse(agent, response, last) {
+function checkGuiarUsuarioResponse(agent, response, last) {
+
+	console.log("checkResponse");
+	console.log(response);
 
 	console.log(util.inspect(response).includes("pending"));
 
 	if (!util.inspect(response).includes("pending")) {
 
+		agent.add('Los préstamos disponibles son: ');
+
 		response.then(
 			(data) => {
 				console.log(data);
 				if (data.status == "success") {
-					agent.add('Los préstamos disponibles son: ');
+					
 					data.result.forEach(object => {				
 						agent.add(" " + object.nombreTipoPrestamo);
 					});
@@ -123,40 +129,53 @@ async function checkResponse(agent, response, last) {
 			agent.setFollowupEvent({
 				"name": "guiar_usuario_event",
 				"parameters": {
-				"parameter-name-1": "parameter-value-1",
-				"parameter-name-2": "parameter-value-2"
+					"parameter-name-1": "parameter-value-1",
+					"parameter-name-2": "parameter-value-2"
 				},
-				"languageCode": "en-US"
+				//"languageCode": "en-US"
 			});
 		} else {
-			agent.add('No se han encontrado préstamos.');	
+			agent.add('No se han encontrado préstamos.');
 		}
 	}
 
-	//agent.add('No se han encontrado préstamos.');
+	//agent.add('Yendo al intent 2-');
 }
 
-var response;
+function delay(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+var responseGuiarUsuario;
 async function guiarUsuario(agent) {
 
 	try {
-		response = tipoPrestamoService.getAll();	
+		responseGuiarUsuario = tipoPrestamoService.getAll();
 	} catch (error) {
 		console.log("Estamos experimentando problemas, intenta de nuevo por favor.");	
 	}	
-	console.log(response);
+	console.log("guiarUsuario");
+	console.log(responseGuiarUsuario);
 
-	//agent.add('Respuesta del I1');
-	
-	setTimeout((obj) => checkResponse(obj.agent, obj.response, obj.last), 4500, {"agent": agent, "response":response, "last": false});
+	//agent.add('Espere por favor...');
+
+	return delay(1000)
+        .then(() => {
+			console.log("Dentro del setTimeout");
+			checkGuiarUsuarioResponse(agent, responseGuiarUsuario, false);
+            //return delay(10);
+        });	
+
+	//checkGuiarUsuarioResponse(agent, response, false);
 	 
 }
 
 async function guiarUsuarioEvent(agent) {
 
-	console.log(response);
+	console.log("Event");
+	//console.log(response);
 
-	setTimeout((obj) => checkResponse(obj.agent, obj.response, obj.last), 2000, {"agent": agent, "response":response, "last": true});
+	checkGuiarUsuarioResponse(agent,responseGuiarUsuario, true);
 	 
 }
 
@@ -171,7 +190,7 @@ async function guiarUsuarioMostrarDescSiPrestamo(agent) {
 	frasesResponses.push("¿Qué más necesitas?");
 
 	try {
-		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);		
+		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 
 		if (response.status == "success") {
 
@@ -277,6 +296,20 @@ async function extraerInfoInicial(agent) {
 		logger.debug(error);
 		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
 	}
+}
+
+function PruebaSetTimeout(agent) {
+    console.log("welcome")
+    agent.add(`Welcome to my agent!`)
+    return delay(1000)
+        .then(() => {
+            agent.add(`After delay 1`)
+            //return delay(1000)
+        })
+        .then(() => {
+            agent.add(`After delay 2`)
+            //return delay(1000)
+        })
 }
 
 module.exports = router;

@@ -14,28 +14,38 @@ var clienteFullfilment = {};
 
 clienteFullfilment.verifyAndSave = async function (agent) {
  
-    const idSession = agent.session.split("/").reverse()[0];	
+    const idSession = agent.session.split("/").reverse()[0];
     //contextos
     const setClienteContext = agent.context.get('setcliente');
     const setNombreClienteContext = agent.context.get('setnombrecliente');
     const setTelefonoClienteContext = agent.context.get('settelefonocliente');
     const setCorreoClienteContext = agent.context.get('setcorreocliente');
+    const setPrestamoClienteContext = agent.context.get('setprestamocliente');
     
-    //variables
+    //inicializar variables
     var saludo = "";
     var nombres = "";		
     var apellidos = "";
     var telefono = "";
     var correo = "";
 
+    if (typeof setClienteContext !== 'undefined') {
+        nombres = setClienteContext.parameters['nombres'];		
+        apellidos = setClienteContext.parameters['apellidos'];
+        telefono = setClienteContext.parameters['telefono'];
+        correo = setClienteContext.parameters['correo'];
+    }
+
     if (typeof setNombreClienteContext !== 'undefined') {
         saludo = setNombreClienteContext.parameters['saludo'];
         nombres = setNombreClienteContext.parameters['given-name.original'];		
         apellidos = setNombreClienteContext.parameters['last-name.original'];
     }
+
     if (typeof setTelefonoClienteContext !== 'undefined') {
         telefono = setTelefonoClienteContext.parameters['phone-number.original'];
     }
+
     if (typeof setCorreoClienteContext !== 'undefined') {
         correo = setCorreoClienteContext.parameters['email.original'];
     }
@@ -49,72 +59,88 @@ clienteFullfilment.verifyAndSave = async function (agent) {
         "correo": correo
     };
 
-    try {
+    try {        
 
-        if (typeof setTelefonoClienteContext !== 'undefined') {
+        var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
 
-            if (typeof setCorreoClienteContext !== 'undefined') {
-
-                var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
-
-                if (response.result.affectedRows == 1) {
-                    var idCliente;
-                    if (typeof response.result.idCliente === "undefined") {
-                        idCliente = response.result.insertId;
-                    } else {
-                        idCliente = response.result.idCliente;
-                    }
-                    
-                    //creando variable contexto setcliente se dispara a Dialogflow session setcliente
-                    agent.context.set({
-                        'name': "setcliente",
-                        'lifespan': 50,
-                        'parameters' : {
-                            'idCliente': idCliente,
-                            'nombres': nombres,
-                            'apellidos': apellidos,
-                            "telefono": telefono,
-                            "correo": correo
-                        }
-                    });
-        
-                    agent.add(saludo + " " + nombres + " " + apellidos + ", gracias por escribirnos");
-        
-                    //Detectar si ya eligió un tipo de préstamo
-                    var setTipoPrestamoContext = agent.context.get('settipoprestamo');
-        
-                    if (typeof setTipoPrestamoContext !== 'undefined') {
-                        var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-                        var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];              
-        
-                        console.log("idPrestamo " + idTipoPrestamo);
-        
-                        if (typeof idTipoPrestamo !== 'undefined') {
-                            agent.add("Has elegido: " + nombreTipoPrestamo);
-                            var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-                            console.log(message);
-                            agent.add(message);
-                        } else {
-                            agent.add("¿En qué préstamo estás interesado?");
-                        }
-                    } else {				
-                        agent.add("¿En qué préstamo estás interesado?");
-                    }
-        
-                    console.log("Datos del cliente guardados correctamente.");
-                }
-            
-            }else
-            {
-                agent.add("Ingrese por favor su correo.");
+        if (response.result.affectedRows == 1) {
+            console.log("Datos del cliente guardados correctamente.");
+            var idCliente;
+            if (typeof response.result.idCliente === "undefined") {
+                idCliente = response.result.insertId;
+            } else {
+                idCliente = response.result.idCliente;
             }
             
-        }else
-        {
-            agent.add("Ingrese por favor su teléfono.");
-        } 
-       
+            //creando variable contexto setcliente se dispara a Dialogflow session setcliente
+            agent.context.set({
+                'name': "setcliente",
+                'lifespan': 50,
+                'parameters' : {
+                    'idCliente': idCliente,
+                    'nombres': nombres,
+                    'apellidos': apellidos,
+                    'telefono': telefono,
+                    'correo': correo
+                }
+            });
 
+            agent.add(saludo + " " + nombres + " " + apellidos + ", gracias por escribirnos");
+
+            //Detectar si ya eligió un tipo de préstamo
+            var setTipoPrestamoContext = agent.context.get('settipoprestamo');
+
+            if (typeof setTipoPrestamoContext !== 'undefined') {
+                var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
+                var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];              
+
+                console.log("idPrestamo " + idTipoPrestamo);
+
+                if (idTipoPrestamo != "" || idTipoPrestamo != null) {
+                    agent.add("Has elegido: " + nombreTipoPrestamo);
+                    var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+                    console.log(message);
+
+                    if (message == "") {
+                        const setClienteContext = agent.context.get('setcliente');
+
+                        if (typeof setClienteContext !== 'undefined') {
+                            var correo = setClienteContext.parameters['correo'];
+                            var telefono = setClienteContext.parameters['telefono'];
+                            
+                            if (correo == "" || correo == null) {
+                                agent.add("Ingrese por favor su correo.");
+                            } else if (telefono == "" || telefono == null) {
+                                agent.add("Ingrese por favor su telefono.");
+                            } else {
+                                if (typeof setPrestamoClienteContext !== 'undefined') {
+                                    agent.add("Gracias por contactarnos.");
+                                    var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
+                                    var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
+                                    var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
+                                    //tiempoNegocio > 1 && 
+                                    if (ingresosAnuales > 5000 && puntajeCredito > 500) {
+                                        agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
+                                    } else {
+                                        agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
+                                    }
+                                    //agent.clearOutgoingContexts();
+                                }
+                            }
+                        }
+                    } else {
+                        
+                        agent.add(message);
+                    }
+                    
+                } else {
+                    agent.add("¿En qué préstamo estás interesado?");
+                }
+            } else {				
+                agent.add("¿En qué préstamo estás interesado?");
+            }
+            
+        }
         
     } catch (error) {
         console.error(error);
@@ -125,9 +151,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
 
 clienteFullfilment.extraerNombreCliente = async function (agent) {
 
-    agent.add("Espera por favor");
-
-    //await clienteFullfilment.verifyAndSave(agent);
+    await clienteFullfilment.verifyAndSave(agent);
     
 }
 
@@ -135,7 +159,7 @@ clienteFullfilment.extraerTelefonoCliente = async function (agent) {
 
     const setTelefonoClienteContext = agent.context.get('settelefonocliente');
 
-    var telefono = setTelefonoClienteContext.parameters['phone-number'];    
+    var telefono = setTelefonoClienteContext.parameters['phone-number'];
     
     if (clienteUtil.getValidatePhoneNumber(telefono) == "success") {
 

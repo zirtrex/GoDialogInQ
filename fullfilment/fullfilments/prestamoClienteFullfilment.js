@@ -15,6 +15,14 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
     const idSession = agent.session.split("/").reverse()[0];
 	
 	//Contextos
+	const setMontoNecesitadoContext = agent.context.get('setmontonecesitado');
+	const setTiempoNegocioContext = agent.context.get('settiemponegocio');
+	const setIngresosAnualesContext = agent.context.get('setingresosanuales');
+	const setPuntajeCreditoContext = agent.context.get('setpuntajecredito');
+	const setQueNegocioTieneContext = agent.context.get('setquenegociotiene');	
+	const setComoVaUsarContext = agent.context.get('setcomovausar');
+	const setCuanRapidoNecesitaContext = agent.context.get('setcuanrapidonecesita');
+
 	const setTipoPrestamoContext = agent.context.get('settipoprestamo');
 	const setClienteContext = agent.context.get('setcliente');
 	const setPrestamoClienteContext = agent.context.get('setprestamocliente');
@@ -49,6 +57,28 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
 			queNegocioTiene = setPrestamoClienteContext.parameters['queNegocioTiene'];
 			comoVaUsar = setPrestamoClienteContext.parameters['comoVaUsar'];
 			cuanRapidoNecesita = setPrestamoClienteContext.parameters['cuanRapidoNecesita'];
+		}
+
+		if (typeof setMontoNecesitadoContext !== 'undefined') {
+			montoNecesitado = setMontoNecesitadoContext.parameters['montoNecesitado.original'];
+		}	
+		if (typeof setTiempoNegocioContext !== 'undefined') {
+			tiempoNegocio = setTiempoNegocioContext.parameters['tiempoNegocio.original'];
+		}
+		if (typeof setIngresosAnualesContext !== 'undefined') {
+			ingresosAnuales = setIngresosAnualesContext.parameters['ingresosAnuales.original'];
+		}	
+		if (typeof setPuntajeCreditoContext !== 'undefined') {
+			puntajeCredito = setPuntajeCreditoContext.parameters['puntajeCredito.original'];
+		}
+		if (typeof setQueNegocioTieneContext !== 'undefined') {
+			queNegocioTiene = setQueNegocioTieneContext.parameters['queNegocioTiene.original'];
+		}	
+		if (typeof setComoVaUsarContext !== 'undefined') {
+			comoVaUsar = setComoVaUsarContext.parameters['comoVaUsar.original'];
+		}
+		if (typeof setCuanRapidoNecesitaContext !== 'undefined') {
+			cuanRapidoNecesita = setCuanRapidoNecesitaContext.parameters['cuanRapidoNecesita.original'];
 		}
 
 		TipoPrestamo = {
@@ -111,8 +141,8 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
 					return "success";
 					
 				} else {
-					//agent.add("Ha ocurrido un error al guardar su información.");
 					console.log("No se han guardado los datos");
+					return "Ha ocurrido un error al guardar su información.";					
 				}
 			}		
 	
@@ -169,7 +199,7 @@ prestamoClienteFullfilment.extraerMontoNecesitado = async function (agent) {
 
 prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
     
-	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "montoNecesitado");
+	var message = await prestamoClienteFullfilment.verifyAndSave(agent, "");
 
 	if (message === "success") {
 		const setPrestamoClienteContext = agent.context.get('setprestamocliente');
@@ -179,11 +209,12 @@ prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
 			const setClienteContext = agent.context.get('setcliente');
 
 			if (typeof setClienteContext !== 'undefined') {
+				var telefono = setClienteContext.parameters['telefono'];
+				var correo = setClienteContext.parameters['correo'];
 
-				console.log("setClienteContext es distinto a vacio");
-				if (setClienteContext.parameters['telefono'] == "") {
+				if (telefono == "" || telefono == null) {
 					agent.add("Ingrese por favor su teléfono.");
-				} else if (setClienteContext.parameters['correo'] == "") {
+				} else if (correo == "" || correo == null) {
 					agent.add("Ingrese por favor su correo.");
 				} else {
 					var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
@@ -195,6 +226,7 @@ prestamoClienteFullfilment.extraerTiempoNegocio = async function (agent) {
 					} else {
 						agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
 					}
+					//agent.clearOutgoingContexts();
 				}
 			} else {
 				console.log("setClienteContext es igual a vacio");
@@ -263,7 +295,7 @@ prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
 
 		var puntajeCredito = setPuntajeCreditoContext.parameters['puntajeCredito'];
 
-		if (puntajeCredito  == '') {
+		if (puntajeCredito  == '' || puntajeCredito == null) {
 
 			let answer = [];
 			answer.push("El puntaje de crédito es básicamente un medidor o un record de comportamiento financiero, es una calificación.");
@@ -274,6 +306,7 @@ prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
 			var indexRandom = Math.floor(Math.random() * answer.length);
 			var message = answer[indexRandom];
 			agent.add(message);
+			agent.add("Ingresa tu puntaje de crédito");
 
 		} else {
 

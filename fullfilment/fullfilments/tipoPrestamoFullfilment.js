@@ -14,7 +14,8 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
 
     let setTipoPrestamoContext = agent.context.get('settipoprestamo');
     
-    var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];
+    var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];    
+    var nombreTipoPrestamOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];
 
     try {
 
@@ -22,7 +23,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
 
         var idTipoPrestamo;
 
-        if (typeof setTipoPrestamoPrevContext !== 'undefined') {
+        /*if (typeof setTipoPrestamoPrevContext !== 'undefined') {
 
             idTipoPrestamo = setTipoPrestamoPrevContext.parameters['idTipoPrestamo'];
             nombreTipoPrestamo = setTipoPrestamoPrevContext.parameters['nombreTipoPrestamo'];
@@ -33,14 +34,15 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
                 'lifespan': 50,
                 'parameters' : {
                     'idTipoPrestamo': idTipoPrestamo,
-                    'tipoPrestamo': nombreTipoPrestamo
+                    'tipoPrestamo': nombreTipoPrestamo,
+                    'tipoPrestamo.original': nombreTipoPrestamOriginal
                 }
             });
 
             agent.add("Ya has elegido: " + nombreTipoPrestamo);
             agent.add("¿Estás interesado en este préstamo?");
 
-        } else {
+        } else {*/
 
             var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 
@@ -50,13 +52,16 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
     
                 const existingContext = agent.context.get('settipoprestamo');
                 agent.context.set({
-                    'name': existingContext.name,
+                    'name': 'settipoprestamo',
                     'lifespan': 50,
                     'parameters' : {
                         'idTipoPrestamo': idTipoPrestamo,
-                        'tipoPrestamo': nombreTipoPrestamo
+                        'tipoPrestamo': nombreTipoPrestamo,
+                        'tipoPrestamo.original': nombreTipoPrestamOriginal
                     }
                 });
+
+                console.log(existingContext);
 
                 if (existingContext.parameters['tipoPrestamo'] == existingContext.parameters['tipoPrestamo.original']) {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
@@ -116,7 +121,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
                 console.log("Prompt:" + REPROMPT_COUNT);
                 
             }
-        } 			
+       /* } */
         
     } catch (error) {
         console.log(error);
@@ -190,7 +195,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi = async function 
 					agent.add(message);
 				}
 			} else {				
-				agent.add('Si estás interesado, por favor ingresa tus nombres');
+				agent.add('Si deseas continuar, por favor ingresa tus nombres');
 			}
 
 		} else {

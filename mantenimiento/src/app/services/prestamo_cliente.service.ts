@@ -7,14 +7,14 @@ import { PrestamoCliente } from '../models/prestamo_cliente';
 @Injectable()
 export class PrestamoClienteService {
 
-    private REST_API_SERVER_DEV = "https://godialoginq.herokuapp.com/prestamo_cliente";
-    private REST_API_SERVER_PROD = "";
+    private REST_API_SERVER_DEV = "http://localhost:8081/prestamo_cliente";
+    private REST_API_SERVER_PROD = "http://localhost:8081/prestamo_cliente";
 
     constructor(private http:HttpClient) { }
 
     getAll(): Observable<any>{
       return this.http
-                .get<any>(this.REST_API_SERVER_DEV)
+                .get<any>(this.REST_API_SERVER_DEV + "/detalle")
                 .pipe(catchError(this.handleError));
     }
 
