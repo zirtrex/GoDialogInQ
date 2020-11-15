@@ -59,9 +59,15 @@ clienteFullfilment.verifyAndSave = async function (agent) {
     };
 
     try {        
+<<<<<<< HEAD
 
         var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
 
+=======
+
+        var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
+
+>>>>>>> 02c6832add96e4e4fbce9e21ea1c14d8c6bd4ee5
         if (response.result.affectedRows == 1) {
             console.log("Datos del cliente guardados correctamente.");
             var idCliente;

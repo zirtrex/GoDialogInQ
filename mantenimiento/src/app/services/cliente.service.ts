@@ -7,9 +7,9 @@ import { Cliente } from '../models/cliente';
 @Injectable()
 export class ClienteService {
 
-    private REST_API_SERVER_DEV = "https://godialoginq.herokuapp.com/cliente";
+    private REST_API_SERVER_DEV = "http://localhost:8081/cliente";
     //private REST_API_SERVER_PROD = "http://localhost:8081/cliente";
-    private REST_API_SERVER_PROD = "https://godialoginq.herokuapp.com";
+    private REST_API_SERVER_PROD = "https://godialoginq.herokuapp.com/cliente";
 
     constructor(private http:HttpClient) { }
 

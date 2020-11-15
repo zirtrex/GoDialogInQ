@@ -5,8 +5,6 @@ const logger = require("../utils/loggerUtil");
 
 const config = require('config');
 
-console.log(config);
-
 var prestamoClienteService = {};
 
 const urlBase = config.get("ipServidor");
