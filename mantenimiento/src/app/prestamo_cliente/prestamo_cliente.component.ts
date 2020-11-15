@@ -21,7 +21,7 @@ import {
 export class PrestamoClienteComponent implements OnInit {
 
   //displayedColumns: string[] = ['idPrestamoCliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'acciones'];
-  displayedColumns: string[] = ['idPrestamoCliente', 'nombreTipoPrestamo', 'cliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita'];
+  displayedColumns: string[] = ['idPrestamoCliente', 'nombreTipoPrestamo', 'cliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita', 'calificacion'];
   
   dataSource: MatTableDataSource<PrestamoCliente>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;

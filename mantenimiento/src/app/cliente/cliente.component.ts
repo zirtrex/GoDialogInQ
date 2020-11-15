@@ -20,7 +20,8 @@ import {
 })
 export class ClienteComponent implements OnInit {
 
-  displayedColumns: string[] = ['idCliente', 'apellidos', 'nombres', 'tipoDocumento', 'documento', 'telefono', 'correo', 'acciones'];
+  //displayedColumns: string[] = ['idCliente', 'apellidos', 'nombres', 'tipoDocumento', 'documento', 'telefono', 'correo', 'acciones'];
+  displayedColumns: string[] = ['idCliente', 'apellidos', 'nombres', 'telefono', 'correo', 'acciones'];
   dataSource: MatTableDataSource<Cliente>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
