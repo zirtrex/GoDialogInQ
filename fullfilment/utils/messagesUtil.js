@@ -55,8 +55,8 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 	answers.push(['tiempoNegocio', "¿Cuánto tiempo tienes en el negocio? (Indique meses o años)"]);
 	answers.push(['ingresosAnuales', "¿Cuáles son tus ingresos anuales? (dólares)"]);
 	answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio? (dólares)"]);
-	answers.push(['puntajeCredito', "¿Cuál es tu puntaje de crédito?"]);
-	answers.push(['puntajeCredito', "¿Cuál es tu fico score?"]);
+	answers.push(['puntajeCredito', "¿Cuál es tu puntaje de crédito? (300 y 850 puntos)"]);
+	answers.push(['puntajeCredito', "¿Cuál es tu fico score? (300 y 850 puntos)"]);
 	answers.push(['queNegocioTiene', "¿Qué negocio tienes?"]);
 	answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio?"]);
 	answers.push(['comoVaUsar', "¿Cómo vas a usar el dinero?"]);

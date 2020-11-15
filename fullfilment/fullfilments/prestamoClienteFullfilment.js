@@ -321,7 +321,7 @@ prestamoClienteFullfilment.extraerPuntajeCredito = async function (agent) {
 			var indexRandom = Math.floor(Math.random() * answer.length);
 			var message = answer[indexRandom];
 			agent.add(message);
-			agent.add("Ingresa tu puntaje de crédito");
+			agent.add("Ingresa tu puntaje de crédito. (300 y 850 puntos)");
 
 		} else {
 
