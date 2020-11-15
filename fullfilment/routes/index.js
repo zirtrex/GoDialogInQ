@@ -1,11 +1,13 @@
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 const util = require("util");
 
-//const dialogflow = require('@google-cloud/dialogflow');
 const { WebhookClient, Card, Suggestion } = require("dialogflow-fulfillment");
 
 const logger = require("../utils/loggerUtil");
+const messagesUtil = require("../utils/messagesUtil");
 
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
@@ -15,18 +17,8 @@ const prestamoClienteService = require("../services/prestamoClienteService");
 const clienteFullfilment = require("../fullfilments/clienteFullfilment");
 const tipoPrestamoFullfilment = require("../fullfilments/tipoPrestamoFullfilment");
 const prestamoClienteFullfilment = require("../fullfilments/prestamoClienteFullfilment");
-const { log } = require('../utils/loggerUtil');
-
-/* 
-const clienteUtil = require("../utils/clienteUtil");
-
-var respuestaTelefono = clienteUtil.getValidatePhoneNumber("223-456-7890");
-console.log(respuestaTelefono); */
-
-
 
 router.get("/", (req, res) => {
-
 	res.json({
 		"godialoginq-fullfilment": "v1.0.0"
 	});    
@@ -41,8 +33,9 @@ router.post("/", express.json(), (req, res) => {
 	//Fullfilments para guiar al usuario a elegir un préstamo
 	intentMap.set("Guiar al usuario", guiarUsuario);
 	intentMap.set("Guiar al usuario event", guiarUsuarioEvent);
-	intentMap.set("Guiar al usuario - mostrar descripcion - si - prestamo", guiarUsuarioMostrarDescSiPrestamo);
-	intentMap.set("Guiar al usuario - mostrar descripcion - si - no prestamo", guiarUsuarioMostrarDescSiNoPrestamo);
+	intentMap.set("Guiar al usuario - elegir prestamo", guiarUsuarioElegirPrestamo);
+	intentMap.set("Guiar al usuario - elegir prestamo - si", guiarUsuarioElegirPrestamoSi);
+	//intentMap.set("Guiar al usuario - elegir prestamo - no", guiarUsuarioElegirPrestamo);
 	
 	//Fullfilments para extraer los datos básicos del cliente
 	intentMap.set("Extraer nombre del cliente", clienteFullfilment.extraerNombreCliente);
@@ -51,8 +44,8 @@ router.post("/", express.json(), (req, res) => {
 	
 	//Fullfilments para extraer el tipo de préstamo
 	intentMap.set("Extraer el tipo de prestamo", tipoPrestamoFullfilment.extraerTipoPrestamo);
-	intentMap.set("Extraer el tipo de prestamo - mostrar prestamos", tipoPrestamoFullfilment.extraerTipoPrestamoMostrarPrestamos);
-	intentMap.set("Extraer el tipo de prestamo - mostrar requisitos - si", tipoPrestamoFullfilment.extraerTipoPrestamoMostrarRequisitosSi);
+	//intentMap.set("Extraer el tipo de prestamo - mostrar prestamos", tipoPrestamoFullfilment.extraerTipoPrestamoMostrarPrestamos);
+	intentMap.set("Extraer el tipo de prestamo - interesado - si", tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi);
 	
 	//Fullfilments para extraer los datos de la tabla prestamo_cliente
 	intentMap.set("Extraer monto necesitado", prestamoClienteFullfilment.extraerMontoNecesitado);
@@ -103,14 +96,15 @@ function checkGuiarUsuarioResponse(agent, response, last) {
 
 		response.then(
 			(data) => {
-				console.log(data);
+				//console.log(data);
 				if (data.status == "success") {
 					
 					data.result.forEach(object => {				
 						agent.add(" " + object.nombreTipoPrestamo);
 					});
 		
-					agent.add('¿Quieres ver la descripción básica de alguno de los préstamos?');
+					agent.add('¿Qué préstamo te interesa?');
+					agent.add('Elige uno.');
 		
 				} else {
 					agent.add('No tenemos préstamos disponibles.');
@@ -179,15 +173,14 @@ async function guiarUsuarioEvent(agent) {
 	 
 }
 
-async function guiarUsuarioMostrarDescSiPrestamo(agent) {
+async function guiarUsuarioElegirPrestamo(agent) {
 
 	var nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo'];
 
 	let frasesResponses = [];
-	frasesResponses.push("¿Tienes alguna otra duda?");
-	frasesResponses.push("¿Deseas alguna otra información?");
-	frasesResponses.push("¿Te podemos ayudar en algo más?");
-	frasesResponses.push("¿Qué más necesitas?");
+	frasesResponses.push("¿Quieres continuar con este préstamo?");
+	frasesResponses.push("Confírmanos si el préstamo de tu interés");
+	frasesResponses.push("¿Proseguimos con este préstamo?");
 
 	try {
 		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
@@ -196,10 +189,11 @@ async function guiarUsuarioMostrarDescSiPrestamo(agent) {
 
 			var prestamo = response.result[0];
 			
-			agent.add("La descripción para, " + prestamo.nombreTipoPrestamo + " es: " + prestamo.descripcionTipoPrestamo);
+			agent.add(prestamo.nombreTipoPrestamo + " :");
+			agent.add(prestamo.descripcionTipoPrestamo);
 
             agent.context.set({
-                'name': 'settipoprestamoprev',
+                'name': 'settipoprestamo',
                 'lifespan': 50,
                 'parameters' : { 
 					'idTipoPrestamo': prestamo.idTipoPrestamo,
@@ -221,28 +215,25 @@ async function guiarUsuarioMostrarDescSiPrestamo(agent) {
   	} 
 }
 
-async function guiarUsuarioMostrarDescSiNoPrestamo(agent) {
+async function guiarUsuarioElegirPrestamoSi(agent) {
 
-	try {
-		var response = await tipoPrestamoService.getAll();
+	const setTipoPrestamo = agent.context.get('settipoprestamo');
+	const setNombreClienteContext = agent.context.get('setnombrecliente');
 
-		if (response.status == "success") {
-			agent.add('Los préstamos disponibles son: ');
+	let nombreTipoPrestamo = setTipoPrestamo.parameters['nombreTipoPrestamo'];
+	let idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
+	
+	agent.add("Has elegido: (" + idTipoPrestamo + ") " + nombreTipoPrestamo);
 
-			response.result.forEach(object => {				
-				agent.add(" " + object.nombreTipoPrestamo);
-			});
-
-			agent.add('¿De cuál quieres ver la descripción?');
-
-		} else {
-			agent.add('No tenemos préstamos disponibles.');
-		}
-
-	} catch (error) {
-		console.log(error);
-		agent.add("Estamos experimentando problemas, intenta de nuevo por favor.");
+	if (typeof setNombreClienteContext === "undefined") {
+		
+		agent.add('Por favor ingresa tus nombres');
+		
+	} else {
+		var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+		agent.add(message);
 	}
+	
 }
 
 async function extraerInfoInicial(agent) {

@@ -49,14 +49,14 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 
 messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent) {
     let answers = [];
-	answers.push(['montoNecesitado', "¿Qué monto requieres?"]);
-	answers.push(['montoNecesitado', "¿Cuál es el monto requerido?"]);
-	answers.push(['tiempoNegocio', "¿Qué tiempo tienes en el negocio?"]);
-	answers.push(['tiempoNegocio', "¿Cuánto tiempo tienes en el negocio?"]);
-	answers.push(['ingresosAnuales', "¿Cuáles son tus ingresos anuales?"]);
-	answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio?"]);
+	answers.push(['montoNecesitado', "¿Qué monto necesitas? (dólares)"]);
+	answers.push(['montoNecesitado', "¿Cuál es el monto requerido? (dólares)"]);
+	answers.push(['tiempoNegocio', "¿Qué tiempo tienes en el negocio? (Indique meses o años)"]);
+	answers.push(['tiempoNegocio', "¿Cuánto tiempo tienes en el negocio? (Indique meses o años)"]);
+	answers.push(['ingresosAnuales', "¿Cuáles son tus ingresos anuales? (dólares)"]);
+	answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio? (dólares)"]);
 	answers.push(['puntajeCredito', "¿Cuál es tu puntaje de crédito?"]);
-	answers.push(['puntajeCredito', "¿Cuál es tu fico scord?"]);
+	answers.push(['puntajeCredito', "¿Cuál es tu fico score?"]);
 	answers.push(['queNegocioTiene', "¿Qué negocio tienes?"]);
 	answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio?"]);
 	answers.push(['comoVaUsar', "¿Cómo vas a usar el dinero?"]);

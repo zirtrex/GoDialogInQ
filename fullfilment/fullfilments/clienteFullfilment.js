@@ -124,7 +124,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
                                     } else {
                                         agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
                                     }
-                                    //agent.clearOutgoingContexts();
+                                    agent.clearOutgoingContexts();
                                 }
                             }
                         }

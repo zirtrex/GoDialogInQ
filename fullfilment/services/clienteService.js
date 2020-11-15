@@ -5,8 +5,6 @@ const logger = require("../utils/loggerUtil");
 const { performance, PerformanceObserver } = require('perf_hooks');
 const config = require('config');
 
-console.log(config);
-
 var clienteService = {};
 
 const urlBase = config.get("ipServidor");
