@@ -1,4 +1,5 @@
 'user strict';
+const util = require("util");
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
 const clienteService = require("../services/clienteService");
@@ -9,6 +10,7 @@ const messagesUtil = require("../utils/messagesUtil");
 const clienteUtil = require("../utils/clienteUtil");
 const promptUtil = require("../utils/promptUtil");
 const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
+const tipoPrestamoUtil = require("../utils/tipoPrestamoUtil");
 
 var guiarUsuarioFullfilment = {};
 
@@ -138,22 +140,35 @@ guiarUsuarioFullfilment.guiarUsuarioElegirPrestamoSi = async function (agent) {
 
     const idSession = agent.session.split("/").reverse()[0];
 	
-	const setTipoPrestamo = agent.context.get('settipoprestamo');
-	const setNombreClienteContext = agent.context.get('setnombrecliente');
+	//agent.add(tipoPrestamoUtil.getValidateTipoPrestamo("",agent,"validaCercano"));
 
-	let nombreTipoPrestamo = setTipoPrestamo.parameters['nombreTipoPrestamo'];
-	let idTipoPrestamo = setTipoPrestamo.parameters['idTipoPrestamo'];
+	var verificarTipoPrestamo =  tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
+
+    if (verificarTipoPrestamo) {
+
+		if (typeof setNombreClienteContext === "undefined") {
+		
+			agent.add('Por favor ingresa tus nombres');
+			
+		} else {
+		
+			var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+			
+			if(message=="") {
+				
+				prestamoClienteUtil.getValidatePrestamoCliente(idSession, agent);
+			}else {
 	
-	agent.add("Has elegido: (" + idTipoPrestamo + ") " + nombreTipoPrestamo);
+				agent.add(message);
+			}
+			
+		}
 
-	if (typeof setNombreClienteContext === "undefined") {
-		
-		agent.add('Por favor ingresa tus nombres');
-		
-	} else {
-		var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-		agent.add(message);
+	}else {
+
+		prompUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
 	}
+	
 
 }
 

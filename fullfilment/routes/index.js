@@ -45,7 +45,6 @@ router.post("/", express.json(), (req, res) => {
 	
 	//Fullfilments para extraer el tipo de préstamo
 	intentMap.set("Extraer el tipo de prestamo", tipoPrestamoFullfilment.extraerTipoPrestamo);
-	//intentMap.set("Extraer el tipo de prestamo - mostrar prestamos", tipoPrestamoFullfilment.extraerTipoPrestamoMostrarPrestamos);
 	intentMap.set("Extraer el tipo de prestamo - interesado - si", tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi);
 	
 	//Fullfilments para extraer los datos de la tabla prestamo_cliente

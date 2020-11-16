@@ -10,6 +10,8 @@ const clienteUtil = require("../utils/clienteUtil");
 const promptUtil = require("../utils/promptUtil");
 const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
 
+const tipoPrestamoUtil = require("../utils/tipoPrestamoUtil");
+
 var clienteFullfilment = {};
 
 clienteFullfilment.verifyAndSave = async function (agent) {
@@ -86,9 +88,31 @@ clienteFullfilment.verifyAndSave = async function (agent) {
             });
 
             agent.add(saludo + " " + nombres + " " + apellidos + ", gracias por escribirnos");
+                      
+             //Detectar si ya eligió un tipo de préstamo
+            var textValidateTipoPrestamo = tipoPrestamoUtil.getValidateTipoPrestamo("", agent);
 
+            if (textValidateTipoPrestamo != ""){
+
+                agent.add(textValidateTipoPrestamo);
+                
+                var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+               
+                if (message == "") {
+
+                    agent.add(prestamoClienteUtil.getValidatePrestamoCliente("",agent));
+
+                } else {
+                    
+                    agent.add(message);
+                }
+            } else {
+
+                agent.add("¿En qué préstamo estás interesado?");
+
+            }
             //Detectar si ya eligió un tipo de préstamo
-            var setTipoPrestamoContext = agent.context.get('settipoprestamo');
+            /* var setTipoPrestamoContext = agent.context.get('settipoprestamo');
 
             if (typeof setTipoPrestamoContext !== 'undefined') {
                 var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
@@ -119,7 +143,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
                 }
             } else {				
                 agent.add("¿En qué préstamo estás interesado?");
-            }
+            } */
             
         }
         
