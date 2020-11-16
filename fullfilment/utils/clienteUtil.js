@@ -19,13 +19,13 @@ clienteUtil.getValidateEmail = function (correo)
 }
 
 
-clienteUtil.getValidatePhoneNumber = function (correo)
+clienteUtil.getValidatePhoneNumber = function (telefono)
 {
     var resul="";
      //if (/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(correo)) {
     ///^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/
     ///^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g
-    if (/^(()?\d{3}())?(-|\s)?\d{3}(-|\s)?\d{4}$/.test(correo)) {
+    if (/^(()?\d{3}())?(-|\s)?\d{3}(-|\s)?\d{4}$/.test(telefono)) {
         return resul = "success";
         } else {
         return resul = "error";
