@@ -227,6 +227,8 @@ async function guiarUsuarioElegirPrestamoSi(agent) {
 	
 	agent.add("Has elegido: (" + idTipoPrestamo + ") " + nombreTipoPrestamo);
 
+	console.log("(guiarUsuarioElegirPrestamoSi) nombre tipo de prestamo =>> "+nombreTipoPrestamo);  
+
 	if (typeof setNombreClienteContext === "undefined") {
 		
 		agent.add('Por favor ingresa tus nombres');
