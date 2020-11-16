@@ -19,7 +19,7 @@ router.post('/send-message', async function(req, res, next) {
 
 		//req.session.contexts = [];
 
-		console.log(req.session.contexts);
+		//console.log(req.session.contexts);
 		
 		var response = await detectTextIntent(req.body.message, req.session.contexts, req);
 			
@@ -85,9 +85,9 @@ async function detectTextIntent(message, contexts, req) {
 		`Intent: ${intentResponse[0].queryResult.intent.displayName}`
 	);
 	//req.session.contexts = intentResponse[0].queryResult.outputContexts;
-	console.log(
+	/* console.log(
 		`Contexts: ${JSON.stringify(intentResponse[0].queryResult.outputContexts)}`
-	);		
+	); */		
 	// Use the context from this response for next queries
 	//contexts = intentResponse[0].queryResult.outputContexts;
 	

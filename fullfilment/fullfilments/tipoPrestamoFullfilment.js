@@ -146,10 +146,12 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
     var apellidos = "";
 
 	try {
-		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
+        var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
+        
 		var idTipoPrestamo = response.result[0].idTipoPrestamo;
-		console.log(idTipoPrestamo);
-		const setTipoPrestamoContext = agent.context.get("settipoprestamo");
+
+        const setTipoPrestamoContext = agent.context.get("settipoprestamo");
+        
 		agent.context.set({
 			'name': setTipoPrestamoContext.name, 
 			'lifespan': 50,
