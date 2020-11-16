@@ -21,17 +21,15 @@ router.post('/send-message', async function(req, res, next) {
 
 		console.log(req.session.contexts);
 		
-		detectTextIntent(req.body.message, req.session.contexts, req).then(response => {
+		var response = await detectTextIntent(req.body.message, req.session.contexts, req);
 			
-			req.session.contexts = response.queryResult.outputContexts;
+		req.session.contexts = response.queryResult.outputContexts;
 
-			if (response.queryResult.fulfillmentMessages) {
-				res.json({Reply: response.queryResult.fulfillmentMessages});
-			} else {
-				res.json({Reply: response.queryResult.fulfillmentText});
-			}
-
-		});
+		if (response.queryResult.fulfillmentMessages) {
+			res.json({Reply: response.queryResult.fulfillmentMessages});
+		} else {
+			res.json({Reply: response.queryResult.fulfillmentText});
+		}		
 	}	
 
 });
@@ -68,7 +66,7 @@ async function detectTextIntent(message, contexts, req) {
 		},
 	};
 	  
-	console.log("1 " + JSON.stringify(contexts));
+	//console.log("1 " + JSON.stringify(contexts));
 	if (contexts && contexts.length > 0) {
 		request.queryParams = {
 			contexts: contexts,
@@ -86,9 +84,9 @@ async function detectTextIntent(message, contexts, req) {
 	console.log(
 		`Intent: ${intentResponse[0].queryResult.intent.displayName}`
 	);
-	req.session.contexts = intentResponse[0].queryResult.outputContexts;
+	//req.session.contexts = intentResponse[0].queryResult.outputContexts;
 	console.log(
-		`Contexts: ${JSON.stringify(req.session.contexts)}`
+		`Contexts: ${JSON.stringify(intentResponse[0].queryResult.outputContexts)}`
 	);		
 	// Use the context from this response for next queries
 	//contexts = intentResponse[0].queryResult.outputContexts;

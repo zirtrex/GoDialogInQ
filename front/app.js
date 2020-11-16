@@ -19,9 +19,7 @@ const sessionMiddleware = session({
     secret: COOKIE_SECRET,
     resave: true,
     saveUninitialized: true,
-    name: 'express.sid',
-    key: 'express.sid',
-    cookie: { secure: true }
+    cookie: { secure: false }
 });
 
 // view engine setup
