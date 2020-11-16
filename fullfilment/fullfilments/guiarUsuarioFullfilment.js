@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 const util = require("util");
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
@@ -142,7 +142,7 @@ guiarUsuarioFullfilment.guiarUsuarioElegirPrestamoSi = async function (agent) {
 	
 	//agent.add(tipoPrestamoUtil.getValidateTipoPrestamo("",agent,"validaCercano"));
 
-	var verificarTipoPrestamo =  tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
+	var verificarTipoPrestamo =  await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
 
     if (verificarTipoPrestamo) {
 

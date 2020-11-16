@@ -87,8 +87,6 @@ clienteFullfilment.verifyAndSave = async function (agent) {
                 }
             });
 
-            agent.add(saludo + " " + nombres + " " + apellidos + ", gracias por escribirnos");
-                      
              //Detectar si ya eligió un tipo de préstamo
             var textValidateTipoPrestamo = tipoPrestamoUtil.getValidateTipoPrestamo("", agent);
 
@@ -108,6 +106,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
                 }
             } else {
 
+                agent.add(saludo + " " + nombres + " " + apellidos + ", gracias por escribirnos");
                 agent.add("¿En qué préstamo estás interesado?");
 
             }

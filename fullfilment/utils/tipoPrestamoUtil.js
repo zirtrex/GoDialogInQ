@@ -1,7 +1,13 @@
-'user strict';
+'use strict';
+
+const tipoPrestamoService = require("../services/tipoPrestamoService");
+const requisitoService = require("../services/requisitoService");
+const clienteService = require("../services/clienteService");
+const prestamoClienteService = require("../services/prestamoClienteService");
 
 const messagesUtil = require("../utils/messagesUtil");
 const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
+
 
 var tipoPrestamoUtil = {};
 
@@ -14,7 +20,8 @@ tipoPrestamoUtil.getValidateTipoPrestamo = function (idSession, agent)
     if (typeof setTipoPrestamoContext !== 'undefined') {
         var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
         var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];
-        var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];   
+        var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];  
+        
                                 
         if (idTipoPrestamo != "" || idTipoPrestamo != null) {
 
@@ -37,10 +44,10 @@ tipoPrestamoUtil.getValidateTipoPrestamo = function (idSession, agent)
 
 
 
-tipoPrestamoUtil.saveAndVerifyTipoPrestamo = function (idSession, agent)
+tipoPrestamoUtil.saveAndVerifyTipoPrestamo = async function (idSession, agent)
 {
 
-    let response = false;
+    let responseBool = false;
 
     const setTipoPrestamoContext = agent.context.get('settipoprestamo');
 
@@ -55,7 +62,7 @@ tipoPrestamoUtil.saveAndVerifyTipoPrestamo = function (idSession, agent)
         if (response.status == "success") {
 
             idTipoPrestamo = response.result[0].idTipoPrestamo;
-
+        
             agent.context.set({
                 'name': 'settipoprestamo',
                 'lifespan': 50,
@@ -65,17 +72,21 @@ tipoPrestamoUtil.saveAndVerifyTipoPrestamo = function (idSession, agent)
                     'tipoPrestamo.original': nombreTipoPrestamOriginal
                 }
             });
-            response = true;
+
+            responseBool = true;
+        }else
+        {
+            responseBool = false;
         }
 
     } catch (error) {
-        response = false;
+        responseBool = false;
         console.log(error);
         logger.debug(error);        
        
     } 
            
-    return response;
+    return responseBool;
 }
 
 module.exports = tipoPrestamoUtil;
