@@ -46,6 +46,9 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
 
                 if (existingContext.parameters['tipoPrestamo'] == existingContext.parameters['tipoPrestamo.original']) {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
+
+                    console.log("(extraerTipoPrestamo) nombre tipo de prestamo =>> "+nombreTipoPrestamo+" "+nombreTipoPrestamOriginal);  
+
                     
                 } else {
                     agent.add("El préstamo más cercano es: " + nombreTipoPrestamo);

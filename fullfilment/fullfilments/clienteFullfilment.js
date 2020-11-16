@@ -94,9 +94,9 @@ clienteFullfilment.verifyAndSave = async function (agent) {
                 var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
                 var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];   
                 
-                //var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];
+                var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];
 
-                //console.log(nombreTipoPrestamo+" "+nombreTipoPrestamoOriginal);  
+                console.log("(Cliente) nombre tipo de prestamo =>> "+nombreTipoPrestamo+" "+nombreTipoPrestamoOriginal);  
 
                 console.log("idPrestamo " + idTipoPrestamo);
                 
