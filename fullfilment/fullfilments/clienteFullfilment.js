@@ -8,6 +8,7 @@ const logger = require("../utils/loggerUtil");
 const messagesUtil = require("../utils/messagesUtil");
 const clienteUtil = require("../utils/clienteUtil");
 const promptUtil = require("../utils/promptUtil");
+const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
 
 var clienteFullfilment = {};
 
@@ -59,15 +60,9 @@ clienteFullfilment.verifyAndSave = async function (agent) {
     };
 
     try {        
-<<<<<<< HEAD
 
         var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
 
-=======
-
-        var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
-
->>>>>>> 02c6832add96e4e4fbce9e21ea1c14d8c6bd4ee5
         if (response.result.affectedRows == 1) {
             console.log("Datos del cliente guardados correctamente.");
             var idCliente;
@@ -97,42 +92,23 @@ clienteFullfilment.verifyAndSave = async function (agent) {
 
             if (typeof setTipoPrestamoContext !== 'undefined') {
                 var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-                var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];              
+                var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];   
+                
+                //var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];
+
+                //console.log(nombreTipoPrestamo+" "+nombreTipoPrestamoOriginal);  
 
                 console.log("idPrestamo " + idTipoPrestamo);
-
+                
                 if (idTipoPrestamo != "" || idTipoPrestamo != null) {
                     agent.add("Has elegido: " + nombreTipoPrestamo);
                     var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
                     console.log(message);
 
                     if (message == "") {
-                        const setClienteContext = agent.context.get('setcliente');
 
-                        if (typeof setClienteContext !== 'undefined') {
-                            var correo = setClienteContext.parameters['correo'];
-                            var telefono = setClienteContext.parameters['telefono'];
-                            
-                            if (correo == "" || correo == null) {
-                                agent.add("Ingrese por favor su correo.");
-                            } else if (telefono == "" || telefono == null) {
-                                agent.add("Ingrese por favor su telefono.");
-                            } else {
-                                if (typeof setPrestamoClienteContext !== 'undefined') {
-                                    agent.add("Gracias por contactarnos.");
-                                    var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-                                    var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-                                    var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-                                    //tiempoNegocio > 1 && 
-                                    if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-                                        agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
-                                    } else {
-                                        agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
-                                    }
-                                    agent.clearOutgoingContexts();
-                                }
-                            }
-                        }
+                        agent.add(prestamoClienteUtil.getValidatePrestamoCliente("",agent));
+
                     } else {
                         
                         agent.add(message);

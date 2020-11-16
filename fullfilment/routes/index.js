@@ -217,6 +217,8 @@ async function guiarUsuarioElegirPrestamo(agent) {
 
 async function guiarUsuarioElegirPrestamoSi(agent) {
 
+	const idSession = agent.session.split("/").reverse()[0];
+	
 	const setTipoPrestamo = agent.context.get('settipoprestamo');
 	const setNombreClienteContext = agent.context.get('setnombrecliente');
 

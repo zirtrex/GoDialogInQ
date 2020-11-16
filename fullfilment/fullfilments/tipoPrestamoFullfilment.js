@@ -7,6 +7,7 @@ const prestamoClienteService = require("../services/prestamoClienteService");
 
 const logger = require("../utils/loggerUtil");
 const messagesUtil = require("../utils/messagesUtil");
+const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
 
 var tipoPrestamoFullfilment = {};
 
@@ -23,28 +24,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
 
         var idTipoPrestamo;
 
-        /*if (typeof setTipoPrestamoPrevContext !== 'undefined') {
-
-            idTipoPrestamo = setTipoPrestamoPrevContext.parameters['idTipoPrestamo'];
-            nombreTipoPrestamo = setTipoPrestamoPrevContext.parameters['nombreTipoPrestamo'];
-
-            const existingContext = agent.context.get('settipoprestamo');
-            agent.context.set({
-                'name': existingContext.name,
-                'lifespan': 50,
-                'parameters' : {
-                    'idTipoPrestamo': idTipoPrestamo,
-                    'tipoPrestamo': nombreTipoPrestamo,
-                    'tipoPrestamo.original': nombreTipoPrestamOriginal
-                }
-            });
-
-            agent.add("Ya has elegido: " + nombreTipoPrestamo);
-            agent.add("¿Estás interesado en este préstamo?");
-
-        } else {*/
-
-            var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
+        var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
 
             if (response.status == "success") {
 
@@ -61,6 +41,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
                     }
                 });
 
+               
                 console.log(existingContext);
 
                 if (existingContext.parameters['tipoPrestamo'] == existingContext.parameters['tipoPrestamo.original']) {
@@ -121,8 +102,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
                 console.log("Prompt:" + REPROMPT_COUNT);
                 
             }
-       /* } */
-        
+            
     } catch (error) {
         console.log(error);
         logger.debug(error);        
@@ -192,37 +172,9 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
                     agent.add(nombres + " " + apellidos);
                     var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
                     if (message == "") {
-                        const setPrestamoClienteContext = agent.context.get('setprestamocliente');
-        
-                        if (typeof setPrestamoClienteContext !== 'undefined') {
-        
-                            const setClienteContext = agent.context.get('setcliente');
-                
-                            if (typeof setClienteContext !== 'undefined') {
-                
-                                if (setClienteContext.parameters['telefono'] == "") {
-                                    agent.add("Ingrese por favor su teléfono.");
-                                } else if (setClienteContext.parameters['correo'] == "") {
-                                    agent.add("Ingrese por favor su correo.");
-                                } else {
-                                    var tiempoNegocio = setPrestamoClienteContext.parameters['tiempoNegocio'];
-                                    var ingresosAnuales = setPrestamoClienteContext.parameters['ingresosAnuales'];
-                                    var puntajeCredito = setPrestamoClienteContext.parameters['puntajeCredito'];
-                                    //tiempoNegocio > 1 && 
-                                    if (ingresosAnuales > 5000 && puntajeCredito > 500) {
-                                        agent.add("Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.");
-                                    } else {
-                                        agent.add('Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion');
-                                    }
-                                    agent.clearOutgoingContexts();
-                                }
-                            } else {
-                                agent.add("Ingrese por favor su teléfono.");
-                            }
-                            
-                        } else {
-                            agent.add('');
-                        }
+
+                        agent.add(prestamoClienteUtil.getValidatePrestamoCliente("",agent));
+
                     } else {        
                         agent.add(message);
                     }

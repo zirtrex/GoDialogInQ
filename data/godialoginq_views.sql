@@ -27,7 +27,7 @@ AS
  pc.queNegocioTiene, 
  pc.comoVaUsar, 
  pc.cuanRapidoNecesita,
- (CASE WHEN (CAST(pc.ingresosAnuales AS DECIMAL(18,2))>5000 AND CAST(pc.puntajeCredito AS DECIMAL(18,2))>500) THEN 'Califica para el préstamo' ELSE 'No calificas' END)calificacion
+ (CASE WHEN (CAST(pc.ingresosAnuales AS DECIMAL(18,2))>=5000 AND CAST(pc.puntajeCredito AS DECIMAL(18,2))>=500) THEN 'Califica para el préstamo' ELSE 'No calificas' END)calificacion
  FROM prestamo_cliente pc
  INNER JOIN cliente c ON pc.idCliente=c.idCliente
  INNER JOIN tipo_prestamo tp ON tp.idTipoPrestamo=pc.idTipoPrestamo
