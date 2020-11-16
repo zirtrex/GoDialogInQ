@@ -93,26 +93,28 @@ function serverMessage(response2) {
 
 }
 
-function fetchmsg(){
+function fetchmsg() {
 
     //var url = 'http://localhost:8080/send-message';
     //var url = window.location.hostname + '/send-message'; 
     var url = window.location.protocol + "//" + window.location.host + "/send-message";
     //var url = 'https://662dfdc8223a.ngrok.io/send-msg';
+
+    console.log(url);
       
     const data = new URLSearchParams();
     for (const pair of new FormData(document.getElementById("mymsg"))) {
         data.append(pair[0], pair[1]);
         console.log(pair);
     }    
-    console.log("message: ", data);
+    //console.log("message: ", data);
 
     fetch(url, {
         method: 'POST',
         body: data
     }).then(res => res.json())
     .then(response => {
-        console.log(response);
+        //console.log(response);
         serverMessage(response.Reply);
         
     })

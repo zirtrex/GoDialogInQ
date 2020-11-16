@@ -1,21 +1,28 @@
-require('events').EventEmitter.prototype._maxListeners = 0;
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var bodyParser = require('body-parser');
+'use strict';
 
-var log4js = require('log4js');
+const express = require('express');
+const http = require('http');
+const path = require('path');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-log4js.configure({
-  appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
-  categories: { default: { appenders: ['cheese'], level: 'debug' } }
+const app = express();
+const server = http.Server(app); //createServer
+const debug = require('debug')('myapp:server');
+
+const COOKIE_SECRET = 'godialoginq';
+const COOKIE_NAME = 'godialoginq_sid';
+
+const sessionMiddleware = session({
+    name: COOKIE_NAME,
+    secret: COOKIE_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    name: 'express.sid',
+    key: 'express.sid',
+    cookie: { secure: true }
 });
-
-const logger = log4js.getLogger('cheese');
-
-var app = express();
-var server = http.Server(app); //createServer
-var debug = require('debug')('myapp:server');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +31,8 @@ app.set('view engine', 'pug');
 var port = normalizePort(process.env.PORT || '8082');
 app.set('port', port);
 
+app.use(cookieParser());
+app.use(sessionMiddleware);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -49,41 +58,29 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error.pug');
+  res.send('Ha ocurrido un error');
 });
 
-
-/**
- * Listen on provided port, on all network interfaces.
- */
 server.listen(port, () => {
     console.log('Server on Port: ' + port)
 });
+
 server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Normalize a port into a number, string, or false.
- */
 function normalizePort(val) {
     var port = parseInt(val, 10);
 
     if (isNaN(port)) {
-        // named pipe
         return val;
     }
 
     if (port >= 0) {
-        // port number
         return port;
     }
 
     return false;
 }
-
-/**
- * Event listener for HTTP server "error" event.
- */
 
 function onError(error) {
     if (error.syscall !== 'listen') {
@@ -94,7 +91,6 @@ function onError(error) {
         ? 'Pipe ' + port
         : 'Port ' + port;
 
-    // handle specific listen errors with friendly messages
     switch (error.code) {
         case 'EACCES':
             console.error(bind + ' requires elevated privileges');
@@ -109,10 +105,6 @@ function onError(error) {
     }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
 function onListening() {
     var addr = server.address();
     var bind = typeof addr === 'string'
@@ -120,6 +112,5 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-
 
 module.exports = app;
