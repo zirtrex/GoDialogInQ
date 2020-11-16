@@ -4,7 +4,7 @@ Chat
 .chat {
   width: 100%;
   height: 100vh;
-  max-height: 600px;
+  max-height: 500px;
   z-index: 2;
   overflow: hidden;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
@@ -44,6 +44,7 @@ Messages
   position: relative;
   width: 100%;
 }
+
 .messages .messages-content {
   position: relative;
   top: 0;
@@ -52,24 +53,27 @@ Messages
   width: 100%;
 }
 .messages .message {
-  clear: both;
-  float: left;
-  padding: 6px 10px 7px;
-  border-radius: 10px 10px 10px 0;
-  background: rgba(0, 0, 0, 0.3);
-  margin: 8px 0;
-  line-height: 1.4;
-  margin-left: 15px;
-  margin-right: 50px;
-  position: relative;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    clear: both;
+    float: left;
+    padding: 6px 10px 7px;
+    border-radius: 10px 10px 10px 0;
+    background: rgba(0, 0, 0, 0.3);
+    margin: 8px 0;
+    line-height: 1.4;
+    margin-left: 15px;
+    margin-right: 50px;
+    position: relative;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    max-width: 280px;
 }
+
 .messages .message .timestamp {
   position: relative;
   bottom: -15px;
   font-size: 9px;
   color: rgba(255, 255, 255, 0.3);
 }
+
 .messages .message::before {
   content: '';
   position: relative;
@@ -83,6 +87,7 @@ Messages
   float: right;
   color: #fff;
   text-align: right;
+  margin-right: 15px;
   background: linear-gradient(120deg, #248A52, #257287);
   border-radius: 10px 10px 0 10px;
 }
@@ -137,6 +142,7 @@ Messages
   height: 10px;
   position: relative;
 }
+
 .messages .message.loading span::before {
   position: absolute;
   top: 50%;
@@ -155,6 +161,7 @@ Messages
           animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
   margin-left: -7px;
 }
+
 .messages .message.loading span::after {
   position: absolute;
   top: 50%;
@@ -190,6 +197,7 @@ Message Box
   outline: none !important;
   margin: 0;
 }
+
 .message-box textarea:focus:-webkit-placeholder {
   color: transparent;
 }
@@ -217,25 +225,9 @@ Message Box
   transition: background .2s ease;
   margin-top: 0;
 }
+
 .message-box .message-submit:hover {
   background: #1D7745;
-}
-
-/*--------------------
-Custom Srollbar
---------------------*/
-.mCSB_scrollTools {
-  margin: 1px -3px 1px 0;
-  opacity: 0;
-}
-
-.mCSB_inside > .mCSB_container {
-  margin-right: 0px;
-  padding: 0 10px;
-}
-
-.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
 /*--------------------

@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-image: url('https://2xft2q18oiw21pj6n2ph8hcj-wpengine.netdna-ssl.com/wp-content/uploads/2020/08/imagenes-para-home.jpg');
   background-repeat: no-repeat;
   background-position: center center;
@@ -17,20 +17,10 @@ a {
   color: #00B7FF;
 }
 
-h3{
+h3 {
   font-size: 34px;  
   font-weight: bold;
-}
-
-.uk-container-2{
-    background-color: rgba(255,255,255,0.9);
-    padding: 30px 40px;
-    border-radius: 50px;
-}
-
-#contenedor div{
-    overflow: hidden;
-    max-height: 100vh;
+  margin-bottom: 5px;
 }
 
 .uk-grid-small > * {
@@ -107,29 +97,4 @@ h3{
 .uk-navbar-center h2{
   font-family: "StardosStencil";
   margin-top: 20px;
-}
-
-.bounce-enter .modulo{
-    animation: bounce-in 2.5s;	
-}
-.bounce-enter-active .modulo{
-  animation: bounce-in 2.5s;
-}
-.bounce-leave-active .modulo{
-  animation: bounce-in 2.5s reverse;
-}
-.bounce-leave .modulo{
-  animation: bounce-in 2.5s reverse;
-}
-
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
 }

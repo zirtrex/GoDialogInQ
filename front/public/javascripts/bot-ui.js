@@ -32,11 +32,13 @@ function listendom(no){
     insertMessage();
 }
 
-$(window).load(function() {
-    autoScroll(".messages");
+$(window).load(function() {    
+    
+    serverMessage("Hola, soy GodialogInq, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
+    
     setTimeout(function() {
-        serverMessage("Hola, soy GodialogInq, y te atenderé para que puedas obtener el mejor préstamo y en menor tiempo.");
-    }, 100);
+        serverMessage("¿Indicanos en que podemos ayudarte?");
+    }, 3000);
 
 });
 
@@ -103,7 +105,7 @@ function fetchmsg() {
     const data = new URLSearchParams();
     for (const pair of new FormData(document.getElementById("mymsg"))) {
         data.append(pair[0], pair[1]);
-        console.log(pair);
+        //console.log(pair);
     }    
     //console.log("message: ", data);
 
