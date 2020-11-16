@@ -18,7 +18,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
 
     const idSession = agent.session.split("/").reverse()[0];
   
-    var verificarTipoPrestamo =  tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
+    var verificarTipoPrestamo = await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
 
     if (verificarTipoPrestamo) {
      
@@ -37,12 +37,15 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
     
     const idSession = agent.session.split("/").reverse()[0];
 
-    var idTipoPrestamo = response.result[0].idTipoPrestamo;
     var textValidateTipoPrestamo = tipoPrestamoUtil.getValidateTipoPrestamo(idSession, agent);
 
     if (textValidateTipoPrestamo != "") {
 
         try {
+            
+            var idTipoPrestamo = agent.context.get('settipoprestamo').parameters['idTipoPrestamo'];
+            var nombreTipoPrestamo = agent.context.get('settipoprestamo').parameters['tipoPrestamo'];
+
             var response = await requisitoService.getRequisitosByIdTipoPrestamo(idTipoPrestamo);
 
             if (response.status == "success") {

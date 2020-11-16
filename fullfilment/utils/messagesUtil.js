@@ -1,3 +1,4 @@
+'use strict';
 
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");

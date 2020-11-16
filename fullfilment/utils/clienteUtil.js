@@ -1,5 +1,4 @@
-
-'user strict';
+'use strict';
 
 var clienteUtil = {};
 
@@ -46,8 +45,6 @@ clienteUtil.getValidatePhoneNumber = function (telefono)
     }
    
 }
-
-
 
 clienteUtil.getValidateNombres = function (idSession, agent)
 {

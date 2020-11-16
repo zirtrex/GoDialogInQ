@@ -13,7 +13,7 @@ requisitoService.getRequisitosByIdTipoPrestamo = async function (idTipoPrestamo)
   	try {
 		var request = await fetch(urlBase + '/requisito/tipo_prestamo/' + idTipoPrestamo);
 		var response = await request.json();
-		console.log(response);
+		
 		return response;
 	} catch (error) {
 		console.log(error);
