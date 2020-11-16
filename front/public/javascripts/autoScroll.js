@@ -16,7 +16,7 @@ function debounce(func, wait, immediate) {
 function autoScroll(selector) {
 
     var el = document.querySelector(selector);
-    console.log(el);
+    //console.log(el);
     el.scrollTop = el.scrollHeight;
 
     /* var scrollAttempts = 0;
