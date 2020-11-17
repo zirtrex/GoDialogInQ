@@ -1,12 +1,11 @@
 {
   "name": "godialoginq-front",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "engines": {
     "node": "10"
   },
   "scripts": {
-    "dev": "nodemon --inspect ./bin/www.js",
     "start": "node ./bin/www.js"
   },
   "dependencies": {
@@ -20,7 +19,5 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "ngrok": "^3.3.0",
-    "nodemon": "^1.19.4"
   }
 }

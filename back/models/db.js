@@ -3,19 +3,29 @@ const mysql = require('mysql');
 
 const config = require('config');
 
-console.log(config);
+const {
+  MYSQL_HOST,
+  MYSQL_USER,
+  MYSQL_ROOT_PASSWORD,
+  MYSQL_DATABASE,
+  MYSQL_PORT
+} = process.env;
+
+console.log(process.env);
 
 var pool = mysql.createPool({
     connectionLimit: 10,
-    host     : config.get("mysql_connection.host"),
-    port     : config.get("mysql_connection.port"),
-    user     : config.get("mysql_connection.user"),
-    password : config.get("mysql_connection.password"),
-    database : config.get("mysql_connection.database")
+    host     : MYSQL_HOST,
+    port     : MYSQL_PORT,
+    user     : MYSQL_USER,
+    password : MYSQL_ROOT_PASSWORD,
+    database : MYSQL_DATABASE,
+    charset: "utf8_general_ci"
 });
 
 pool.getConnection((err, connection) => {
   if (err) {
+    console.log(err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       console.error('Database connection was closed.');
     }
@@ -28,6 +38,7 @@ pool.getConnection((err, connection) => {
   }
 
   if (connection) {
+    //console.error(connection);
     connection.release();
   }
 

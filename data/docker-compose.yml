@@ -1,6 +1,7 @@
 version: '2'
 services:
   mysql:
+    container_name: godialoginq_mysql_pre
     image: 'mysql'
     restart: always
     volumes:

@@ -10,6 +10,7 @@ USER node
 
 RUN npm install
 
+#COPY --chown=node:node ./fullfilment/. .
 COPY --chown=node:node ./. .
 
 ARG GITHUB_SHA
@@ -20,9 +21,9 @@ ENV REF=$GITHUB_REF
 RUN sed -i 's,SHA,'"$GITHUB_SHA"',' app.js
 RUN sed -i 's,REF,'"$GITHUB_REF"',' app.js
 
-ENV PORT=8082
+ENV PORT=8083
 ENV NODE_ENV=development
 
-EXPOSE 8082
+EXPOSE 8083
 
 CMD [ "npm", "start" ]

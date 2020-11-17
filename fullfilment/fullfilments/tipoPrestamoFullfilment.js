@@ -8,7 +8,7 @@ const prestamoClienteService = require("../services/prestamoClienteService");
 const logger = require("../utils/loggerUtil");
 const messagesUtil = require("../utils/messagesUtil");
 const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
-const prompUtil = require("../utils/promptUtil");
+const promptUtil = require("../utils/promptUtil");
 const tipoPrestamoUtil = require("../utils/tipoPrestamoUtil");
 const clienteUtil = require("../utils/clienteUtil");
 
@@ -27,7 +27,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
     } else {
 
         //Cuando el tipo de prestamo no existe
-        prompUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
+        await promptUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
                 
     }
     
@@ -55,7 +55,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
                     agent.add(" " + object.descripcionRequisito);
                 });		
                 
-                var textValidateNombres = clienteUtil.getValidateNombres(idSession,agent);
+                var textValidateNombres = clienteUtil.getValidateNombres(idSession, agent);
 
                 if (textValidateNombres != "") {
 
@@ -82,9 +82,9 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
             agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
         }
 
-    }else {
+    } else {
 
-		prompUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
+		promptUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
 	}
 
     

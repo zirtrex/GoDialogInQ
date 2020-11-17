@@ -1,4 +1,5 @@
 'use strict';
+
 const logger = require("../utils/loggerUtil");
 
 const tipoPrestamoService = require("../services/tipoPrestamoService");

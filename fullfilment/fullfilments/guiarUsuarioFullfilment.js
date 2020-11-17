@@ -1,5 +1,7 @@
 'use strict';
+
 const util = require("util");
+
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
 const clienteService = require("../services/clienteService");
@@ -16,7 +18,11 @@ var guiarUsuarioFullfilment = {};
 
 var responseGuiarUsuario;
 
-checkGuiarUsuarioResponse = async function (agent, response, last) {
+var delay = async function (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));    
+}
+
+var checkGuiarUsuarioResponse = async function (agent, response, last) {
  
     console.log("checkResponse");
 	console.log(response);
@@ -51,6 +57,7 @@ checkGuiarUsuarioResponse = async function (agent, response, last) {
 	} else {
 		if (!last) {
 			console.log('Yendo al intent 2');
+			agent.add('Espere por favor.');
 
 			agent.setFollowupEvent({
 				"name": "guiar_usuario_event",
@@ -64,11 +71,9 @@ checkGuiarUsuarioResponse = async function (agent, response, last) {
  
 }
 
-delay = async function (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));    
-}
-
 guiarUsuarioFullfilment.guiarUsuario = async function (agent) {
+
+	const idSession = agent.session.split("/").reverse()[0];
 
     try {
 		responseGuiarUsuario = tipoPrestamoService.getAll();
@@ -76,7 +81,7 @@ guiarUsuarioFullfilment.guiarUsuario = async function (agent) {
 		console.log("Estamos experimentando problemas, intenta de nuevo por favor.");
     }
 
-	return delay(1000).then(() => {
+	return delay(3000).then(() => {
         console.log("Dentro del setTimeout");
         checkGuiarUsuarioResponse(agent, responseGuiarUsuario, false);
         //return delay(10);
@@ -88,51 +93,36 @@ guiarUsuarioFullfilment.guiarUsuario = async function (agent) {
 guiarUsuarioFullfilment.guiarUsuarioEvent = async function (agent) {
 
     console.log("Event");
-	checkGuiarUsuarioResponse(agent,responseGuiarUsuario, true);
+	checkGuiarUsuarioResponse(agent, responseGuiarUsuario, true);
 
 }
 
 guiarUsuarioFullfilment.guiarUsuarioElegirPrestamo = async function (agent) {
 
-    var nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo'];
+	const idSession = agent.session.split("/").reverse()[0];
+
+    //var nombreTipoPrestamo = agent.request_.body.queryResult.outputContexts[0].parameters['tipoPrestamo'];
 
 	let frasesResponses = [];
 	frasesResponses.push("¿Quieres continuar con este préstamo?");
 	frasesResponses.push("Confírmanos si el préstamo de tu interés");
 	frasesResponses.push("¿Proseguimos con este préstamo?");
+	
+	var verificarTipoPrestamo = await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
 
-	try {
-		var response = await tipoPrestamoService.getByNombre(nombreTipoPrestamo);
+	if (verificarTipoPrestamo) {
 
-		if (response.status == "success") {
+		var indexRandom = Math.floor(Math.random() * frasesResponses.length);
+		var message = frasesResponses[indexRandom];
 
-			var prestamo = response.result[0];
-			
-			agent.add(prestamo.nombreTipoPrestamo + " :");
-			agent.add(prestamo.descripcionTipoPrestamo);
+		agent.add(message);
 
-            agent.context.set({
-                'name': 'settipoprestamo',
-                'lifespan': 50,
-                'parameters' : { 
-					'idTipoPrestamo': prestamo.idTipoPrestamo,
-					'nombreTipoPrestamo': prestamo.nombreTipoPrestamo
-				}
-            });
+	} else {
 
-			var indexRandom = Math.floor(Math.random() * frasesResponses.length);
-			var message = frasesResponses[indexRandom];
-
-			agent.add(message);
-
-		} else {
-            //PRONT
-			agent.add('El préstamo ingresado no lo tenemos, por favor elige otro.');
-		}
-	} catch (error) {
-		console.log(error);
-		agent.add('Estamos experimentando problemas, intenta de nuevo por favor.');
-  	} 
+		//Cuando el tipo de prestamo no existe
+		await promptUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
+				
+	}
 
 }
 
@@ -142,33 +132,34 @@ guiarUsuarioFullfilment.guiarUsuarioElegirPrestamoSi = async function (agent) {
 	
 	//agent.add(tipoPrestamoUtil.getValidateTipoPrestamo("",agent,"validaCercano"));
 
-	var verificarTipoPrestamo =  await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
+	var textVerifyTipoPrestamo =  tipoPrestamoUtil.verifyTipoPrestamo(idSession, agent);
 
-    if (verificarTipoPrestamo) {
+    if (textVerifyTipoPrestamo != "") {
 
-		if (typeof setNombreClienteContext === "undefined") {
-		
-			agent.add('Por favor ingresa tus nombres');
-			
-		} else {
-		
+		agent.add(textVerifyTipoPrestamo);
+
+		var textVerifyNombres = clienteUtil.verifyNombres(idSession, agent);
+
+		if (textVerifyNombres != "") {
+
 			var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-			
-			if(message=="") {
-				
-				prestamoClienteUtil.getValidatePrestamoCliente(idSession, agent);
-			}else {
-	
-				agent.add(message);
+			if (message == "") {
+
+				response = prestamoClienteUtil.getValidatePrestamoCliente("",agent);
+
+			} else {        
+				response = message;
 			}
+		}else {
 			
+			agent.add("Si deseas continuar, por favor ingresa tus nombres");
 		}
 
-	}else {
+	} else {
 
-		prompUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
-	}
-	
+		await promptUtil.getPromptTipoPrestamo(agent, "settipoprestamo");
+		
+	}	
 
 }
 

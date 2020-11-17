@@ -11,17 +11,17 @@ const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
 
 var tipoPrestamoUtil = {};
 
-tipoPrestamoUtil.getValidateTipoPrestamo = function (idSession, agent)
-{
+tipoPrestamoUtil.verifyTipoPrestamo = function (idSession, agent) {
+
     let response="";
 
     var setTipoPrestamoContext = agent.context.get('settipoprestamo');
 
     if (typeof setTipoPrestamoContext !== 'undefined') {
+
         var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
         var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];
-        var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];  
-        
+        var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];        
                                 
         if (idTipoPrestamo != "" || idTipoPrestamo != null) {
 

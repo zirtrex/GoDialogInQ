@@ -1,15 +1,21 @@
-var express = require('express');
-var http = require('http');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
+'use strict';
 
-var app = express();
-var server = http.Server(app); //createServer
-var debug = require('debug')('myapp:server');
+const express = require('express');
+const http = require('http');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const config = require('config');
+
+console.log(config);
+
+const app = express();
+const server = http.Server(app); //createServer
+const debug = require('debug')('myapp:server');
+
 
 app.use(methodOverride("_method"));
 
-var port = normalizePort(process.env.PORT || '8083');
+const port = normalizePort(process.env.PORT || '8083');
 app.set('port', port);
 
 app.use(bodyParser.json());
@@ -24,10 +30,10 @@ app.use((req, res, next) => {
     next();
 });
 
-//imports
+//imports routes
 const index = require('./routes/index');
 
-//routes
+//add routes
 app.use(index);
 
 // catch 404 and forward to error handler

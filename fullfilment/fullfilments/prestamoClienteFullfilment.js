@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
@@ -82,7 +82,7 @@ prestamoClienteFullfilment.verifyAndSave = async function (agent, requisito) {
 			cuanRapidoNecesita = setCuanRapidoNecesitaContext.parameters['cuanRapidoNecesita.original'];
 		}
 
-		TipoPrestamo = {
+		const TipoPrestamo = {
 			"idSession": idSession,
 			"montoNecesitado": montoNecesitado,
 			"tiempoNegocio": tiempoNegocio,

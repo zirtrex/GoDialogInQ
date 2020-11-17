@@ -20,9 +20,9 @@ ENV REF=$GITHUB_REF
 RUN sed -i 's,SHA,'"$GITHUB_SHA"',' app.js
 RUN sed -i 's,REF,'"$GITHUB_REF"',' app.js
 
-ENV PORT=8082
+ENV NODE_PORT=8081
 ENV NODE_ENV=development
 
-EXPOSE 8082
+EXPOSE 8081
 
-CMD [ "npm", "start" ]
+CMD ./wait-for-it.sh db:3306 -- npm start

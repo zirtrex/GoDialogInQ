@@ -3,13 +3,28 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res) {
+const dialogflow = require('@google-cloud/dialogflow');
+const uuid = require('uuid');
+
+const projectId = 'text-to-speech-api-232719';
+var sessionId;
+const languageCode = 'es-ES';
+
+router.get('/', function(req, res) {	
 
 	/* var fecha = new Date();
 	var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var fechaFormat = days[fecha.getDay()] + " " + months[fecha.getMonth()] + " " + fecha.getDate() + " " + fecha.getFullYear(); */
 
+	console.log(req.sessionID);	
+	
+	/* if (typeof req.session.sessionId === 'undefined') {
+		sessionId = req.sessionID;
+	} else {
+		sessionId = req.session.sessionId;
+	} */
+	
 	res.render('index.pug', {'titulo' : ""});
 });
 
@@ -17,12 +32,10 @@ router.post('/send-message', async function(req, res, next) {
 
 	if (typeof req.body.message !== 'undefined') {
 
-		//req.session.contexts = [];
-
-		//console.log(req.session.contexts);
-		
+		//console.log(req.session.sessionId);
+		sessionId = req.sessionID;
 		var response = await detectTextIntent(req.body.message, req.session.contexts, req);
-			
+	
 		req.session.contexts = response.queryResult.outputContexts;
 
 		if (response.queryResult.fulfillmentMessages) {
@@ -35,13 +48,6 @@ router.post('/send-message', async function(req, res, next) {
 });
 
 async function detectTextIntent(message, contexts, req) {
-
-	const dialogflow = require('@google-cloud/dialogflow');
-	const uuid = require('uuid');
-
-	const projectId = 'text-to-speech-api-232719';
-	const sessionId = uuid.v4();
-	const languageCode = 'es-ES';
 
 	const sessionClient = new dialogflow.SessionsClient({
 		keyFilename: "./InQmatic-AI-Full-Access-56ff8d631b7f.json"

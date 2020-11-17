@@ -1,4 +1,5 @@
-'user strict';
+'use strict';
+
 const tipoPrestamoService = require("../services/tipoPrestamoService");
 const requisitoService = require("../services/requisitoService");
 const clienteService = require("../services/clienteService");
@@ -53,7 +54,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
     }
     
     //Objeto cliente a guardar
-    Cliente = {
+    const Cliente = {
         "idSession": idSession,
         "nombres": nombres,
         "apellidos": apellidos,
@@ -65,7 +66,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
 
         var response = await clienteService.saveOrUpdateCliente(idSession, Cliente);
 
-        if (response.result.affectedRows == 1) {
+        if (response.result.affectedRows >= 1) {
             console.log("Datos del cliente guardados correctamente.");
             var idCliente;
             if (typeof response.result.idCliente === "undefined") {
@@ -88,7 +89,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
             });
 
              //Detectar si ya eligió un tipo de préstamo
-            var textValidateTipoPrestamo = tipoPrestamoUtil.getValidateTipoPrestamo("", agent);
+            var textValidateTipoPrestamo = tipoPrestamoUtil.verifyTipoPrestamo(idSession, agent);
 
             if (textValidateTipoPrestamo != ""){
 
@@ -109,41 +110,7 @@ clienteFullfilment.verifyAndSave = async function (agent) {
                 agent.add(saludo + " " + nombres + " " + apellidos + ", gracias por escribirnos");
                 agent.add("¿En qué préstamo estás interesado?");
 
-            }
-            //Detectar si ya eligió un tipo de préstamo
-            /* var setTipoPrestamoContext = agent.context.get('settipoprestamo');
-
-            if (typeof setTipoPrestamoContext !== 'undefined') {
-                var idTipoPrestamo = setTipoPrestamoContext.parameters['idTipoPrestamo'];
-                var nombreTipoPrestamo = setTipoPrestamoContext.parameters['tipoPrestamo'];   
-                
-                var nombreTipoPrestamoOriginal = setTipoPrestamoContext.parameters['tipoPrestamo.original'];
-
-                console.log("(Cliente) nombre tipo de prestamo =>> "+nombreTipoPrestamo+" "+nombreTipoPrestamoOriginal);  
-
-                console.log("idPrestamo " + idTipoPrestamo);
-                
-                if (idTipoPrestamo != "" || idTipoPrestamo != null) {
-                    agent.add("Has elegido: " + nombreTipoPrestamo);
-                    var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
-                    console.log(message);
-
-                    if (message == "") {
-
-                        agent.add(prestamoClienteUtil.getValidatePrestamoCliente("",agent));
-
-                    } else {
-                        
-                        agent.add(message);
-                    }
-                    
-                } else {
-                    agent.add("¿En qué préstamo estás interesado?");
-                }
-            } else {				
-                agent.add("¿En qué préstamo estás interesado?");
-            } */
-            
+            }            
         }
         
     } catch (error) {
