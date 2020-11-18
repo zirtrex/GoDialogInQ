@@ -4,10 +4,17 @@ const fetch = require('node-fetch');
 const logger = require("../utils/loggerUtil");
 const { performance, PerformanceObserver } = require('perf_hooks');
 const config = require('config');
+//const urlBase = config.get("ipServidor");
 
 var tipoPrestamoService = {};
 
-const urlBase =  process.env.BACK_HOST || config.get("ipServidor");
+const {
+	BACK_PROTOCOL,
+    BACK_HOST,
+    BACK_PORT
+} = process.env;
+
+const urlBase =  BACK_PROTOCOL + "://" + BACK_HOST + ":" + BACK_PORT;
 
 tipoPrestamoService.getAll = async function () {
 	try {

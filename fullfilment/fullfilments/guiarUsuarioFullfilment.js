@@ -105,12 +105,14 @@ guiarUsuarioFullfilment.guiarUsuarioElegirPrestamo = async function (agent) {
 
 	let frasesResponses = [];
 	frasesResponses.push("¿Quieres continuar con este préstamo?");
-	frasesResponses.push("Confírmanos si el préstamo de tu interés");
+	frasesResponses.push("Confírmanos si el préstamo es de tu interés");
 	frasesResponses.push("¿Proseguimos con este préstamo?");
 	
-	var verificarTipoPrestamo = await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
+	var verificarTipoPrestamo = await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(agent);
 
 	if (verificarTipoPrestamo) {
+
+		agent.add(verificarTipoPrestamo.descripcionTipoPrestamo);
 
 		var indexRandom = Math.floor(Math.random() * frasesResponses.length);
 		var message = frasesResponses[indexRandom];
@@ -120,7 +122,7 @@ guiarUsuarioFullfilment.guiarUsuarioElegirPrestamo = async function (agent) {
 	} else {
 
 		//Cuando el tipo de prestamo no existe
-		await promptUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
+		await promptUtil.getPromptTipoPrestamo(agent, "settipoprestamo_prompt");
 				
 	}
 
@@ -132,35 +134,59 @@ guiarUsuarioFullfilment.guiarUsuarioElegirPrestamoSi = async function (agent) {
 	
 	//agent.add(tipoPrestamoUtil.getValidateTipoPrestamo("",agent,"validaCercano"));
 
-	var textVerifyTipoPrestamo =  tipoPrestamoUtil.verifyTipoPrestamo(idSession, agent);
+	var textVerifyTipoPrestamo =  tipoPrestamoUtil.verifyTipoPrestamo(agent);
 
     if (textVerifyTipoPrestamo != "") {
 
 		agent.add(textVerifyTipoPrestamo);
 
-		var textVerifyNombres = clienteUtil.verifyNombres(idSession, agent);
+		var textVerifyNombres = clienteUtil.verifyNombres(agent);
 
 		if (textVerifyNombres != "") {
 
 			var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+
 			if (message == "") {
 
-				response = prestamoClienteUtil.getValidatePrestamoCliente("",agent);
+				var textVerifyPrestamoCliente = prestamoClienteUtil.getValidatePrestamoCliente(agent);
+
+				if (textVerifyPrestamoCliente != "") {
+					agent.add("Gracias");		
+				} else {
+					agent.add(textVerifyPrestamoCliente);
+				}
 
 			} else {        
-				response = message;
+				agent.add(message);
 			}
-		}else {
+		} else {
 			
-			agent.add("Si deseas continuar, por favor ingresa tus nombres");
+			agent.add("Si deseas continuar");
+			agent.add(messagesUtil.getMessageForNombres());
 		}
 
 	} else {
 
-		await promptUtil.getPromptTipoPrestamo(agent, "settipoprestamo");
+		await promptUtil.getPromptTipoPrestamo(agent, "settipoprestamo_prompt");
 		
-	}	
+	}
+}
 
+guiarUsuarioFullfilment.guiarUsuarioConsultarPrestamo = async function (agent) {
+	
+	var verificarTipoPrestamo = await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(agent);
+
+	if (verificarTipoPrestamo) {
+		
+		agent.add(verificarTipoPrestamo.descripcionTipoPrestamo);
+
+		agent.add(messagesUtil.getDescriptionPrestamo());
+
+	} else {
+		agent.add('Lo sentimos el préstamo indicado no lo tenemos disponible');
+	}
+
+	 
 }
 
 module.exports = guiarUsuarioFullfilment;

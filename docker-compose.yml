@@ -52,6 +52,7 @@ services:
     restart: always
     environment:
       - BACK_HOST=back
+      - BACK_PORT=8081
     ports:
       - '8083:8083'
     networks:

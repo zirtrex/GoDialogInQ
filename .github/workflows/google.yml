@@ -18,7 +18,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-godialoginq    # TODO: update to cluster name
+  GKE_CLUSTER: cluster-godialoginq-front    # TODO: update to cluster name
   GKE_ZONE: us-central1-a   # TODO: update to cluster zone
   DEPLOYMENT_NAME: godialoginq-front # TODO: update to deployment name
   IMAGE: godialoginq-front

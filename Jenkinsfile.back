@@ -81,10 +81,6 @@ def dockerCmd(args) {
 	sh "docker ${args}"
 }
 
-def dockerComposeCmd(args) {
-	sh "docker-compose ${args}"
-}
-
 def getReleasedVersion() {
 
 	def props = readJSON file: './back/package.json'

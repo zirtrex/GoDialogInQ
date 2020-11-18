@@ -16,7 +16,7 @@ var debug = require('debug')('myapp:server');
 
 app.use(methodOverride("_method"));
 
-var port = normalizePort(process.env.NODE_PORT || '8081');
+var port = normalizePort(process.env.PORT || '8081');
 app.set('port', port);
 
 app.use(bodyParser.json());

@@ -1,12 +1,5 @@
 'use strict';
 
-const tipoPrestamoService = require("../services/tipoPrestamoService");
-const requisitoService = require("../services/requisitoService");
-const clienteService = require("../services/clienteService");
-const prestamoClienteService = require("../services/prestamoClienteService");
-
-const logger = require("./loggerUtil");
-
 var messagesUtil = {};
 
 messagesUtil.getFieldsByComplete = function (idSession, agent) {
@@ -50,14 +43,14 @@ messagesUtil.getFieldsByComplete = function (idSession, agent) {
 
 messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent) {
     let answers = [];
-	answers.push(['montoNecesitado', "¿Qué monto necesitas? (dólares)"]);
-	answers.push(['montoNecesitado', "¿Cuál es el monto requerido? (dólares)"]);
+	answers.push(['montoNecesitado', "¿Qué monto necesitas? (Ejemplo: Necesito 5000 dólares)"]);
+	answers.push(['montoNecesitado', "¿Cuál es el monto requerido? (Ejemplo: Necesito 5000 dólares)"]);
 	answers.push(['tiempoNegocio', "¿Qué tiempo tienes en el negocio? (Indique meses o años)"]);
 	answers.push(['tiempoNegocio', "¿Cuánto tiempo tienes en el negocio? (Indique meses o años)"]);
-	answers.push(['ingresosAnuales', "¿Cuáles son tus ingresos anuales? (dólares)"]);
-	answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio? (dólares)"]);
-	answers.push(['puntajeCredito', "¿Cuál es tu puntaje de crédito? (300 y 850 puntos)"]);
-	answers.push(['puntajeCredito', "¿Cuál es tu fico score? (300 y 850 puntos)"]);
+	answers.push(['ingresosAnuales', "¿Cuáles son tus ingresos anuales? (Ejemplo: Mis ingresos son 50000 dólares)"]);
+	answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio? (Ejemplo: Mis ingresos son 50000 dólares)"]);
+	answers.push(['puntajeCredito', "¿Cuál es tu puntaje de crédito? (Entre 300 y 850 puntos)"]);
+	answers.push(['puntajeCredito', "¿Cuál es tu fico score? (Entre 300 y 850 puntos)"]);
 	answers.push(['queNegocioTiene', "¿Qué negocio tienes?"]);
 	answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio?"]);
 	answers.push(['comoVaUsar', "¿Cómo vas a usar el dinero?"]);
@@ -97,7 +90,7 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 
 messagesUtil.getMessageForNombres = function () {
     let answers = [];
-	answers.push("Hola, indicanos tu nombre por favor.");
+	answers.push("Indicanos tu nombre por favor.");
 	answers.push("Por favor indicanos tu nombre.");
 	answers.push("¿Cuál es tu nombre?");
 
@@ -108,9 +101,34 @@ messagesUtil.getMessageForNombres = function () {
 
 messagesUtil.getMessageForTipoPrestamo = function () {
     let answers = [];
-	answers.push("Hola, indicanos el préstamo de tu interés.");
+	answers.push("Indicanos el préstamo de tu interés.");
+	answers.push("¿Cuál es el préstamo que estás interesado?");
 	answers.push("Por favor indicanos el préstamo de tu interés.");
 	answers.push("¿Qué préstamo deseas?");
+
+	var message = answers[Math.floor(Math.random() * answers.length)];
+
+	return message;
+}
+
+messagesUtil.getDescriptionForFICO = function () {
+    let answers = [];
+	answers.push("El puntaje de crédito es básicamente un medidor o un record de comportamiento financiero, es una calificación.");
+	answers.push("Esta calificación varia entre 300 y 850 puntos y en Estados Unidos que es una economía basada en crédito, este puntaje es uno de los datos más importantes de cualquier persona.");
+	answers.push("Normalmente, las aplicaciones bancarias que tienes en tu celular te permiten inscribirte para monitorear tu puntaje de crédito de manera gratuita y sin afectarlo. También puedes consultarlo en http://creditkarma.com y http://creditchecktotal.com.");
+	answers.push("Puedes obtener mas informacion en: https://inqmatic.com/10-preguntas-sobre-el-puntaje-de-credito/");
+
+	var message = answers[Math.floor(Math.random() * answers.length)];
+
+	return message;
+}
+
+messagesUtil.getDescriptionPrestamo = function () {
+    let answers = [];
+	answers.push("¿Tienes alguna otra duda?");
+	answers.push("¿Deseas alguna otra información?");
+	answers.push("¿Te podemos ayudar en algo más?");
+	answers.push("¿Qué más necesitas?");
 
 	var message = answers[Math.floor(Math.random() * answers.length)];
 

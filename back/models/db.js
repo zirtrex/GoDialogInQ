@@ -1,26 +1,28 @@
 const util = require('util');
 const mysql = require('mysql');
 
+const dotenv = require('dotenv').config();
 const config = require('config');
+//config.get('mysql_connection.database');
 
 const {
   MYSQL_HOST,
   MYSQL_USER,
-  MYSQL_ROOT_PASSWORD,
+  MYSQL_PASSWORD,
   MYSQL_DATABASE,
   MYSQL_PORT
 } = process.env;
 
-console.log(process.env);
+//console.log(process.env);
 
 var pool = mysql.createPool({
     connectionLimit: 10,
     host     : MYSQL_HOST,
     port     : MYSQL_PORT,
     user     : MYSQL_USER,
-    password : MYSQL_ROOT_PASSWORD,
+    password : MYSQL_PASSWORD,
     database : MYSQL_DATABASE,
-    charset: "utf8_general_ci"
+    charset  : "utf8_general_ci"
 });
 
 pool.getConnection((err, connection) => {

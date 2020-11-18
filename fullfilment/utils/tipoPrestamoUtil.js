@@ -11,9 +11,9 @@ const prestamoClienteUtil = require("../utils/prestamoClienteUtil");
 
 var tipoPrestamoUtil = {};
 
-tipoPrestamoUtil.verifyTipoPrestamo = function (idSession, agent) {
+tipoPrestamoUtil.verifyTipoPrestamo = function (agent) {
 
-    let response="";
+    let response = "";
 
     var setTipoPrestamoContext = agent.context.get('settipoprestamo');
 
@@ -25,7 +25,7 @@ tipoPrestamoUtil.verifyTipoPrestamo = function (idSession, agent) {
                                 
         if (idTipoPrestamo != "" || idTipoPrestamo != null) {
 
-            if (nombreTipoPrestamo == nombreTipoPrestamoOriginal) {
+            if (nombreTipoPrestamo.toLowerCase() == nombreTipoPrestamoOriginal.toLowerCase()) {
                 response = "Has elegido: " + nombreTipoPrestamo;
                 
             } else {
@@ -42,10 +42,7 @@ tipoPrestamoUtil.verifyTipoPrestamo = function (idSession, agent) {
     return response;
 }
 
-
-
-tipoPrestamoUtil.saveAndVerifyTipoPrestamo = async function (idSession, agent)
-{
+tipoPrestamoUtil.saveAndVerifyTipoPrestamo = async function (agent) {
 
     let responseBool = false;
 
@@ -62,6 +59,7 @@ tipoPrestamoUtil.saveAndVerifyTipoPrestamo = async function (idSession, agent)
         if (response.status == "success") {
 
             idTipoPrestamo = response.result[0].idTipoPrestamo;
+            nombreTipoPrestamo = response.result[0].nombreTipoPrestamo;
         
             agent.context.set({
                 'name': 'settipoprestamo',
@@ -69,11 +67,12 @@ tipoPrestamoUtil.saveAndVerifyTipoPrestamo = async function (idSession, agent)
                 'parameters' : {
                     'idTipoPrestamo': idTipoPrestamo,
                     'tipoPrestamo': nombreTipoPrestamo,
-                    'tipoPrestamo.original': nombreTipoPrestamOriginal
+                    'tipoPrestamo.original': nombreTipoPrestamOriginal,
+                    'nombreTipoPrestamo': nombreTipoPrestamo
                 }
             });
 
-            responseBool = true;
+            responseBool = response.result[0];
         }else
         {
             responseBool = false;

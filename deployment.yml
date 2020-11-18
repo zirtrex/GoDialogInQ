@@ -32,7 +32,7 @@ spec:
       - name: godialoginq-front
         image: gcr.io/PROJECT_ID/IMAGE:TAG
         ports:
-        - containerPort: 8080
+        - containerPort: 8082
         resources:
           requests:
             cpu: 100m

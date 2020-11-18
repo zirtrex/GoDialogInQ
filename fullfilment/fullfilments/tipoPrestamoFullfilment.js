@@ -18,16 +18,15 @@ tipoPrestamoFullfilment.extraerTipoPrestamo = async function (agent) {
 
     const idSession = agent.session.split("/").reverse()[0];
   
-    var verificarTipoPrestamo = await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(idSession, agent);
+    var verificarTipoPrestamo = await tipoPrestamoUtil.saveAndVerifyTipoPrestamo(agent);
 
     if (verificarTipoPrestamo) {
      
         agent.add('¿Estás interesado en este préstamo?');
     
     } else {
-
         //Cuando el tipo de prestamo no existe
-        await promptUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
+        await promptUtil.getPromptTipoPrestamo(agent,"settipoprestamoprompt");
                 
     }
     
@@ -37,9 +36,9 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
     
     const idSession = agent.session.split("/").reverse()[0];
 
-    var textValidateTipoPrestamo = tipoPrestamoUtil.getValidateTipoPrestamo(idSession, agent);
+    var textVerifyTipoPrestamo = tipoPrestamoUtil.verifyTipoPrestamo(agent);
 
-    if (textValidateTipoPrestamo != "") {
+    if (textVerifyTipoPrestamo != "") {
 
         try {
             
@@ -55,19 +54,21 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
                     agent.add(" " + object.descripcionRequisito);
                 });		
                 
-                var textValidateNombres = clienteUtil.getValidateNombres(idSession, agent);
+                var textVerifyNombres = clienteUtil.verifyNombres(agent);
 
-                if (textValidateNombres != "") {
+                //Se validan los nombres
+                if (textVerifyNombres != "") {
 
                     var message = messagesUtil.getMessageForRequisitosPrestamoCliente(idSession, agent);
+                    //Se validan los requisitos
                     if (message == "") {
-        
-                        response = prestamoClienteUtil.getValidatePrestamoCliente("",agent);
+                        //Se valida el préstamo y la calificación
+                        agent.add(prestamoClienteUtil.getValidatePrestamoCliente(agent));
         
                     } else {        
-                        response = message;
+                        agent.add(message);
                     }
-                }else {
+                } else {
                     
                     agent.add("Si deseas continuar, por favor ingresa tus nombres");
                 }
@@ -83,8 +84,7 @@ tipoPrestamoFullfilment.extraerTipoPrestamoInteresadoSi = async function (agent)
         }
 
     } else {
-
-		promptUtil.getPromptTipoPrestamo(agent,"settipoprestamo");
+		await promptUtil.getPromptTipoPrestamo(agent, "settipoprestamo_prompt");
 	}
 
     

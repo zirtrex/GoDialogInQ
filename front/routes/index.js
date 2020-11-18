@@ -17,7 +17,7 @@ router.get('/', function(req, res) {
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var fechaFormat = days[fecha.getDay()] + " " + months[fecha.getMonth()] + " " + fecha.getDate() + " " + fecha.getFullYear(); */
 
-	console.log(req.sessionID);	
+	console.log(req.session.id);
 	
 	/* if (typeof req.session.sessionId === 'undefined') {
 		sessionId = req.sessionID;
@@ -32,9 +32,9 @@ router.post('/send-message', async function(req, res, next) {
 
 	if (typeof req.body.message !== 'undefined') {
 
-		//console.log(req.session.sessionId);
-		sessionId = req.sessionID;
-		var response = await detectTextIntent(req.body.message, req.session.contexts, req);
+		console.log(req.session.id);
+		sessionId = req.session.id;
+		var response = await detectTextIntent(req.body.message, req.session.contexts);
 	
 		req.session.contexts = response.queryResult.outputContexts;
 
@@ -47,7 +47,7 @@ router.post('/send-message', async function(req, res, next) {
 
 });
 
-async function detectTextIntent(message, contexts, req) {
+async function detectTextIntent(message, contexts) {
 
 	const sessionClient = new dialogflow.SessionsClient({
 		keyFilename: "./InQmatic-AI-Full-Access-56ff8d631b7f.json"
@@ -73,10 +73,12 @@ async function detectTextIntent(message, contexts, req) {
 	};
 	  
 	//console.log("1 " + JSON.stringify(contexts));
-	if (contexts && contexts.length > 0) {
-		request.queryParams = {
-			contexts: contexts,
-		};
+	if (typeof contexts !== 'undefined') {
+		if (contexts && contexts.length > 0) {
+			request.queryParams = {
+				contexts: contexts,
+			};
+		}
 	}
 	
 	const intentResponse = await sessionClient.detectIntent(request);

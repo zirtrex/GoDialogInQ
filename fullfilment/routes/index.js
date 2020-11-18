@@ -27,6 +27,7 @@ router.post("/", express.json(), (req, res) => {
 	//Fullfilments para guiar al usuario a elegir un préstamo
 	intentMap.set("Guiar al usuario", guiarUsuarioFullfilment.guiarUsuario);
 	intentMap.set("Guiar al usuario event", guiarUsuarioFullfilment.guiarUsuarioEvent);
+	intentMap.set("Guiar al usuario - consultar prestamo", guiarUsuarioFullfilment.guiarUsuarioConsultarPrestamo);
 	intentMap.set("Guiar al usuario - elegir prestamo", guiarUsuarioFullfilment.guiarUsuarioElegirPrestamo);
 	intentMap.set("Guiar al usuario - elegir prestamo - si", guiarUsuarioFullfilment.guiarUsuarioElegirPrestamoSi);
 	//intentMap.set("Guiar al usuario - elegir prestamo - no", guiarUsuarioFullfilment.guiarUsuarioElegirPrestamo);

@@ -4,14 +4,14 @@ const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const dotenv = require('dotenv').config();
 const config = require('config');
 
-console.log(config);
+//console.log(config);
 
 const app = express();
 const server = http.Server(app); //createServer
 const debug = require('debug')('myapp:server');
-
 
 app.use(methodOverride("_method"));
 
