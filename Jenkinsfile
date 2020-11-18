@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-	/* tools {nodejs "nodejs"} */
+	tools {nodejs "node"}
 	
 	environment {
 		imagename = 'zirtrex/godialoginq'
@@ -16,7 +16,7 @@ pipeline {
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
         }
-		stage('Tests') {
+		stage('Levantar servicios') {
     		steps {
       			echo "Running tests in a fully containerized environment..."
       			
@@ -25,6 +25,19 @@ pipeline {
 				withEnv(["PATH=$PATH:~/.local/bin"]){
 
         			sh "./run_test.sh"
+				}
+      			
+			}
+    	}
+		stage('Tests') {
+    		steps {
+      			echo "Running tests in a fully containerized environment..."
+      			
+				sh "chmod +x -R ${env.WORKSPACE}"
+
+				withEnv(["PATH=$PATH:~/.local/bin"]){
+
+        			sh 'npm test'
 				}
       			
 			}
