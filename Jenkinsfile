@@ -25,10 +25,6 @@ pipeline {
 			}
     	}
   	}
-
-	post {
-		cleanWs()
-	}
 }
 
 def dockerCmd(args) {
