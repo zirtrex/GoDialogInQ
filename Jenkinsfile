@@ -21,7 +21,11 @@ pipeline {
       			echo "Running tests in a fully containerized environment..."
       			
 				sh "chmod +x -R ${env.WORKSPACE}"
-        		sh "./run_test.sh"
+
+				withEnv(["PATH=$PATH:~/.local/bin"]){
+
+        			sh "./run_test.sh"
+				}
       			
 			}
     	}

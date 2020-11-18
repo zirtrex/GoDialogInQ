@@ -33,9 +33,7 @@ mailer
 matrix-project
 maven-plugin
 momentjs
-nested-view
 nodejs
-parameterized-trigger
 pipeline-build-step
 pipeline-graph-analysis
 pipeline-input-step
@@ -50,7 +48,6 @@ pipeline-stage-tags-metadata
 pipeline-stage-view
 pipeline-utility-steps
 plain-credentials
-pmd
 run-condition
 scm-api
 script-security  
