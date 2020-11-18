@@ -27,7 +27,7 @@ describe('Prueba Unitaria Tipo de Prestamo', function () {
   });
 
   it("Devuelve id de tipo de prestamo por nombre", (done) => {
-  const getIdTipoPrestamoByNombre = "Plazo fijo8";
+  const getIdTipoPrestamoByNombre = "Plazo fijo";
   
   chai.request(urlBase)
     .get('/tipo_prestamo/'+ getIdTipoPrestamoByNombre)
@@ -85,8 +85,6 @@ describe('Prueba Unitaria Tipo de Prestamo', function () {
  
 
 }); 
-
-
 
 
 //************ Prueba unitaria API REST Requisito ***********
