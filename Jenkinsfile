@@ -33,15 +33,13 @@ pipeline {
     		steps {
       			echo "Running tests in a fully containerized environment..."
       			
-				sh "chmod +x -R ${env.WORKSPACE}"
+				sh "chmod +x -R ${env.WORKSPACE}"				
 
-				dir ('back') {
+				withEnv(["PATH=$PATH:~/.local/bin"]){
 
-					withEnv(["PATH=$PATH:~/.local/bin"]){
-
-						sh "./run_test.sh"
-					}
+					sh "./run_test.sh"
 				}
+				
       			
 			}
     	}
