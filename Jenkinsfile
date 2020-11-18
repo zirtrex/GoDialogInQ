@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage ('Obtener archivos del repositorio: https://github.com/zirtrex/GoDialogInQ') {
             steps {
-				cleanWs()
+				cleanWs(deleteDirs(true))
                 git 'https://github.com/zirtrex/GoDialogInQ.git'
             }
         }
@@ -44,6 +44,18 @@ pipeline {
 			}
     	}
   	}
+
+	post {
+        always {
+            echo 'Hola!'
+        }
+		success {
+			mail to: "zirtrex@live.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Si, se pasaron las pruebas."
+		}
+		failure {
+			mail to: "zirtrex@live.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Ohhh, no se pasaron las pruebas."
+		}
+    }
 }
 
 def dockerCmd(args) {

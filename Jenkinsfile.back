@@ -61,7 +61,7 @@ pipeline {
 			steps {
 				dockerCmd "exec -d ${container} ./bin/startup.sh"
 			}
-		}
+		}*/
     }
 	
     /*post {

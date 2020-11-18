@@ -27,13 +27,13 @@ describe('Prueba Unitaria Tipo de Prestamo', function () {
   });
 
   it("Devuelve id de tipo de prestamo por nombre", (done) => {
-  const getIdTipoPrestamoByNombre = "Plazo fijo";
+    var getIdTipoPrestamoByNombre = "7A";
   
-  chai.request(urlBase)
-    .get('/tipo_prestamo/'+ getIdTipoPrestamoByNombre)
+    chai.request(urlBase)
+    .get('/tipo_prestamo/nombre/'+ getIdTipoPrestamoByNombre)
     .end((err, response) => {      
       response.should.have.status(200);
-      response.body.should.be.a('Object');
+      response.body.should.be.a('object');
       done();           
     });  
   }); 
@@ -67,7 +67,7 @@ describe('Prueba Unitaria Tipo de Prestamo', function () {
             response.should.have.status(200);
             response.body.should.be.a('object');
 
-        done();
+          done();
         });
   });
   
