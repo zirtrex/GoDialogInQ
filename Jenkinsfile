@@ -20,7 +20,8 @@ pipeline {
     		steps {
       			echo "Running tests in a fully containerized environment..."
       			
-        		sh './run_test.sh'
+				sh "chmod +x -R ${env.WORKSPACE}"
+        		sh "./run_test.sh"
       			
 			}
     	}
