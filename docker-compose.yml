@@ -19,7 +19,7 @@ services:
   back:
     build: ./back
     image: godialoginq/back:lastest
-    #container_name: godialoginq_back
+    container_name: godialoginq_back
     restart: unless-stopped
     env_file: ./back/.env
     environment:

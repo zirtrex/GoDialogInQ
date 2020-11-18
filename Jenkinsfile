@@ -24,7 +24,7 @@ pipeline {
 
 				withEnv(["PATH=$PATH:~/.local/bin"]){
 
-        			sh "./run_test.sh"
+        			sh "./run_apps.sh"
 				}
       			
 			}
@@ -34,12 +34,12 @@ pipeline {
       			echo "Running tests in a fully containerized environment..."
       			
 				sh "chmod +x -R ${env.WORKSPACE}"
-				
+
 				dir ('back') {
 
 					withEnv(["PATH=$PATH:~/.local/bin"]){
 
-						sh 'npm test'
+						sh "./run_test.sh"
 					}
 				}
       			

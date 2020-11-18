@@ -2,5 +2,8 @@
 
 COMPOSE_ID=${JOB_NAME:-local}
 
-# Test
-docker exec -i godialoginq_back npm test
+# Remove Previous Stack
+docker-compose -p $COMPOSE_ID rm -f
+
+# Starting new stack environment
+docker-compose -p $COMPOSE_ID up -d --build
