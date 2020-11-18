@@ -4,7 +4,7 @@ services:
     build: ./data
     image: godialoginq/mysql_db:lastest
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
-    container_name: godialoginq_mysql_db
+    #container_name: godialoginq_mysql_db
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=godialoginq
@@ -19,7 +19,7 @@ services:
   back:
     build: ./back
     image: godialoginq/back:lastest
-    container_name: godialoginq_back
+    #container_name: godialoginq_back
     restart: unless-stopped
     env_file: ./back/.env
     environment:
@@ -35,11 +35,11 @@ services:
       - app-network
     links:
       - mysql
-    #command: ./wait-for-it.sh db:3306 -- node app.js
+    command: ./wait-for-it.sh mysql:3306 -- node app.js
   front:
     build: ./front
     image: godialoginq/front:lastest
-    container_name: godialoginq_front
+    #container_name: godialoginq_front
     restart: always    
     ports:
       - '8082:8082'
@@ -48,7 +48,7 @@ services:
   fullfilment:
     build: ./fullfilment
     image: godialoginq/fullfilment:lastest
-    container_name: godialoginq_fullfilment
+    #container_name: godialoginq_fullfilment
     restart: always
     environment:
       - BACK_HOST=back
