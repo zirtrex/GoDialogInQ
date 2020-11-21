@@ -25,11 +25,12 @@ tipoPrestamoUtil.verifyTipoPrestamo = function (agent) {
                                 
         if (idTipoPrestamo != "" || idTipoPrestamo != null) {
 
-            if (nombreTipoPrestamo.toLowerCase() == nombreTipoPrestamoOriginal.toLowerCase()) {
+            if (nombreTipoPrestamo == nombreTipoPrestamoOriginal) {
                 response = "Has elegido: " + nombreTipoPrestamo;
                 
             } else {
-                response =  "El préstamo más cercano es: " + nombreTipoPrestamo;
+                //response =  "El préstamo más cercano es: " + nombreTipoPrestamo;
+                response = "Has elegido: " + nombreTipoPrestamo;
             }
           
         } else {
