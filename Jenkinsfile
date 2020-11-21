@@ -49,12 +49,12 @@ pipeline {
         always {
             echo 'Hola!'
         }
-		success {
+		/*success {
 			mail to: "zirtrex@live.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Si, se pasaron las pruebas."
 		}
 		failure {
 			mail to: "zirtrex@live.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Ohhh, no se pasaron las pruebas."
-		}
+		}*/
     }
 }
 
