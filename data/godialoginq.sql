@@ -1,4 +1,4 @@
--- MySQL Workbench Forward Engineering 
+-- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `direccion` VARCHAR(100) NULL DEFAULT NULL,
   `razonSocial` VARCHAR(20) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
+  `fecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idCliente`, `idSession`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -73,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   `idCliente` INT NOT NULL,
+  `fecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idPrestamoCliente`, `idSession`),
   INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) VISIBLE,
   INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) VISIBLE,
@@ -142,12 +144,12 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `godialoginq`;
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (1, 'Plazo fijo', 'Un préstamo que se presta a un plazo fijo con pagos fijos semanales, quincenales o mensuales y con una tasa de interés fija.', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (2, 'Línea de crédito', 'Un tipo de préstamo revolvente que a medida que vas pagando vuelves a tener disponible los fondos de tu línea.', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (3, 'Dinero por tus facturas', 'Se llama Factoring o Dinero por tus facturas al producto financiero que te compra las cuentas que tienes por cobrar. La idea es que cuando tienes un invoice por cobrar por parte de un cliente tuyo, uno de nuestros lenders puede comprarlo y darte tu dinero en 24 horas y que no tengas que esperar 30, 60 o hasta 90 días para obtener tu dinero.', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (4, '7A Express', 'Un programa de préstamos de capital de trabajo para pequeños negocios respaldado por la Administración de Pequeños Negocios (SBA) y otorgados a través de prestamistas autorizados. El SBA garantiza entre un 50 al 85% del monto del préstamo.', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (5, '7A', 'Un programa de préstamos de capital de expansión para pequeños negocios respaldado por la Administración de Pequeños Negocios (SBA) y otorgados a través de prestamistas autorizados. El SBA garantiza entre el 85% del monto del préstamo.', '1');
-INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (6, 'Compras de propiedades comerciales', 'Un programa de préstamos para comprar propiedades comerciales para negocios garantizado por el SBA. La propiedad debe ser ocupada un 51% por el negocio.', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (1, 'Plazo fijo', 'Un prÃ©stamo que se presta a un plazo fijo con pagos fijos semanales, quincenales o mensuales y con una tasa de interÃ©s fija.', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (2, 'LÃ­nea de crÃ©dito', 'Un tipo de prÃ©stamo revolvente que a medida que vas pagando vuelves a tener disponible los fondos de tu lÃ­nea.', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (3, 'Dinero por tus facturas', 'Se llama Factoring o Dinero por tus facturas al producto financiero que te compra las cuentas que tienes por cobrar. La idea es que cuando tienes un invoice por cobrar por parte de un cliente tuyo, uno de nuestros lenders puede comprarlo y darte tu dinero en 24 horas y que no tengas que esperar 30, 60 o hasta 90 dÃ­as para obtener tu dinero.', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (4, '7A Express', 'Un programa de prÃ©stamos de capital de trabajo para pequeÃ±os negocios respaldado por la AdministraciÃ³n de PequeÃ±os Negocios (SBA) y otorgados a travÃ©s de prestamistas autorizados. El SBA garantiza entre un 50 al 85% del monto del prÃ©stamo.', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (5, '7A', 'Un programa de prÃ©stamos de capital de expansiÃ³n para pequeÃ±os negocios respaldado por la AdministraciÃ³n de PequeÃ±os Negocios (SBA) y otorgados a travÃ©s de prestamistas autorizados. El SBA garantiza entre el 85% del monto del prÃ©stamo.', '1');
+INSERT INTO `tipo_prestamo` (`idTipoPrestamo`, `nombreTipoPrestamo`, `descripcionTipoPrestamo`, `estado`) VALUES (6, 'Compras de propiedades comerciales', 'Un programa de prÃ©stamos para comprar propiedades comerciales para negocios garantizado por el SBA. La propiedad debe ser ocupada un 51% por el negocio.', '1');
 
 COMMIT;
 
@@ -157,41 +159,41 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `godialoginq`;
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Estados de cuenta bancario del negocio de los últimos 3 meses', '1', 1);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Aplicación firmada', '1', 1);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Estados de cuenta bancario del negocio de los Ãºltimos 3 meses', '1', 1);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'AplicaciÃ³n firmada', '1', 1);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID estatal', '1', 1);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Los últimos 3 estados de cuenta bancarios', '1', 2);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Los Ãºltimos 3 estados de cuenta bancarios', '1', 2);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID estatal', '1', 2);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Aplicación firmada', '1', 2);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'AplicaciÃ³n firmada', '1', 2);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'El invoice por cobrar', '1', 3);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank Statements del negocio', '1', 3);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID del o los dueños', '1', 3);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos de negocios', '1', 4);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de ingresos y egresos al 30 de enero del 2020', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID del o los dueÃ±os', '1', 3);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos de negocios', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de ingresos y egresos al 30 de enero del 2020', '1', 4);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Forma 4506T del IRS', '1', 4);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Personal Financial Statement (SBA Form 413)', '1', 4);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'SBA Form 1368', '1', 4);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales del o los dueños', '1', 4);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueños del negocio', '1', 4);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Crédito requerido: al menos 600 puntos', '1', 4);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos de negocios últimos 3 años', '1', 5);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales últimos 2 años', '1', 5);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Financial Statement de los últimos dos años', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos personales del o los dueÃ±os', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueÃ±os del negocio', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'CrÃ©dito requerido: al menos 600 puntos', '1', 4);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos de negocios Ãºltimos 3 aÃ±os', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos personales Ãºltimos 2 aÃ±os', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Financial Statement de los Ãºltimos dos aÃ±os', '1', 5);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Business Plan y Proyecciones Financieras', '1', 5);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Personal Financial Statement (SBA Form 413)', '1', 5);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'SBA Form 1368', '1', 5);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank statements del negocio de los últimos 12 meses', '1', 5);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales del o los dueños', '1', 5);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueños del negocio', '1', 5);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos de negocios últimos 3 años', '1', 6);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales últimos 2 años', '1', 6);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Financial Statement de los últimos dos años', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank statements del negocio de los Ãºltimos 12 meses', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos personales del o los dueÃ±os', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueÃ±os del negocio', '1', 5);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos de negocios Ãºltimos 3 aÃ±os', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos personales Ãºltimos 2 aÃ±os', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Financial Statement de los Ãºltimos dos aÃ±os', '1', 6);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Personal Financial Statement (SBA Form 413)', '1', 6);
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'SBA Form 1368', '1', 6);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank statements del negocio de los últimos 12 meses', '1', 6);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Declaración de impuestos personales del o los dueños', '1', 6);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Información de la propiedad', '1', 6);
-INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueños del negocio', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'Bank statements del negocio de los Ãºltimos 12 meses', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'DeclaraciÃ³n de impuestos personales del o los dueÃ±os', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'InformaciÃ³n de la propiedad', '1', 6);
+INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueÃ±os del negocio', '1', 6);
 
 COMMIT;
 
