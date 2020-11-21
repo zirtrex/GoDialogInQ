@@ -14,9 +14,9 @@ prestamoClienteUtil.getCalificacionPrestamoCliente = function (tiempoNegocio, in
 
     //tiempoNegocio > 1 && 
     if (ingresosAnuales >= 5000 && puntajeCredito >= 500) {
-        return "Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.";
+        return "Muchas gracias por contactarnos. Califica para un préstamo, un agente se estará contactando contigo a la brevedad posible.";
     } else {
-        return "Lo sentimos no calificas para un préstamo, visita: https://inqmatic.com/?s=rehabilitacion";
+        return "Muchas gracias por contactarnos. Lo sentimos no calificas para un préstamo, visita: inqmatic.com/rehabilitacion. ";
     }     
 
 }

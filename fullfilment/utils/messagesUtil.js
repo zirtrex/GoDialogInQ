@@ -51,12 +51,12 @@ messagesUtil.getMessageForRequisitosPrestamoCliente = function (idSession, agent
 	answers.push(['ingresosAnuales', "¿Cuánto percibe anualmente tu negocio? (Ejemplo: Mis ingresos son 50000 dólares)"]);
 	answers.push(['puntajeCredito', "¿Cuál es tu puntaje de crédito? (Entre 300 y 850 puntos)"]);
 	answers.push(['puntajeCredito', "¿Cuál es tu fico score? (Entre 300 y 850 puntos)"]);
-	answers.push(['queNegocioTiene', "¿Qué negocio tienes?"]);
-	answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio?"]);
-	answers.push(['comoVaUsar', "¿Cómo vas a usar el dinero?"]);
-	answers.push(['comoVaUsar', "¿Para qué vas a usar el dinero?"]);
-	answers.push(['cuanRapidoNecesita', "¿Cuán rápido quieres el préstamo?"]);
-	answers.push(['cuanRapidoNecesita', "¿Qué tan rápido requieres el préstamo?"]);
+	answers.push(['queNegocioTiene', "¿Qué negocio tienes? (Ejemplo: Tengo un negocio de construcción)"]);
+	answers.push(['queNegocioTiene', "¿A qué se dedica tu negocio? (Ejemplo: Mi negocio se dedica a la construcción)"]);
+	answers.push(['comoVaUsar', "¿Cómo vas a usar el dinero? (Ejemplo: Lo voy a usar para comprar equipos)"]);
+	answers.push(['comoVaUsar', "¿Para qué vas a usar el dinero? (Ejemplo: Lo voy a usar para pagar a mi personal)"]);
+	answers.push(['cuanRapidoNecesita', "¿Cuán rápido quieres el préstamo? (Ejemplo: En una semana)"]);
+	answers.push(['cuanRapidoNecesita', "¿Qué tan rápido requieres el préstamo? (Ejemplo: En 2 días)"]);
 
 	let requisitosInicialesRestantesArray = messagesUtil.getFieldsByComplete(idSession, agent);
 	const requisitosLength = requisitosInicialesRestantesArray.length;
