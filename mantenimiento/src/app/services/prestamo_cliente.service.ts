@@ -18,6 +18,12 @@ export class PrestamoClienteService {
                 .pipe(catchError(this.handleError));
     }
 
+    getAllByIdCliente(idCliente: any): Observable<any> {
+      return this.http
+                .get<any>(this.REST_API_SERVER_DEV+ '/cliente/' + idCliente)
+                .pipe(catchError(this.handleError));
+    }
+
     add(prestamoCliente: PrestamoCliente): Observable<any>{
       return this.http
                 .post<any>(this.REST_API_SERVER_DEV, prestamoCliente)
