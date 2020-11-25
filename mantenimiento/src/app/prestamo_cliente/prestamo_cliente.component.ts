@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PrestamoCliente } from '../models/prestamo_cliente';
 import { PrestamoClienteService } from '../services/prestamo_cliente.service';
@@ -20,6 +21,8 @@ import {
 })
 export class PrestamoClienteComponent implements OnInit {
 
+  params: any;
+  idCliente: any;
   //displayedColumns: string[] = ['idPrestamoCliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'acciones'];
   displayedColumns: string[] = ['idPrestamoCliente', 'nombreTipoPrestamo', 'cliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita', 'calificacion'];
   
@@ -29,14 +32,53 @@ export class PrestamoClienteComponent implements OnInit {
   keyPressed: string;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router:Router,
     private prestamoClienteService:PrestamoClienteService,
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
     private snackBar: MatSnackBar
   ) {}
 
+ 
   ngOnInit() {
-    this.getData();
+  
+    this.params = this.activatedRoute.params.subscribe(params => this.idCliente = params['idCliente']);
+    if (this.idCliente == null) {
+      this.getData(); 
+    } else {
+      this.getAllDataByIdCliente(this.idCliente); 
+    }    
+  }
+
+
+  
+  getAllDataByIdCliente(idCliente) {
+    this.prestamoClienteService.getAllByIdCliente(idCliente).subscribe(
+      (res) => {
+        this.dataSource = new MatTableDataSource(res.result);
+        this.dataSource.sort = this.sort;
+        this.paginator._intl.firstPageLabel = 'Primera página';
+        this.paginator._intl.itemsPerPageLabel = 'Productos por página';
+        this.paginator._intl.lastPageLabel = 'Última página';
+        this.paginator._intl.nextPageLabel = 'Siguiente';
+        this.paginator._intl.previousPageLabel = 'Anterior';
+        this.dataSource.paginator = this.paginator;
+        this.changeDetectorRefs.detectChanges();
+      },
+      (error) => {
+        this.dataSource = new MatTableDataSource(error.result);
+        this.dataSource.sort = this.sort;
+        this.paginator._intl.firstPageLabel = 'Primera página';
+        this.paginator._intl.itemsPerPageLabel = 'Productos por página';
+        this.paginator._intl.lastPageLabel = 'Última página';
+        this.paginator._intl.nextPageLabel = 'Siguiente';
+        this.paginator._intl.previousPageLabel = 'Anterior';
+        this.dataSource.paginator = this.paginator;
+        this.changeDetectorRefs.detectChanges();
+      },
+
+    );
   }
 
   getData() {
