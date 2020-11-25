@@ -47,7 +47,7 @@ pipeline {
 
 	post {
         always {
-            echo 'Hola!'
+            echo 'Todo ha salido bien.'
         }
 		/*success {
 			mail to: "zirtrex@live.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Si, se pasaron las pruebas."
