@@ -1,4 +1,4 @@
--- MySQL Workbench Forward Engineering 
+-- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `direccion` VARCHAR(100) NULL DEFAULT NULL,
   `razonSocial` VARCHAR(20) NULL DEFAULT NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
+  `fecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idCliente`, `idSession`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -73,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   `idCliente` INT NOT NULL,
+  `fecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idPrestamoCliente`, `idSession`),
   INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) VISIBLE,
   INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) VISIBLE,
@@ -194,4 +196,3 @@ INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTip
 INSERT INTO `requisito` (`idRequisito`, `descripcionRequisito`, `estado`, `idTipoPrestamo`) VALUES (DEFAULT, 'ID de o de los dueños del negocio', '1', 6);
 
 COMMIT;
-
