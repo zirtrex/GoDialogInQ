@@ -8,7 +8,7 @@ COMPOSE_ID=${JOB_NAME:-local}
 docker-compose -p $COMPOSE_ID down
 
 #Borra volumen
-docker volume rm godialoginq_mysql_data
+#docker volume rm godialoginq_mysql_data
 
 # Starting new stack environment
 docker-compose -p $COMPOSE_ID up -d --build
