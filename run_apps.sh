@@ -3,10 +3,10 @@
 COMPOSE_ID=${JOB_NAME:-local}
 
 # Remove Previous Stack
-#docker-compose -p $COMPOSE_ID rm -f
+docker-compose -p $COMPOSE_ID rm -f
 
 # Remove Previous Stack
-docker-compose -p $COMPOSE_ID down
+#docker-compose -p $COMPOSE_ID down
 
 # Starting new stack environment
 docker-compose -p $COMPOSE_ID up -d --build
