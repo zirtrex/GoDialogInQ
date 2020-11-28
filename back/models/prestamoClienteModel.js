@@ -63,7 +63,8 @@ prestamocliente.getAllByIdTipoPrestamo = async function (idTipoPrestamo) {
 
 prestamocliente.getAllByIdCliente = async function (idCliente) {
     try {
-        var query = 'select * from prestamo_cliente where idCliente=?';
+        //var query = 'select * from prestamo_cliente where idCliente=?';
+        var query = 'select * from vw_prestamo_cliente_getAllClienteTipoPrestamo where idCliente=?';
         var result = await db_connect.query(query,[
             idCliente
         ]);
