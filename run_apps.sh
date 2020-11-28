@@ -1,12 +1,14 @@
 # JOB_NAME is the name of the project of this build. This is the name you gave your job. It is set up by Jenkins
-
 COMPOSE_ID=${JOB_NAME:-local}
 
 # Remove Previous Stack
-docker-compose -p $COMPOSE_ID rm -f
+#docker-compose -p $COMPOSE_ID rm -f
 
 # Remove Previous Stack
-#docker-compose -p $COMPOSE_ID down
+docker-compose -p $COMPOSE_ID down
+
+#Borra volumen
+docker volume rm godialoginq_mysql_data
 
 # Starting new stack environment
 docker-compose -p $COMPOSE_ID up -d --build
