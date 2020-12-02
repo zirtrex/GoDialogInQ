@@ -2,43 +2,52 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse  } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError  } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { Cliente } from '../models/cliente';
 
-@Injectable()
-export class ClienteService {
+const {
+    BACK_PROTOCOL,
+    BACK_HOST,
+    BACK_PORT
+} = environment;
 
-    private REST_API_SERVER_DEV = "http://localhost:8081/cliente";
-    //private REST_API_SERVER_PROD = "http://localhost:8081/cliente";
-    private REST_API_SERVER_PROD = "https://godialoginq.herokuapp.com/cliente";
+const urlBase =  BACK_PROTOCOL + "://" + BACK_HOST + ":" + BACK_PORT;
+
+console.log("Mantenimiento on: " + urlBase);
+
+@Injectable()
+export class ClienteService {    
+
+    private REST_API_SERVER = urlBase + "/cliente";
 
     constructor(private http:HttpClient) { }
 
     getAll(): Observable<any>{
       return this.http
-                .get<any>(this.REST_API_SERVER_DEV)
+                .get<any>(this.REST_API_SERVER)
                 .pipe(catchError(this.handleError));
     }
 
     add(cliente: Cliente): Observable<any>{
       return this.http
-                .post<any>(this.REST_API_SERVER_DEV, cliente)
+                .post<any>(this.REST_API_SERVER, cliente)
                 .pipe(catchError(this.handleError));
     }
 
     get(idCliente: String): Observable<any>{
       return this.http
-                .get<any>(this.REST_API_SERVER_DEV + '/' + idCliente);
+                .get<any>(this.REST_API_SERVER + '/' + idCliente);
     }
 
     edit(cliente: Cliente): Observable<any>{
-      const url = `${this.REST_API_SERVER_DEV}/${cliente["idCliente"]}`;
+      const url = `${this.REST_API_SERVER}/${cliente["idCliente"]}`;
       return this.http
                 .put<any>(url, cliente)
                 .pipe(catchError(this.handleError));
     }
 
     delete(idCliente: string): Observable<any>{
-      const url = `${this.REST_API_SERVER_DEV}/${idCliente}`;
+      const url = `${this.REST_API_SERVER}/${idCliente}`;
       return this.http
                 .delete<any>(url)
                 .pipe(catchError(this.handleError));

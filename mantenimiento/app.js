@@ -3,50 +3,27 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const app = express();
 const server = http.Server(app); //createServer
 const debug = require('debug')('myapp:server');
 
-const COOKIE_SECRET = 'godialoginq';
-const COOKIE_NAME = 'godialoginq_sid';
-
-var session_config = {
-    name: COOKIE_NAME,
-    secret: COOKIE_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    cookie: { }
-}
-
-if (app.get('env') === 'production') {
-    app.set('trust proxy', 1) // trust first proxy
-    session_config.cookie.secure = true // serve secure cookies
-}
-
-const sessionMiddleware = session(session_config);
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-var port = normalizePort(process.env.PORT || '8082');
+var port = normalizePort(process.env.PORT || '8084');
 app.set('port', port);
 
-app.use(cookieParser());
-app.use(sessionMiddleware);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist/godialoginq-mantenimiento')));
 
-//imports
-const index = require('./routes/index');
-
-//routes
-app.use(index);
+//Permite redirigir las rutas cuando se ingresa directamente a una.
+app.get('/*', function(req, res) { 
+    res.sendFile(__dirname + '/dist/godialoginq-mantenimiento/index.html');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
