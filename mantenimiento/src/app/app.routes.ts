@@ -1,16 +1,18 @@
-import { ModuleWithProviders } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { InicioComponent } from './inicio/inicio.component';
+import { UsuarioComponent } from './usuario/usuario.component';
 import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
 import { RequisitoComponent } from './requisito/requisito.component';
 import { ClienteComponent } from './cliente/cliente.component';
 
 import { PrestamoClienteComponent } from './prestamo_cliente/prestamo_cliente.component';
 
-const appRoutes: Routes = [
-  /*{path: '', redirectTo: '/productos', pathMatch: 'full'},*/
-  {path: '', component: InicioComponent},
+const routes: Routes = [
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  {path: 'inicio', component: InicioComponent},
+  {path: 'login', component: UsuarioComponent},
   {path: 'tipo_prestamo', component: TipoPrestamoComponent},
   {path: 'requisito', component: RequisitoComponent},
   {path: 'requisito/:idTipoPrestamo', component: RequisitoComponent},
@@ -28,4 +30,9 @@ const appRoutes: Routes = [
   {path: 'producciones/edit/:idProduccion', component: EditarProduccionComponent},*/
 ];
 
-export const routes:ModuleWithProviders = RouterModule.forRoot(appRoutes);
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+
+export class AppRoutingModule {}

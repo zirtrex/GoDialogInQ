@@ -3,14 +3,12 @@ import { Observable } from 'rxjs';
 import { TipoPrestamo } from '../models/tipo_prestamo';
 import { TipoPrestamoService } from '../services/tipo_prestamo.service';
 import { TipoPrestamoFormComponent } from '../tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
-import {
-  MatTableDataSource,
-  MatSort,
-  MatPaginator,
-  MatDialog,
-  MatDialogConfig,
-  MatSnackBar
-} from '@angular/material';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort  } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tipo_prestamo',

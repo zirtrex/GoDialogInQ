@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { routes } from './app.routes';
+import { AppRoutingModule } from './app.routes';
 
 import { TipoPrestamoService } from './services/tipo_prestamo.service';
 import { RequisitoService } from './services/requisito.service';
@@ -15,6 +15,10 @@ import { PrestamoClienteService } from './services/prestamo_cliente.service';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
 import { InicioComponent } from './inicio/inicio.component';
+
+import { UsuarioComponent } from './usuario/usuario.component';
+import { UsuarioLoginFormComponent } from './usuario/usuario_login_form.component';
+import { UsuarioRegistroFormComponent } from './usuario/usuario_registro_form.component';
 
 import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
 import { TipoPrestamoFormComponent } from './tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
@@ -30,12 +34,16 @@ import { PrestamoClienteFormComponent } from './prestamo_cliente/prestamo_client
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
+import { UsuarioService } from './services/usuario.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     InicioComponent,
+    UsuarioComponent,
+    UsuarioLoginFormComponent,
+    UsuarioRegistroFormComponent,
     TipoPrestamoComponent,
     TipoPrestamoFormComponent,
     RequisitoComponent,
@@ -47,7 +55,7 @@ import { MaterialModule } from './material/material.module';
   ],
   imports: [
     BrowserModule,
-    routes,
+    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -58,16 +66,18 @@ import { MaterialModule } from './material/material.module';
     TipoPrestamoService,
     RequisitoService,
     ClienteService,
-    PrestamoClienteService
-
+    PrestamoClienteService,
+    UsuarioService
      /*ExporterService*/
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    UsuarioLoginFormComponent,
+    UsuarioRegistroFormComponent,
     TipoPrestamoFormComponent,
     RequisitoFormComponent,
     ClienteFormComponent,
-    PrestamoClienteFormComponent
+    PrestamoClienteFormComponent    
   ]
 })
 export class AppModule { }

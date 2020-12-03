@@ -1,0 +1,59 @@
+<div class="container mt-2">
+  <div class="col-md-12">
+    <div class="well well bs-component">
+      <form *ngIf="action == 0 || action == 1" novalidate class="form-horizontal" (ngSubmit)="getAction(ClienteForm.value)" #ClienteForm="ngForm">
+        <fieldset>
+          <legend>{{ textForm }} Login | Register</legend>
+
+          <div class="form-group">
+            <label for="nombres" class="control-label">Nombres</label>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Nombres" [(ngModel)]="cliente.nombres" #nombres="ngModel" required minlength="2"/>
+              <div *ngIf="nombres.errors?.required && nombres.touched" class="alert alert-danger mt-2">
+                Campo obligatorio
+              </div>
+              <div *ngIf="nombres.errors?.minlength && nombres.touched" class="alert alert-danger mt-2">
+                Minimo 2 caracteres
+              </div>
+            </div>
+          </div>        
+
+          <div class="form-group">
+            <label for="correo" class="control-label">Correo</label>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" rows="1" id="correo" name="correo" placeholder="Correo" [(ngModel)]="cliente.correo" #correo="ngModel" required minlength="9"/>
+              <div *ngIf="correo.errors?.required && correo.touched" class="alert alert-danger mt-2">
+                Campo obligatorio
+              </div>
+              <div *ngIf="correo.errors?.minlength && correo.touched" class="alert alert-danger mt-2">
+                Minimo 9
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="clave" class="control-label">Contraseña</label>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" id="clave" name="clave" placeholder="Clave" [(ngModel)]="usuario.clave" #nombres="ngModel" required minlength="2"/>
+              <div *ngIf="clave.errors?.required && clave.touched" class="alert alert-danger mt-2">
+                Campo obligatorio
+              </div>
+              <div *ngIf="clave.errors?.minlength && clave.touched" class="alert alert-danger mt-2">
+                Minimo 2 caracteres
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-12 col-lg-offset-2">
+              <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
+              &nbsp;
+              <button type="submit" class="btn btn-primary" [disabled]="ClienteForm.invalid">{{ textForm }}</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </div>
+  </div>
+</div>
