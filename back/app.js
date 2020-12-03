@@ -38,6 +38,7 @@ const requisitoRoutes = require('./routes/requisitoRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
 const documentacionCliente = require('./routes/documentacionClienteRoutes');
 const prestamoCliente = require('./routes/prestamoClienteRoutes');
+const usuario = require('./routes/usuarioRoutes');
 
 //routes
 app.use(index);
@@ -46,6 +47,7 @@ app.use(requisitoRoutes);
 app.use(clienteRoutes);
 app.use(documentacionCliente);
 app.use(prestamoCliente);
+app.use(usuario);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
