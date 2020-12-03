@@ -7,7 +7,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema godialoginq
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `godialoginq` ;
 
 -- -----------------------------------------------------
 -- Schema godialoginq
@@ -18,8 +17,6 @@ USE `godialoginq` ;
 -- -----------------------------------------------------
 -- Table `cliente`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cliente` ;
-
 CREATE TABLE IF NOT EXISTS `cliente` (
   `idCliente` INT NOT NULL AUTO_INCREMENT,
   `idSession` VARCHAR(100) NOT NULL,
@@ -44,8 +41,6 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `tipo_prestamo`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tipo_prestamo` ;
-
 CREATE TABLE IF NOT EXISTS `tipo_prestamo` (
   `idTipoPrestamo` INT NOT NULL AUTO_INCREMENT,
   `nombreTipoPrestamo` VARCHAR(100) NULL DEFAULT NULL,
@@ -59,8 +54,6 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `prestamo_cliente`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `prestamo_cliente` ;
-
 CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `idPrestamoCliente` INT NOT NULL AUTO_INCREMENT,
   `idSession` VARCHAR(100) NOT NULL,
@@ -95,8 +88,6 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `documentacion_cliente`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `documentacion_cliente` ;
-
 CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
   `idDocumentacionCliente` INT NOT NULL AUTO_INCREMENT,
   `nombreDocumentacion` VARCHAR(100) NULL DEFAULT NULL,
@@ -117,8 +108,6 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `requisito`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `requisito` ;
-
 CREATE TABLE IF NOT EXISTS `requisito` (
   `idRequisito` INT NOT NULL AUTO_INCREMENT,
   `descripcionRequisito` VARCHAR(200) NULL DEFAULT NULL,
@@ -133,6 +122,19 @@ CREATE TABLE IF NOT EXISTS `requisito` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `nombres` VARCHAR(50) NULL,
+  `correo` VARCHAR(50) NOT NULL,
+  `clave` VARCHAR(100) NULL,
+  `estado` VARCHAR(1) NULL,
+  UNIQUE INDEX `correo_UNIQUE` (`correo` ASC) VISIBLE,
+  PRIMARY KEY (`correo`))
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
