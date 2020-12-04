@@ -34,6 +34,16 @@ prestamocliente.getQuantityCalificacion = async function () {
     }
 }
 
+prestamocliente.getCountCalificabyFecha = async function () {
+    try {       
+        var query = 'SELECT * from vw_getCountCalificabyFecha'; 
+        var result = await db_connect.query(query);
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
 
 
 prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
