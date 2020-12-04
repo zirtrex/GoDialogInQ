@@ -34,6 +34,8 @@ import { PrestamoClienteFormComponent } from './views/prestamo_cliente/prestamo_
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 
+import { ChartsModule } from 'ng2-charts';
+
 // Import containers
 import { DefaultLayoutComponent } from './containers';
 
@@ -82,6 +84,7 @@ import { UsuarioService } from './services/usuario.service';
     AppFooterModule,
     AppHeaderModule,
     AppSidebarModule,
+    ChartsModule
   ],
   providers: [
     TipoPrestamoService,
