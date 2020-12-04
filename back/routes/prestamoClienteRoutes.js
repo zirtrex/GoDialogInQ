@@ -23,4 +23,8 @@ router.put('/prestamo_cliente/session/:idSession', controller.updateIdSession);
 
 router.get('/prestamo_cliente/calificacion/:id', controller.getQuantityCalificacion);
 
+router.get('/prestamo_cliente/calificacion_grafico/:id', controller.getCountCalificabyFecha);
+
+
+
 module.exports = router;
