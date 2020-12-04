@@ -1,33 +1,37 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './auth/auth.guard';
 
-import { InicioComponent } from './inicio/inicio.component';
 import { UsuarioComponent } from './usuario/usuario.component';
-import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
-import { RequisitoComponent } from './requisito/requisito.component';
-import { ClienteComponent } from './cliente/cliente.component';
-
-import { PrestamoClienteComponent } from './prestamo_cliente/prestamo_cliente.component';
+import { DefaultLayoutComponent } from './containers';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: 'inicio', component: InicioComponent},
+  {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   {path: 'login', component: UsuarioComponent},
-  {path: 'tipo_prestamo', component: TipoPrestamoComponent},
-  {path: 'requisito', component: RequisitoComponent},
-  {path: 'requisito/:idTipoPrestamo', component: RequisitoComponent},
-  {path: 'cliente', component: ClienteComponent},  
-  {path: 'prestamo_cliente', component: PrestamoClienteComponent},
-  {path: 'prestamo_cliente/cliente/:idCliente', component: PrestamoClienteComponent}
-  //{path: 'prestamo_cliente/:idCliente', component: PrestamoClienteComponent}
-
-  //http://localhost:4200/prestamo_cliente/cliente/1
-
-  /*{path: 'ventas/edit/:idVentas', component: EditarVentaComponent},
-  {path: 'ventas/delete/:idVentas', component: EliminarVentaComponent},
-  {path: 'producciones', component: ProduccionComponent},
-  {path: 'producciones/create/:idProducto', component: CrearProduccionComponent},
-  {path: 'producciones/edit/:idProduccion', component: EditarProduccionComponent},*/
+  {path: 'login/logout', component: UsuarioComponent},
+  {
+    path: 'dashboard',
+    component: DefaultLayoutComponent,
+    canActivate: [AuthGuard],
+    data: {
+      title: 'Home'
+    },
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
+      }
+    ]
+  },
+  {path: '**', component: DefaultLayoutComponent},
+  {
+    path: 'admin2',
+    component: DefaultLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      /* {path: '', component: InicioComponent}, */           
+    ]
+  },
 ];
 
 @NgModule({

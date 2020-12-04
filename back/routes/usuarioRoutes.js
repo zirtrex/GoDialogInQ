@@ -5,9 +5,9 @@ var router = express.Router();
 
 var controller = require('../controllers/usuarioController');
 
-router.get('/usuario', controller.getByCorreo);
+router.post('/usuario/login', controller.getByCorreo);
 
-router.post('/usuario', controller.create);
+router.post('/usuario/registro', controller.create);
 
 
 module.exports = router;

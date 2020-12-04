@@ -1,11 +1,11 @@
 export interface JwtResponseI {
-
-    usuarioData: {        
+    status: string,
+    message: string,
+    result: {              
         nombres: string,
         correo: string,
         clave: string,
         accessToken: string,
-        expiresIn: string,
+        expiresIn: string        
     }
-
 }

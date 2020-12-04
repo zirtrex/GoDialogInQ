@@ -1,28 +1,19 @@
-'user strict';
+'use strict';
 
 var db_connect = require('./db');
 
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const SECRET_KEY = 'secretkey123456';
-
 
 var usuario = {}; 
 
 usuario.getByCorreo = async function (usuario) {
     try {
-
-        var usuarioReq = usuario.correo;
-        var claveReq = usuario.clave;
-
-        var query = 'select nombres, correo from usuario where estado<>0 and correo=? and clave=?';
+        var query = 'select nombres, correo, clave from usuario where estado<>0 and correo=?';
         var result = await db_connect.query(query,[
-            usuarioReq,
-            claveReq
+            usuario.correo
         ]);
         return result;
     } catch(error) {
-
         console.log(error);
         throw new Error(error);
     }

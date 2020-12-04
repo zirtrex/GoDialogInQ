@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { FormBuilder, FormGroup, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UsuarioService } from '../services/usuario.service';
 import { Usuario } from '../models/usuario';
+import { JwtResponseI } from '../models/jwt_response';
 
 @Component({
   selector: 'app-usuario-login-form',
@@ -17,52 +18,48 @@ export class UsuarioLoginFormComponent implements OnInit {
   action: number;
   textForm: string;
   usuario: Usuario;
+  usuarioForm: FormGroup;
 
   constructor(
     private usuarioService:UsuarioService,
     private router:Router,
     private snackBar: MatSnackBar,
+    private fb: FormBuilder
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.usuario = new Usuario();
 
-  getAction(usuario){}
-
-  crear(usario){
-    this.usuarioService.crear(usario)
-      .subscribe(
-        response => {
-            console.log(response);
-            this.snackBar.open(response.message, null, {
-              duration: 10000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['text-warning']
-            });
-            if(!response.error){
-              this.router.navigate(['/inicio']);
-            }
-        },
-        error => console.log(<any> error)
-      )
+    this.usuarioForm = this.fb.group({
+      correo: [this.usuario.correo, Validators.compose( [Validators.required, Validators.email, Validators.minLength(2), Validators.maxLength(200)] )],
+      clave: ['', Validators.compose( [Validators.required, Validators.minLength(6), Validators.maxLength(20)] )],
+    });
   }
 
-  login(usario){
-    this.usuarioService.login(usario)
-      .subscribe(
+  login(usuario) { 
+    console.log(usuario); 
+    this.usuarioService.login(usuario).subscribe( 
         response => {
           console.log(response);
           this.snackBar.open(response.message, null, {
             duration: 10000,
             horizontalPosition: 'right',
-            verticalPosition: 'top',
-            panelClass: ['text-warning']
+            verticalPosition: 'bottom',
+            panelClass: ['text-success']
           });
-          if(!response.error){
-              this.router.navigate(['/inicio']);
-          }
+          
+          this.router.navigate(['/dashboard']);
+          
         },
-        error => console.log(<any> error)
+        error => {
+          console.log(<any> error);
+          this.snackBar.open(error.message, null, {
+            duration: 10000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['text-danger']
+          });
+        }
       )
   }
 

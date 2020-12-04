@@ -1,0 +1,34 @@
+<app-header
+  [navbarBrandRouterLink]="['/dashboard']"
+  [fixed]="true"
+  [navbarBrandFull]="{src: 'assets/img/brand/logo.svg', width: 89, height: 25, alt: 'GoDialogInq'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/sygnet.svg', width: 30, height: 30, alt: 'GoDialogInq'}"
+  [sidebarToggler]="'lg'"
+  [asideMenuToggler]="'lg'">
+  <div class="ml-auto">
+  </div>
+</app-header>
+<div class="app-body">
+  <app-sidebar [fixed]="true" [display]="'lg'" [minimized]="minimized" #sidebar (minimizedChange)="toggleMinimize($event)">
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebar.minimized"></app-sidebar-nav>
+    <app-sidebar-minimizer></app-sidebar-minimizer>
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <cui-breadcrumb>
+      <!-- Breadcrumb Menu-->
+    </cui-breadcrumb>
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+  <app-aside [fixed]="true" [display]="false">
+    <button mat-icon-button color="accent" [routerLink]="['/login/logout/']" matTooltip="Salir">
+      <mat-icon>exit_to_app</mat-icon>Salir
+    </button>
+  </app-aside>
+</div>
+<app-footer>
+  <span class="ml-auto">Desarrollado para el curso de Integrador II - UTP</span>
+</app-footer>

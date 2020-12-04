@@ -1,8 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Cliente } from '../models/cliente';
-import { ClienteService } from '../services/cliente.service';
-import { ClienteFormComponent } from '../cliente/cliente_form/cliente_form.component';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -17,16 +14,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class UsuarioComponent implements OnInit {
 
-  constructor(
+  isLogin = true;
 
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
 
-  }
-
-  create() {
-
+  loginOption(option){
+    if(option == "login")
+      this.isLogin = true
+    else
+      this.isLogin = false
   }
 
 }

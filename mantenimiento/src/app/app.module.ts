@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app.routes';
@@ -7,33 +8,47 @@ import { AppRoutingModule } from './app.routes';
 import { TipoPrestamoService } from './services/tipo_prestamo.service';
 import { RequisitoService } from './services/requisito.service';
 import { ClienteService } from './services/cliente.service';
-
 import { PrestamoClienteService } from './services/prestamo_cliente.service';
-
-/*import { ExporterService } from './services/exporter.service';*/
+import { ExporterService } from './services/exporter.service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
-import { InicioComponent } from './inicio/inicio.component';
+import { InicioComponent } from './views/inicio/inicio.component';
 
 import { UsuarioComponent } from './usuario/usuario.component';
 import { UsuarioLoginFormComponent } from './usuario/usuario_login_form.component';
 import { UsuarioRegistroFormComponent } from './usuario/usuario_registro_form.component';
 
-import { TipoPrestamoComponent } from './tipo_prestamo/tipo_prestamo.component';
-import { TipoPrestamoFormComponent } from './tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
+import { TipoPrestamoComponent } from './views/tipo_prestamo/tipo_prestamo.component';
+import { TipoPrestamoFormComponent } from './views/tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
 
-import { RequisitoComponent } from './requisito/requisito.component';
-import { RequisitoFormComponent } from './requisito/requisito_form/requisito_form.component';
+import { RequisitoComponent } from './views/requisito/requisito.component';
+import { RequisitoFormComponent } from './views/requisito/requisito_form/requisito_form.component';
 
-import { ClienteComponent } from './cliente/cliente.component';
-import { ClienteFormComponent } from './cliente/cliente_form/cliente_form.component';
+import { ClienteComponent } from './views/cliente/cliente.component';
+import { ClienteFormComponent } from './views/cliente/cliente_form/cliente_form.component';
 
-import { PrestamoClienteComponent } from './prestamo_cliente/prestamo_cliente.component';
-import { PrestamoClienteFormComponent } from './prestamo_cliente/prestamo_cliente_form/prestamo_cliente_form.component';
+import { PrestamoClienteComponent } from './views/prestamo_cliente/prestamo_cliente.component';
+import { PrestamoClienteFormComponent } from './views/prestamo_cliente/prestamo_cliente_form/prestamo_cliente_form.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
+
+// Import containers
+import { DefaultLayoutComponent } from './containers';
+
+const APP_CONTAINERS = [
+  DefaultLayoutComponent
+];
+
+import {
+  AppAsideModule,
+  AppBreadcrumbModule,
+  AppHeaderModule,
+  AppFooterModule,
+  AppSidebarModule,
+} from '@coreui/angular';
+
 import { UsuarioService } from './services/usuario.service';
 
 @NgModule({
@@ -51,7 +66,8 @@ import { UsuarioService } from './services/usuario.service';
     ClienteComponent,
     ClienteFormComponent,
     PrestamoClienteComponent,
-    PrestamoClienteFormComponent
+    PrestamoClienteFormComponent,
+    ...APP_CONTAINERS,
   ],
   imports: [
     BrowserModule,
@@ -60,15 +76,24 @@ import { UsuarioService } from './services/usuario.service';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    AppAsideModule,
+    AppBreadcrumbModule.forRoot(),
+    AppFooterModule,
+    AppHeaderModule,
+    AppSidebarModule,
   ],
   providers: [
     TipoPrestamoService,
     RequisitoService,
     ClienteService,
     PrestamoClienteService,
-    UsuarioService
-     /*ExporterService*/
+    UsuarioService,
+    ExporterService,
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: [

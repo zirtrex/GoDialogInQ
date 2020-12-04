@@ -1,39 +1,50 @@
-<div class="container mt-2">
-  <div class="col-md-12">
-    <div class="well well bs-component">
-      <form novalidate class="form-horizontal" (ngSubmit)="getAction(LoginForm.value)" #LoginForm="ngForm">
-        <fieldset>
-          <legend>{{ textForm }} Login | Register</legend>
+<div class="mt-2">
+    <mat-card>
+      <mat-card-title>Ingresar</mat-card-title>
+      <mat-card-content>
+        <div class="well well bs-component">
+          <form novalidate class="form-horizontal" (ngSubmit)="login(usuarioForm.value)" [formGroup]='usuarioForm'>
+              <mat-form-field>
+                <input type="text" matInput formControlName="correo" placeholder="Correo" />
+                
+                <mat-error *ngIf="usuarioForm.get('correo').hasError('required')">
+                  El campo es obligatorio
+                </mat-error>
 
-          <div class="form-group">
-            <label for="correo" class="control-label">Correo</label>
-            <div class="col-lg-12">
-              <input type="text" class="form-control" id="correo" name="correo" placeholder="Correo" [(ngModel)]="usuario.correo" #apellidos="ngModel" required minlength="2"/>
-              <div *ngIf="correo.errors?.required && correo.touched" class="alert alert-danger mt-2">
-                Campo obligatorio
-              </div>
-              <div *ngIf="correo.errors?.minlength && correo.touched" class="alert alert-danger mt-2">
-                Minimo 2 caracteres
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="clave" class="control-label">Contraseña</label>
-            <div class="col-lg-12">
-              <input type="text" class="form-control" id="clave" name="clave" placeholder="Clave" [(ngModel)]="usuario.clave" #nombres="ngModel" required minlength="2"/>
-              <div *ngIf="clave.errors?.required && clave.touched" class="alert alert-danger mt-2">
-                Campo obligatorio
-              </div>
-              <div *ngIf="clave.errors?.minlength && clave.touched" class="alert alert-danger mt-2">
-                Minimo 2 caracteres
-              </div>
-            </div>
-          </div>          
-          
-        </fieldset>
-      </form>
-
-    </div>
-  </div>
+                <mat-error *ngIf="usuarioForm.get('correo').hasError('email')">
+                  El correo no es válido
+                </mat-error>
+    
+                <mat-error *ngIf="usuarioForm.get('correo').hasError('minlength')">
+                  Mínimo 2 caracteres
+                </mat-error>
+    
+                <mat-error *ngIf="usuarioForm.get('correo').hasError('maxlength')">
+                  Máximo 2 caracteres
+                </mat-error> 
+                
+              </mat-form-field>
+    
+              <mat-form-field>
+                <input type="password" matInput formControlName="clave" placeholder="Clave" >
+                <mat-error *ngIf="usuarioForm.get('clave').hasError('required')">
+                  El campo es obligatorio
+                </mat-error>
+    
+                <mat-error *ngIf="usuarioForm.get('clave').hasError('minlength')">
+                  Mínimo 2 caracteres
+                </mat-error>
+    
+                <mat-error *ngIf="usuarioForm.get('clave').hasError('maxlength')">
+                  Máximo 2 caracteres
+                </mat-error>
+              </mat-form-field> 
+              
+              <button mat-raised-button color="primary">
+                <mat-icon>login</mat-icon>Ingresar
+              </button>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
 </div>
