@@ -43,6 +43,28 @@ prestamoClienteController.getAllClienteTipoPrestamo = async function (req, res) 
 }
 
 
+prestamoClienteController.getQuantityCalificacion = async function (req, res) {
+  try {
+    var prestamoCliente = await model.getQuantityCalificacion();
+    res.send(
+      {
+        status:'success',
+        message: "",
+        result: prestamoCliente
+      }
+      
+      );
+    } catch (error) {
+
+      console.log(error);
+      res.status(500).send({
+      status:'error',
+      message: "Ha ocurrido un error",
+      result: error     
+    });  
+    }
+}
+
 
 
 prestamoClienteController.getByIdPrestamoCliente = async function (req, res) {

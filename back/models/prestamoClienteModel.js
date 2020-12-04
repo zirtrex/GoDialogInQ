@@ -24,6 +24,18 @@ prestamocliente.getAllClienteTipoPrestamo = async function () {
     }
 }
 
+prestamocliente.getQuantityCalificacion = async function () {
+    try {       
+        var query = 'SELECT SUM((CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 1 ELSE 0 END)) AS califica, SUM((CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 0 ELSE 1 END)) AS nocalifica FROM prestamo_cliente PC WHERE PC.estado<>0'; 
+        var result = await db_connect.query(query);
+        return result;
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+
+
 prestamocliente.getByIdPrestamoCliente = async function (idPrestamoCliente) {
     try {
         var query = 'select * from prestamo_cliente where idPrestamoCliente=?';
