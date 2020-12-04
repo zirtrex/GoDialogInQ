@@ -21,4 +21,6 @@ router.post('/prestamo_cliente', controller.create);
 
 router.put('/prestamo_cliente/session/:idSession', controller.updateIdSession);
 
+router.get('/prestamo_cliente/calificacion/:id', controller.getQuantityCalificacion);
+
 module.exports = router;
