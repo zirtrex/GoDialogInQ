@@ -15,3 +15,17 @@ table {
 .hide{
   display: none;
 }
+
+span.green {
+  background-color: darkseagreen;
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+span.red {
+  background-color: crimson;
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff;
+}

@@ -18,6 +18,12 @@ export class AuthGuard implements CanActivate  {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): true|UrlTree {
+
+      if (localStorage.getItem('ACCESS_TOKEN')) {
+        // logged in so return true
+        return true;
+      }
+
       const url: string = state.url;
 
       return this.checkLogin(url);

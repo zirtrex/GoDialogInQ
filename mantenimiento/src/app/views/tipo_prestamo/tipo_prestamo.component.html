@@ -1,10 +1,10 @@
 <div class="fluid mt-3">  
   <div>
     <div class="row">
-      <div class="col-2 col-md-3">
+      <div class="col-12 col-md-auto">
         <button mat-raised-button color="primary" (click)="create()">Crear Tipo de Prestamo</button>
       </div>
-      <div class="col-md-6">
+      <div class="col-12 col-md-7">
         <mat-form-field >
           <mat-label>Buscar</mat-label>
           <input matInput [(ngModel)]="keyPressed" (keyup)="filterApply()" placeholder="Dijite una letra para filtrar" autocomplete="off">
@@ -13,7 +13,10 @@
           </button>
         </mat-form-field>
       </div>
-      <div class="col-2">        
+      <div class="col-12 col-md-auto">
+        <button mat-raised-button color="accent" (click)="exportarAExcel()">
+          <mat-icon>description</mat-icon>Exportar a Excel
+        </button>
       </div>
     </div>
 

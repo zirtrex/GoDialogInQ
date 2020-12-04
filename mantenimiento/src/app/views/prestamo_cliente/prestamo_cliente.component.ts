@@ -1,9 +1,12 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { PrestamoCliente } from '../../models/prestamo_cliente';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { ExporterService } from '../../services/exporter.service';
 import { PrestamoClienteService } from '../../services/prestamo_cliente.service';
-import { PrestamoClienteFormComponent } from '../prestamo_cliente/prestamo_cliente_form/prestamo_cliente_form.component';
+
+import { PrestamoCliente } from '../../models/prestamo_cliente';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort  } from '@angular/material/sort';
@@ -18,10 +21,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class PrestamoClienteComponent implements OnInit {
 
+  destroy$: Subject<boolean> = new Subject<boolean>();
   params: any;
   idCliente: any;
-  //displayedColumns: string[] = ['idPrestamoCliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'acciones'];
-  displayedColumns: string[] = ['idPrestamoCliente', 'nombreTipoPrestamo', 'cliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita', 'calificacion'];
+  displayedColumns: string[] = ['idPrestamoCliente', 'nombreTipoPrestamo', 'cliente', 'montoNecesitado', 'tiempoNegocio', 'ingresosAnuales', 'puntajeCredito', 'queNegocioTiene', 'comoVaUsar', 'cuanRapidoNecesita', 'calificacion', 'acciones'];
   
   dataSource: MatTableDataSource<PrestamoCliente>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -34,9 +37,9 @@ export class PrestamoClienteComponent implements OnInit {
     private prestamoClienteService:PrestamoClienteService,
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private exporter: ExporterService
   ) {}
-
  
   ngOnInit() {
   
@@ -47,11 +50,9 @@ export class PrestamoClienteComponent implements OnInit {
       this.getAllDataByIdCliente(this.idCliente); 
     }    
   }
-
-
   
   getAllDataByIdCliente(idCliente) {
-    this.prestamoClienteService.getAllByIdCliente(idCliente).subscribe(
+    this.prestamoClienteService.getAllByIdCliente(idCliente).pipe(takeUntil(this.destroy$)).subscribe(
       (res) => {
         this.dataSource = new MatTableDataSource(res.result);
         this.dataSource.sort = this.sort;
@@ -79,7 +80,7 @@ export class PrestamoClienteComponent implements OnInit {
   }
 
   getData() {
-    this.prestamoClienteService.getAll().subscribe(
+    this.prestamoClienteService.getAll().pipe(takeUntil(this.destroy$)).subscribe(
       (res) => {
         this.dataSource = new MatTableDataSource(res.result);
         this.dataSource.sort = this.sort;
@@ -106,44 +107,23 @@ export class PrestamoClienteComponent implements OnInit {
     );
   }
 
-
   filterApply() {
     this.dataSource.filter = this.keyPressed.trim().toLowerCase();
   }
 
-  searchClean(){
+  searchClean() {
     this.keyPressed = "";
     this.filterApply();
   }
-/* 
-  create(){
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "auto";
-    dialogConfig.data = {action: 0};
-    this.dialog.open(PrestamoClienteFormComponent, dialogConfig)
-      .afterClosed().subscribe(result => this.getData());
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
   }
 
-  edit(cliente){
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "auto";
-    dialogConfig.data = {action: 1, cliente};
-    this.dialog.open(PrestamoClienteFormComponent, dialogConfig)
-      .afterClosed().subscribe(result => this.getData());
+  exportarAExcel() {
+    this.exporter.exportToExcel(this.dataSource.filteredData, 'prestamo_cliente')
   }
-
-  delete(cliente){
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "auto";
-    dialogConfig.data = {action: 2, cliente};
-    this.dialog.open(PrestamoClienteFormComponent, dialogConfig)
-      .afterClosed().subscribe(result => this.getData());
-  } */
 
 }

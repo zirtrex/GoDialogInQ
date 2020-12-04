@@ -1,7 +1,10 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TipoPrestamo } from '../../models/tipo_prestamo';
+
 import { TipoPrestamoService } from '../../services/tipo_prestamo.service';
+import { ExporterService } from 'src/app/services/exporter.service';
+
+import { TipoPrestamo } from '../../models/tipo_prestamo';
 import { TipoPrestamoFormComponent } from '../tipo_prestamo/tipo_prestamo_form/tipo_prestamo_form.component';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,6 +12,7 @@ import { MatSort  } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-tipo_prestamo',
@@ -27,7 +31,8 @@ export class TipoPrestamoComponent implements OnInit {
     private tipoPrestamoService:TipoPrestamoService,
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private exporter: ExporterService
   ) {}
 
   ngOnInit() {
@@ -117,5 +122,9 @@ export class TipoPrestamoComponent implements OnInit {
     dialogConfig.data = {action: 2, tipoPrestamo};
     this.dialog.open(TipoPrestamoFormComponent, dialogConfig)
       .afterClosed().subscribe(result => this.getData());
+  }
+
+  exportarAExcel(){
+    this.exporter.exportToExcel(this.dataSource.filteredData, 'tipo_prestamo')
   }
 }

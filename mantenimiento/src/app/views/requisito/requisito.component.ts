@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpResponse, HttpErrorResponse  } from '@angular/common/http';
 import { Observable, Subject  } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Requisito } from '../../models/requisito';
+
+import { ExporterService } from '../../services/exporter.service';
 import { RequisitoService } from '../../services/requisito.service';
+
+import { Requisito } from '../../models/requisito';
+
 import { RequisitoFormComponent } from '../requisito/requisito_form/requisito_form.component';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -38,7 +41,8 @@ export class RequisitoComponent implements OnInit, OnDestroy  {
     private requisitoService:RequisitoService,
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private exporter: ExporterService
   ) {}
 
   ngOnInit() {
@@ -47,7 +51,7 @@ export class RequisitoComponent implements OnInit, OnDestroy  {
       this.router.navigate(['/dashboard/tipo_prestamo']);
     } else {
       this.requisito.idTipoPrestamo = this.idTipoPrestamo;
-      this.getData(); 
+      this.getData();
     }    
   }
 
@@ -128,4 +132,9 @@ export class RequisitoComponent implements OnInit, OnDestroy  {
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
   }
+
+  exportarAExcel(){
+    this.exporter.exportToExcel(this.dataSource.filteredData, 'requisito')
+  }
+  
 }
