@@ -42,9 +42,9 @@ CREATE VIEW vw_getCountCalificabyFecha
 AS
 SELECT
 DATE_FORMAT(F.FECHA,'%d/%m/%Y')fecha, 
-F.califica,
-F.noCalifica,
-(califica+nocalifica)total
+SUM(F.califica)califica,
+SUM(F.noCalifica)noCalifica,
+SUM((califica+nocalifica))total
 FROM(SELECT 
 	PC.FECHA, 
     (CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
@@ -60,7 +60,7 @@ GROUP BY
 		(CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
 		AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 'C' ELSE 'N' END
 		)
-  union       
+UNION       
 SELECT 
 	PC.FECHA, 
     0 califica,
@@ -77,6 +77,8 @@ GROUP BY
 		AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 'C' ELSE 'N' END
 		)
 )F
-WHERE F.FECHA>=DATE_ADD(NOW(), INTERVAL -15 DAY);
+WHERE F.FECHA>=DATE_ADD(NOW(), INTERVAL -15 DAY)
+GROUP BY DATE_FORMAT(F.FECHA,'%d/%m/%Y')
+ORDER BY F.FECHA ASC;
 
  
