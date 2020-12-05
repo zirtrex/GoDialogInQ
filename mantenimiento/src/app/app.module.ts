@@ -6,8 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { AppRoutingModule } from './app.routes';
 
+import { UsuarioService } from './services/usuario.service';
 import { TipoPrestamoService } from './services/tipo_prestamo.service';
 import { RequisitoService } from './services/requisito.service';
 import { ClienteService } from './services/cliente.service';
@@ -49,8 +52,6 @@ import {
   AppSidebarModule,
 } from '@coreui/angular';
 
-import { UsuarioService } from './services/usuario.service';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -76,6 +77,7 @@ import { UsuarioService } from './services/usuario.service';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     MaterialModule,
     AppAsideModule,
     AppBreadcrumbModule.forRoot(),
