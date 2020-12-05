@@ -30,9 +30,23 @@ export class UsuarioRegistroFormComponent implements OnInit {
   ngOnInit() {
     this.usuario = new Usuario();
     this.usuarioForm = this.fb.group({
-      nombres: [this.usuario.nombres, Validators.compose( [Validators.required, Validators.minLength(2), Validators.maxLength(200)] )],
-      correo: [this.usuario.correo, Validators.compose( [Validators.required, Validators.email, Validators.minLength(2), Validators.maxLength(200)] )],
-      clave: ['', Validators.compose( [Validators.required, Validators.minLength(6), Validators.maxLength(20)] )],
+      nombres: [this.usuario.nombres, Validators.compose([
+        Validators.required,
+        Validators.pattern("^[a-zA-Z ]*$"), 
+        Validators.minLength(2), 
+        Validators.maxLength(200)] 
+      )],
+      correo: [this.usuario.correo, Validators.compose([
+        Validators.required, 
+        Validators.email, 
+        Validators.minLength(5), 
+        Validators.maxLength(50)] 
+      )],
+      clave: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(20)]
+      )],
     });
   }
 
@@ -45,7 +59,7 @@ export class UsuarioRegistroFormComponent implements OnInit {
             this.snackBar.open(response.message, null, {
               duration: 10000,
               horizontalPosition: 'right',
-              verticalPosition: 'bottom',
+              verticalPosition: 'top',
               panelClass: ['text-success']
             });
             

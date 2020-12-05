@@ -7,11 +7,11 @@ import { PrestamoClienteService } from '../../services/prestamo_cliente.service'
 
 import { PrestamoCliente } from '../../models/prestamo_cliente';
 
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort  } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { ChartDataSets, ChartOptions } from 'chart.js';
+import { Label, Color } from 'ng2-charts';
 
 
 @Component({
@@ -20,19 +20,36 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class DashboardComponent {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
-  usuariosCalificados: number;
-  usuariosNoCalificados: number;
+  public usuariosCalificados: number;
+  public usuariosNoCalificados: number;
 
-  public barChartOptions = {
-    scaleShowVerticalLines: false,
-    responsive: true
-  };
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartType = 'bar';
-  public barChartLegend = true;  public barChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
+  lineChartData: ChartDataSets[] = [
+    { data: [15, 30, 18, 75, 77, 75], label: 'Califican' },
+    { data: [14, 45, 38, 75, 27, 75], label: 'No Califican' },
+    { data: [29, 75, 56, 150, 104, 150], label: 'Total' },
   ];
+
+  lineChartLabels: Label[] = ['01/12/2020', '02/12/2020', '03/12/2020', '04/12/2020', '05/12/2020', '06/12/2020'];
+
+  lineChartOptions = {
+    responsive: true,
+  };
+
+  lineChartColors: Color[] = [
+    {
+      borderColor: 'green',
+    },
+    {
+      borderColor: 'red',
+    },
+    {
+      borderColor: 'black',
+    },
+  ];
+
+  lineChartLegend = true;
+  lineChartPlugins = [];
+  lineChartType = 'line';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,15 +60,16 @@ export class DashboardComponent {
   ) {}
  
   ngOnInit() {    
-    this.getCalificaciones();       
+    this.getCalificaciones();
+    this.getTraficoCalificaciones();   
   }
 
   getCalificaciones() {
     this.prestamoClienteService.getCalificaciones().pipe(takeUntil(this.destroy$)).subscribe(
       (res) => {
         console.log(res);
-        this.usuariosCalificados = res.califica;
-        this.usuariosNoCalificados = res.nocalifica;
+        this.usuariosCalificados = res.result[0].califica;
+        this.usuariosNoCalificados = res.result[0].nocalifica;
       },
       (error) => {
         console.log(error);

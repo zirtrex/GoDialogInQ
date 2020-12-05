@@ -23,25 +23,29 @@
     </div>
 
     <div class="row">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-sm-5">
-              <h4 class="card-title mb-0">Estado de las calificaciones de los préstamos</h4>
-              <div class="small text-muted">November 2017</div>
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="card-title mb-0">Estado de las calificaciones de los préstamos</h4>
+                <div class="small text-muted">Diciembre 2020</div>
+              </div>
+              <div class="col-sm-7 d-none d-md-block"></div>
             </div>
-            <div class="col-sm-7 d-none d-md-block"></div>
-          </div>
-          <div class="chart-wrapper" style="height:300px;margin-top:40px;">
-            <canvas baseChart
-              [datasets]="barChartData"
-              [labels]="barChartLabels"
-              [options]="barChartOptions"
-              [legend]="barChartLegend"
-              [chartType]="barChartType">
+            <div class="chart-wrapper" style="height:auto;margin-top:40px;">
+              <canvas baseChart 
+                [datasets]="lineChartData" 
+                [labels]="lineChartLabels" 
+                [options]="lineChartOptions"
+                [colors]="lineChartColors" 
+                [legend]="lineChartLegend" 
+                [chartType]="lineChartType" 
+                [plugins]="lineChartPlugins">
             </canvas>
-          </div>
-        </div>  
+            </div>
+          </div>  
+        </div>
       </div>
     </div>
     

@@ -3,6 +3,18 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.header-fixed .app-header {
+  z-index: 50;
+}
+
+.aside-menu {
+  z-index: 49;
+}
+
+::ng-deep .cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
 table {
   width: 100%;
 }

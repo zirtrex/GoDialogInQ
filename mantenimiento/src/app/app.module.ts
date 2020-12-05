@@ -1,8 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts';
 import { AppRoutingModule } from './app.routes';
 
 import { TipoPrestamoService } from './services/tipo_prestamo.service';
@@ -30,11 +33,6 @@ import { ClienteFormComponent } from './views/cliente/cliente_form/cliente_form.
 
 import { PrestamoClienteComponent } from './views/prestamo_cliente/prestamo_cliente.component';
 import { PrestamoClienteFormComponent } from './views/prestamo_cliente/prestamo_cliente_form/prestamo_cliente_form.component';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from './material/material.module';
-
-import { ChartsModule } from 'ng2-charts';
 
 // Import containers
 import { DefaultLayoutComponent } from './containers';
@@ -106,6 +104,7 @@ import { UsuarioService } from './services/usuario.service';
     RequisitoFormComponent,
     ClienteFormComponent,
     PrestamoClienteFormComponent    
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 
 const urlBase = 'http://localhost:8081';
 var  idTipoPrestamo;
-var  idRequisito; 
+var  idRequisito;
 
 //************Prueba unitaria API REST Tipo de Prestamo************
 describe('Prueba Unitaria Tipo de Prestamo', function () {
@@ -22,8 +22,7 @@ describe('Prueba Unitaria Tipo de Prestamo', function () {
       expect(tipPres.idTipoPrestamo).to.be.a('Number');
       expect(tipPres.nombreTipoPrestamo).to.be.a('String');
       expect(tipPres.estado).to.be.a('String');
-    } 
-
+    }
   });
 
   it("Devuelve id de tipo de prestamo por nombre", (done) => {
