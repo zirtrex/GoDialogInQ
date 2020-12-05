@@ -11,7 +11,7 @@
     "config": "ts-node ./scripts/setenv.ts",
     "start": "node app.js",
     "start2": "npm run config -- --environment=dev && ng serve",
-    "build": "npm run config -- --environment=prod && npm run ng -- build --prod --aot=false --optimization=true --sourceMap=false --buildOptimizer=false",
+    "build": "npm run ng -- build --prod --aot=false --optimization=true --sourceMap=false --buildOptimizer=false",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
