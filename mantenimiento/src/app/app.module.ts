@@ -15,6 +15,7 @@ import { TipoPrestamoService } from './services/tipo_prestamo.service';
 import { RequisitoService } from './services/requisito.service';
 import { ClienteService } from './services/cliente.service';
 import { PrestamoClienteService } from './services/prestamo_cliente.service';
+import { MensajeClienteService } from './services/mensaje_cliente.service';
 import { ExporterService } from './services/exporter.service';
 
 import { AppComponent } from './app.component';
@@ -91,6 +92,7 @@ import {
     RequisitoService,
     ClienteService,
     PrestamoClienteService,
+    MensajeClienteService,
     UsuarioService,
     ExporterService,
     {

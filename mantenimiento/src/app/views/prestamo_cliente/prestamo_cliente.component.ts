@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import {Location} from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -39,7 +40,8 @@ export class PrestamoClienteComponent implements OnInit {
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
     private snackBar: MatSnackBar,
-    private exporter: ExporterService
+    private exporter: ExporterService,
+    private location: Location
   ) {}
  
   ngOnInit() {
@@ -135,6 +137,10 @@ export class PrestamoClienteComponent implements OnInit {
 
   exportarAExcel() {
     this.exporter.exportToExcel(this.dataSource.filteredData, 'prestamo_cliente')
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

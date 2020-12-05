@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import {Location} from '@angular/common';
 import { Observable, Subject  } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -42,7 +43,8 @@ export class RequisitoComponent implements OnInit, OnDestroy  {
     public dialog:MatDialog,
     private changeDetectorRefs: ChangeDetectorRef,
     private snackBar: MatSnackBar,
-    private exporter: ExporterService
+    private exporter: ExporterService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -135,6 +137,10 @@ export class RequisitoComponent implements OnInit, OnDestroy  {
 
   exportarAExcel(){
     this.exporter.exportToExcel(this.dataSource.filteredData, 'requisito')
+  }
+
+  goBack() {
+    this.location.back();
   }
   
 }

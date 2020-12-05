@@ -4,6 +4,11 @@
     <mat-card-content>      
       <form novalidate class="form-horizontal" (ngSubmit)="enviarMensaje(mensajeForm.value)" [formGroup]='mensajeForm'>
 
+          <input type="hidden" formControlName="idPrestamoCliente" />
+          <mat-error *ngIf="mensajeForm.get('idPrestamoCliente').hasError('required')">
+            Ha ocurrido un error inesperado.
+          </mat-error>
+
           <mat-form-field>
             <textarea type="text" matInput formControlName="mensaje" placeholder="Mensaje" cdkAutosizeMaxRows="5"></textarea>
             
@@ -16,12 +21,11 @@
             </mat-error>
           </mat-form-field>
 
-          <button mat-raised-button color="primary" [disabled]="mensajeForm.invalid">
+          <button type="submit" mat-raised-button color="primary" [disabled]="mensajeForm.invalid">
             <mat-icon>chat</mat-icon>Enviar
           </button>
           &nbsp;
-          <button mat-raised-button (click)="closeDialog()">Cancelar</button>
-          
+          <button mat-raised-button (click)="closeDialog()" mat-dialog-close>Cancelar</button>          
           
       </form>      
     </mat-card-content>

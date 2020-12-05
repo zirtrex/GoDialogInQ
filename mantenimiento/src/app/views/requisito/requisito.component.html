@@ -1,8 +1,13 @@
 <div class="row">
+  <div class="col-12 col-md-auto">    
+    <button mat-raised-button color="default" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>Volver
+    </button>
+  </div>
   <div class="col-12 col-md-auto">
     <button mat-raised-button color="primary" (click)="create()">Crear Requisito</button>
   </div>
-  <div class="col-12 col-md-7">
+  <div class="col-12 col-md-6">
     <mat-form-field >
       <mat-label>Buscar</mat-label>
       <input matInput [(ngModel)]="keyPressed" (keyup)="filterApply()" placeholder="Dijite una letra para filtrar" autocomplete="off">
