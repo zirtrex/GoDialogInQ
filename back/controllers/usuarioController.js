@@ -34,7 +34,7 @@ usuarioController.getByCorreo = async function (req, res) {
 
         const usuarioSend = {
             nombres: usuario.nombres,
-            correo: usuario.correo,
+            correo: usuario.correo.toLowerCase(),
             accessToken: accessToken,
             expiresIn: expiresIn
         }
@@ -77,7 +77,7 @@ usuarioController.create = async function (req, res) {
 
       const usuarioSend = {
           nombres: usuario.nombres,
-          correo: usuario.correo,
+          correo: usuario.correo.toLowerCase(),
           accessToken: accessToken,
           expiresIn: expiresIn
       }

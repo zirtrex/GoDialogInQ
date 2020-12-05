@@ -10,7 +10,7 @@ usuario.getByCorreo = async function (usuario) {
     try {
         var query = 'select nombres, correo, clave from usuario where estado<>0 and correo=?';
         var result = await db_connect.query(query,[
-            usuario.correo
+            usuario.correo.toLowerCase()
         ]);
         return result;
     } catch(error) {
@@ -35,7 +35,7 @@ usuario.create = async function (usuario) {
         )`;
         var result = await db_connect.query(query, [
             usuario.nombres,
-            usuario.correo,
+            usuario.correo.toLowerCase(),
             bcrypt.hashSync(usuario.clave)
         ]);        
         return result;        

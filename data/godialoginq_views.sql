@@ -19,7 +19,10 @@ AS
  SELECT 
  pc.idPrestamoCliente,
  tp.nombreTipoPrestamo,
- concat_ws(' ', c.apellidos, c.nombres)cliente,
+ c.idCliente,
+ concat_ws(' ', c.nombres, c.apellidos)cliente,
+ c.telefono,
+ c.correo,
  pc.montoNecesitado,
  pc.tiempoNegocio,
  pc.ingresosAnuales, 
@@ -27,8 +30,7 @@ AS
  pc.queNegocioTiene, 
  pc.comoVaUsar, 
  pc.cuanRapidoNecesita,
- (CASE WHEN (CAST(pc.ingresosAnuales AS DECIMAL(18,2))>=5000 AND CAST(pc.puntajeCredito AS DECIMAL(18,2))>=500) THEN 'Califica' ELSE 'No califica' END)calificacion,
- c.idCliente
+ (CASE WHEN (CAST(pc.ingresosAnuales AS DECIMAL(18,2))>=5000 AND CAST(pc.puntajeCredito AS DECIMAL(18,2))>=500) THEN 'Califica' ELSE 'No califica' END)calificacion
  FROM prestamo_cliente pc
  INNER JOIN cliente c ON pc.idCliente=c.idCliente
  INNER JOIN tipo_prestamo tp ON tp.idTipoPrestamo=pc.idTipoPrestamo
