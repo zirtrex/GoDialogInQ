@@ -86,8 +86,8 @@ export class TipoPrestamoFormComponent implements OnInit  {
             this.snackBar.open(response.message, null, {
               duration: 10000,
               horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['text-warning']
+              verticalPosition: 'bottom',
+              panelClass: ['text-success']
             });
             if(!response.error){
               //this.router.navigate(['/productos']);
@@ -102,7 +102,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
             this.snackBar.open("El tipo de prestamo ingresado ya existe", null, {
               duration: 10000,
               horizontalPosition: 'right',
-              verticalPosition: 'top',
+              verticalPosition: 'bottom',
               panelClass: ['text-warning']
             }); 
           }          
@@ -110,7 +110,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
       )
   }
 
-  update(tipoPrestamo){
+  update(tipoPrestamo) {
     this.tipoPrestamoService.edit(tipoPrestamo)
       .subscribe(
         response => {
@@ -142,7 +142,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
       )
   }
 
-  delete (tipoPrestamo){
+  delete (tipoPrestamo) {
     this.tipoPrestamoService.delete(tipoPrestamo.idTipoPrestamo)
       .subscribe(
         response => {
@@ -151,7 +151,7 @@ export class TipoPrestamoFormComponent implements OnInit  {
               duration: 10000,
               horizontalPosition: 'right',
               verticalPosition: 'top',
-              panelClass: ['text-warning']
+              panelClass: ['text-success']
             });
             if(!response.error){
               this.closeDialog();

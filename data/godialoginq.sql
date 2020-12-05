@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `idCliente` INT NOT NULL,
   `fecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idPrestamoCliente`, `idSession`),
-  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) VISIBLE,
-  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) VISIBLE,
+  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) ,
+  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) ,
   CONSTRAINT `fk_prestamo_cliente_tipo_prestamo`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idPrestamoCliente` INT NOT NULL,
   PRIMARY KEY (`idDocumentacionCliente`),
-  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC) VISIBLE,
+  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC),
   CONSTRAINT `fk_documentacion_cliente_prestamo_cliente1`
     FOREIGN KEY (`idPrestamoCliente`)
     REFERENCES `prestamo_cliente` (`idPrestamoCliente`)
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `requisito` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   PRIMARY KEY (`idRequisito`),
-  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC) VISIBLE,
+  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC),
   CONSTRAINT `fk_requisito_tipo_prestamo1`
     FOREIGN KEY (`idTipoPrestamo`)
     REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `correo` VARCHAR(50) NOT NULL,
   `clave` VARCHAR(100) NULL,
   `estado` VARCHAR(1) NULL,
-  UNIQUE INDEX `correo_UNIQUE` (`correo` ASC) VISIBLE,
+  UNIQUE INDEX `correo_UNIQUE` (`correo` ASC),
   PRIMARY KEY (`correo`))
 ENGINE = InnoDB;
 

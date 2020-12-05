@@ -6,7 +6,7 @@
         <div class="card text-white bg-success">
           <div class="card-body pb-5">
             <button class="btn btn-transparent p-0 float-right" type="button"><i class="icon-location-pin"></i></button>
-            <div class="text-value">9.823</div>
+            <div class="text-value">{{usuariosCalificados}}</div>
             <div>Préstamo calificados</div>
           </div>
         </div>
@@ -15,9 +15,36 @@
         <div class="card text-white bg-danger">
           <div class="card-body pb-5">
             <button class="btn btn-transparent p-0 float-right" type="button"><i class="icon-location-pin"></i></button>
-            <div class="text-value">9.823</div>
+            <div class="text-value">{{usuariosNoCalificados}}</div>
             <div>Préstamo no calificados</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="card-title mb-0">Estado de las calificaciones de los préstamos</h4>
+                <div class="small text-muted">Diciembre 2020</div>
+              </div>
+              <div class="col-sm-7 d-none d-md-block"></div>
+            </div>
+            <div class="chart-wrapper" style="height:auto;margin-top:40px;">
+              <canvas baseChart 
+                [datasets]="lineChartData" 
+                [labels]="lineChartLabels" 
+                [options]="lineChartOptions"
+                [colors]="lineChartColors" 
+                [legend]="lineChartLegend" 
+                [chartType]="lineChartType" 
+                [plugins]="lineChartPlugins">
+            </canvas>
+            </div>
+          </div>  
         </div>
       </div>
     </div>

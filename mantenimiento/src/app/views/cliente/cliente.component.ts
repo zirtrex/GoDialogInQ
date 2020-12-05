@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Cliente } from '../../models/cliente';
+
 import { ExporterService } from '../../services/exporter.service';
 import { ClienteService } from '../../services/cliente.service';
+
+import { Cliente } from '../../models/cliente';
+
 import { ClienteFormComponent } from '../cliente/cliente_form/cliente_form.component';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -37,23 +40,6 @@ export class ClienteComponent implements OnInit {
   ngOnInit() {
     this.getData();
   }
-
-  /* getData() {
-    this.clienteService.getAll().subscribe(
-      object => {
-        this.dataSource = new MatTableDataSource(object.result);
-        this.dataSource.sort = this.sort;
-        this.paginator._intl.firstPageLabel = 'Primera página';
-        this.paginator._intl.itemsPerPageLabel = 'Productos por página';
-        this.paginator._intl.lastPageLabel = 'Última página';
-        this.paginator._intl.nextPageLabel = 'Siguiente';
-        this.paginator._intl.previousPageLabel = 'Anterior';
-        this.dataSource.paginator = this.paginator;
-        this.changeDetectorRefs.detectChanges();
-        //console.log(this.dataSource);
-      }
-    );
-  } */
 
   getData() {
     this.clienteService.getAll().subscribe(
@@ -124,7 +110,7 @@ export class ClienteComponent implements OnInit {
   }
 
   exportarAExcel(){
-    this.exporter.exportToExcel(this.dataSource.filteredData, 'ventas')
+    this.exporter.exportToExcel(this.dataSource.filteredData, 'cliente')
   }
 
 }

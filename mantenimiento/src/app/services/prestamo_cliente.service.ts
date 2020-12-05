@@ -32,6 +32,18 @@ export class PrestamoClienteService {
                 .pipe(catchError(this.handleError));
     }
 
+    getCalificaciones(): Observable<any> {
+      return this.http
+                .get<any>(this.REST_API_SERVER+ '/calificacion/' + 1)
+                .pipe(catchError(this.handleError));
+    }
+
+    getTraficoCalificaciones(): Observable<any> {
+      return this.http
+                .get<any>(this.REST_API_SERVER+ '/trafico_calificaciones/' + 1)
+                .pipe(catchError(this.handleError));
+    }
+
     add(prestamoCliente: PrestamoCliente): Observable<any>{
       return this.http
                 .post<any>(this.REST_API_SERVER, prestamoCliente)
