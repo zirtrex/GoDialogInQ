@@ -19,7 +19,10 @@ AS
  SELECT 
  pc.idPrestamoCliente,
  tp.nombreTipoPrestamo,
- concat_ws(' ', c.apellidos, c.nombres)cliente,
+ c.idCliente,
+ concat_ws(' ', c.nombres, c.apellidos)cliente,
+ c.telefono,
+ c.correo,
  pc.montoNecesitado,
  pc.tiempoNegocio,
  pc.ingresosAnuales, 
@@ -27,8 +30,7 @@ AS
  pc.queNegocioTiene, 
  pc.comoVaUsar, 
  pc.cuanRapidoNecesita,
- (CASE WHEN (CAST(pc.ingresosAnuales AS DECIMAL(18,2))>=5000 AND CAST(pc.puntajeCredito AS DECIMAL(18,2))>=500) THEN 'Califica' ELSE 'No califica' END)calificacion,
- c.idCliente
+ (CASE WHEN (CAST(pc.ingresosAnuales AS DECIMAL(18,2))>=5000 AND CAST(pc.puntajeCredito AS DECIMAL(18,2))>=500) THEN 'Califica' ELSE 'No califica' END)calificacion
  FROM prestamo_cliente pc
  INNER JOIN cliente c ON pc.idCliente=c.idCliente
  INNER JOIN tipo_prestamo tp ON tp.idTipoPrestamo=pc.idTipoPrestamo
@@ -39,35 +41,42 @@ AS
 CREATE VIEW vw_getCountCalificabyFecha
 AS
 SELECT
- F.fecha,
- F.califica,
- F.noCalifica,
- (F.califica+F.noCalifica)total
- FROM(SELECT
- DATE_FORMAT(C.fecha,'%d/%m/%Y')fecha,
- COUNT(C.califica)califica,
- 0 noCalifica
- FROM(SELECT 
- DATE_FORMAT(PC.fecha,'%Y-%m-%d')fecha, 
- (CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
-    AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN '1' ELSE '0' END
-)califica
+DATE_FORMAT(F.FECHA,'%d/%m/%Y')fecha, 
+F.califica,
+F.noCalifica,
+(califica+nocalifica)total
+FROM(SELECT 
+	PC.FECHA, 
+    (CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
+    AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN count(*) ELSE 0 END
+	)califica,
+    0 noCalifica
 FROM prestamo_cliente PC WHERE PC.estado<>0
-)C WHERE C.califica=1
-GROUP BY C.fecha
-union
- SELECT
- DATE_FORMAT(C.fecha,'%d/%m/%Y')fecha,
- 0 califica,
- COUNT(C.califica)noCalifica
- FROM(SELECT 
- DATE_FORMAT(PC.fecha,'%Y-%m-%d')fecha, 
- (CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
-    AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN '1' ELSE '0' END
-)califica
+AND (CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
+		AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 'C' ELSE 'N' END
+		)='C'
+GROUP BY 
+		PC.FECHA, 
+		(CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
+		AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 'C' ELSE 'N' END
+		)
+  union       
+SELECT 
+	PC.FECHA, 
+    0 califica,
+    (CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
+    AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 0 ELSE count(*) END
+	)noCalifica
 FROM prestamo_cliente PC WHERE PC.estado<>0
-)C WHERE C.califica=0
-GROUP BY C.fecha
-)F;
+AND (CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
+		AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 'C' ELSE 'N' END
+		)='N'
+GROUP BY 
+		PC.FECHA, 
+		(CASE WHEN ((CAST(pc.ingresosAnuales AS DECIMAL (18 , 2 )) >= 5000) 
+		AND (CAST(pc.puntajeCredito AS DECIMAL (18 , 2 )) >= 500)) THEN 'C' ELSE 'N' END
+		)
+)F
+WHERE F.FECHA>=DATE_ADD(NOW(), INTERVAL -15 DAY);
 
  

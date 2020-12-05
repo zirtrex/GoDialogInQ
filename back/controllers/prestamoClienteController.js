@@ -68,15 +68,54 @@ prestamoClienteController.getQuantityCalificacion = async function (req, res) {
 
 prestamoClienteController.getCountCalificabyFecha = async function (req, res) {
   try {
+
     var prestamoCliente = await model.getCountCalificabyFecha();
 
-  //armar array
+  
+   console.log(prestamoCliente);
+
+  const arrayFecha = [];
+  const arrayCalifica = [];
+  const arrayNoCalifica = [];
+  const arrayTotal = [];
+		
+  prestamoCliente.forEach(element => {
+
+    const oKeys = Object.keys(element);
+
+    oKeys.forEach(key => {
+      if (key == "fecha") {
+        arrayFecha.push(element.fecha);
+      } 
+      if (key == "califica") {
+        arrayCalifica.push(element.califica);
+      }
+      if (key == "noCalifica") {
+        arrayNoCalifica.push(element.noCalifica);
+      }
+      if (key == "total") {
+        arrayTotal.push(element.total);
+      } 
+    });
+    
+  });
+
+    console.log(arrayFecha);
+    console.log(arrayCalifica);
+    console.log(arrayNoCalifica);
+    console.log(arrayTotal);
+    
 
     res.send(
       {
         status:'success',
         message: "",
-        result: prestamoCliente
+        result: {
+          "fecha": arrayFecha,
+          "califica":arrayCalifica,
+          "noCalifica":arrayNoCalifica,
+          "total":arrayTotal
+        }
       }
       
       );

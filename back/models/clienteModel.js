@@ -6,7 +6,7 @@ var cliente = {};
 
 cliente.getAll = async function () {
     try {       
-        var query = 'select * from cliente'; 
+        var query = 'select apellidos, nombres, telefono,correo,idSession,estado from cliente'; 
         var result = await db_connect.query(query);
         return result;
     } catch(error) {
@@ -64,6 +64,8 @@ cliente.getIdTipoPrestamoByNombre = async function (nombreTipoPrestamo) {
     }
 } */
 
+            
+
 
 
 cliente.create = async function (cliente) {
@@ -106,7 +108,7 @@ cliente.create = async function (cliente) {
              cliente.fechaNacimiento,
              cliente.sexo,
              cliente.telefono,
-             cliente.correo,
+             cliente.correo.toLowerCase(),
              cliente.movil,
              cliente.direccion,
              cliente.razonSocial,
