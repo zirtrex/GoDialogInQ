@@ -1,0 +1,8 @@
+@import '../../../styles.scss';
+
+@include mat-table-columns((
+    idRequisito: (width: 4rem, color: gray),
+    descripcionRequisito: (width: 50%, color: gray),
+    acciones: (width: 10rem)
+));
+

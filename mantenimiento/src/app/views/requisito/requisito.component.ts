@@ -19,7 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-requisito',
   templateUrl: './requisito.component.html',
-  styleUrls: []
+  styleUrls: ["./requisito.component.scss"]
 })
 export class RequisitoComponent implements OnInit, OnDestroy  {
 
@@ -33,7 +33,7 @@ export class RequisitoComponent implements OnInit, OnDestroy  {
   dataSource: MatTableDataSource<Object>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  keyPressed: string;
+  keyPressed: string = "";
 
   constructor(
     private activatedRoute: ActivatedRoute,

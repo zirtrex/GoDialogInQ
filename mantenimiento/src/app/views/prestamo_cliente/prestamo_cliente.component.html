@@ -1,109 +1,108 @@
-<div class=" mt-3">
-  <div class="row">
-    <div class="col-12 col-md-8">
-      <mat-form-field >
-        <mat-label>Buscar</mat-label>
-        <input matInput [(ngModel)]="keyPressed" (keyup)="filterApply()" placeholder="Dijite una letra para filtrar" autocomplete="off">
-        <button mat-button matSuffix mat-icon-button aria-label="Limpiar" *ngIf="keyPressed" (click)="searchClean()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
-    <div class="col-12 col-md-auto">
-      <button mat-raised-button color="accent" (click)="exportarAExcel()">
-        <mat-icon>description</mat-icon>Exportar a Excel
+<div class="row">
+  <div class="col-12 col-md-8">
+    <mat-form-field >
+      <mat-label>Buscar</mat-label>
+      <input matInput [(ngModel)]="keyPressed" (keyup)="filterApply()" placeholder="Dijite una letra para filtrar" autocomplete="off">
+      <button mat-button matSuffix mat-icon-button aria-label="Limpiar" *ngIf="keyPressed" (click)="searchClean()">
+        <mat-icon>close</mat-icon>
       </button>
-    </div>
+    </mat-form-field>
   </div>
-
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <div class="col-12 col-md-auto">
+    <button mat-raised-button color="accent" (click)="exportarAExcel()">
+      <mat-icon>description</mat-icon>Exportar a Excel
+    </button>
+  </div>
+</div>
+<div class="mt-2">
+  <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
     <ng-container matColumnDef="idPrestamoCliente" >
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-      <td mat-cell *matCellDef="let element"> {{element.idPrestamoCliente}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Id"> {{element.idPrestamoCliente}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="nombreTipoPrestamo">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Prestamo </th>
-      <td mat-cell *matCellDef="let element"> {{element.nombreTipoPrestamo}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Prestamo </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Tipo de Prestamo"> {{element.nombreTipoPrestamo}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="cliente">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
-      <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Cliente"> {{element.cliente}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="montoNecesitado">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto Necesitado </th>
-      <td mat-cell *matCellDef="let element"> {{element.montoNecesitado}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Monto Necesitado </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Monto Necesitado"> {{element.montoNecesitado}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="tiempoNegocio">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo Negocio </th>
-      <td mat-cell *matCellDef="let element"> {{element.tiempoNegocio}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo Negocio </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Tiempo Negocio"> {{element.tiempoNegocio}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ingresosAnuales">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Ingreso Anual </th>
-      <td mat-cell *matCellDef="let element"> {{element.ingresosAnuales}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Ingreso Anual </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Ingreso Anual"> {{element.ingresosAnuales}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="puntajeCredito">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Puntaje Credito </th>
-      <td mat-cell *matCellDef="let element"> {{element.puntajeCredito}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Puntaje Credito </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Puntaje Credito"> {{element.puntajeCredito}} </mat-cell>
     </ng-container>      
 
     <ng-container matColumnDef="queNegocioTiene">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Que negocio Tiene </th>
-      <td mat-cell *matCellDef="let element"> {{element.queNegocioTiene}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Que negocio Tiene </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Que negocio Tiene"> {{element.queNegocioTiene}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="comoVaUsar">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Como va Usar </th>
-      <td mat-cell *matCellDef="let element"> {{element.comoVaUsar}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Como va Usar </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Como va Usar"> {{element.comoVaUsar}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="cuanRapidoNecesita">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Cuan Rapido Necesita</th>
-      <td mat-cell *matCellDef="let element"> {{element.cuanRapidoNecesita}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Cuan Rapido Necesita</mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Cuan Rapido Necesita"> {{element.cuanRapidoNecesita}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="calificacion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Calificación</th>
-      <td mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Calificación</mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Calificación">
         <span class="green" *ngIf="element.calificacion=='Califica'"> {{element.calificacion}} </span>
         <span class="red" *ngIf="element.calificacion!='Califica'"> {{element.calificacion}} </span>
-      </td>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="acciones">
-      <th mat-header-cell *matHeaderCellDef>Acciones</th>
-      <td mat-cell *matCellDef="let row">  
-        <a mat-icon-button color="primary" href="tel://1" matTooltip="Llamar">
+      <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="Acciones">  
+        <a mat-icon-button color="primary" href="tel://{{row.telefono}}" matTooltip="Llamar">
           <mat-icon>call</mat-icon>
         </a>
-        <button mat-icon-button color="accent" matTooltip="Escribir">
+        <button mat-icon-button color="accent" (click)="enviarMensaje(row)" matTooltip="Escribir">
           <mat-icon>chat</mat-icon>
         </button>
-      </td>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="cargando">
-      <th mat-footer-cell *matFooterCellDef colspan="5"> Cargando datos... </th>
+      <mat-footer-cell *matFooterCellDef colspan="5"> Cargando datos... </mat-footer-cell>
     </ng-container>
 
     <ng-container matColumnDef="sinDatos">
-      <th mat-footer-cell *matFooterCellDef colspan="5"> Sin datos </th>
+      <mat-footer-cell *matFooterCellDef colspan="5"> Sin datos </mat-footer-cell>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    <tr mat-footer-row *matFooterRowDef="['cargando']" [ngClass]="{'hide': dataSource!=null}"></tr>
-    <tr mat-footer-row *matFooterRowDef="['sinDatos']" [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0)}"></tr>
-  </table>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-footer-row *matFooterRowDef="['cargando']" [ngClass]="{'hide': dataSource!=null}"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['sinDatos']" [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0)}"></mat-footer-row>
+  </mat-table>
   <mat-paginator [pageSizeOptions]="[25,50,100,200]" [pageSize]="25" showFirstLastButtons>Filter</mat-paginator>
 </div>
-<div>
+<div class="mt-3">
   <h2>Leyenda de iconos:</h2>
   <ul class="list-group">
     <li class="list-group-item"><mat-icon>call</mat-icon> | Llamar cliente</li>

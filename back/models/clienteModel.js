@@ -6,7 +6,7 @@ var cliente = {};
 
 cliente.getAll = async function () {
     try {       
-        var query = 'select apellidos, nombres, telefono,correo,idSession,estado from cliente'; 
+        var query = 'select idCliente, apellidos, nombres, telefono,correo,idSession,estado from cliente'; 
         var result = await db_connect.query(query);
         return result;
     } catch(error) {

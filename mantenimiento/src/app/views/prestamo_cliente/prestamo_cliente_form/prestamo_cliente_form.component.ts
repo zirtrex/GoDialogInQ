@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -18,6 +19,8 @@ export class PrestamoClienteFormComponent implements OnInit {
   action: number;
   textForm: string;
   prestamoCliente: PrestamoCliente;
+  public mensaje: string = "";
+  mensajeForm: FormGroup;
 
   constructor(
     private prestamoClienteService:PrestamoClienteService,
@@ -25,7 +28,9 @@ export class PrestamoClienteFormComponent implements OnInit {
     public dialogRef: MatDialogRef<PrestamoClienteFormComponent>,
     @Inject(MAT_DIALOG_DATA) data,
     private snackBar: MatSnackBar,
+    private fb: FormBuilder
   ) {
+    console.log(data);
     if (data.action == 0) {
       this.prestamoCliente = new PrestamoCliente();
       this.action = data.action;
@@ -40,10 +45,17 @@ export class PrestamoClienteFormComponent implements OnInit {
     if (this.action == 0) {
       this.textForm = "Crear";
     } else if (this.action == 1){
-      this.textForm = "Editar";
+      this.textForm = this.prestamoCliente.cliente;
     } else {
       this.textForm = "Eliminar";
     }
+
+    this.mensajeForm = this.fb.group({
+      mensaje: [this.mensaje, Validators.compose([
+        Validators.required,
+        Validators.pattern("^[a-zA-Z0-9. ]*$"),
+      ])]
+    });
    
   }
 
@@ -56,25 +68,17 @@ export class PrestamoClienteFormComponent implements OnInit {
      // this.delete(prestamoCliente);
     }
   }
-/* 
-  add(prestamoCliente){
-    this.prestamoClienteService.add(prestamoCliente)
-      .subscribe(
-        response => {
-            console.log(response);
-            this.snackBar.open(response.message, null, {
-              duration: 10000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['text-warning']
-            });
-            if(!response.error){
-              //this.router.navigate(['/productos']);
-              this.closeDialog();
-            }
-        },
-        error => console.log(<any> error)
-      )
+ 
+  enviarMensaje(mensaje){
+    
+    this.snackBar.open("Mensaje enviado con éxito", null, {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: ['text-success']
+    });    
+    this.closeDialog();
+
   }
 
   edit(prestamoCliente){
@@ -114,7 +118,7 @@ export class PrestamoClienteFormComponent implements OnInit {
         },
         error => console.log(<any> error)
       )
-  } */
+  }
 
   closeDialog(){
     this.dialogRef.close();

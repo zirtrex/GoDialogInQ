@@ -17,15 +17,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-tipo_prestamo',
   templateUrl: './tipo_prestamo.component.html',
-  styleUrls: []
+  styleUrls: ['tipo_prestamo.component.scss']
 })
-export class TipoPrestamoComponent implements OnInit {
+
+export class TipoPrestamoComponent implements OnInit { 
 
   displayedColumns: string[] = ['idTipoPrestamo', 'nombreTipoPrestamo', 'descripcionTipoPrestamo', 'acciones'];
   dataSource: MatTableDataSource<TipoPrestamo>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  keyPressed: string;
+  keyPressed: string = "";
 
   constructor(
     private tipoPrestamoService:TipoPrestamoService,

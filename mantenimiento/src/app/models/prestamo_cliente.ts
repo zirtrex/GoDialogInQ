@@ -13,6 +13,7 @@ export class PrestamoCliente {
     public cuanRapidoNecesita: string;
     public idTipoPrestamo : TipoPrestamo;
     public idCliente : Cliente;
+    public cliente : string;
         
 }
 

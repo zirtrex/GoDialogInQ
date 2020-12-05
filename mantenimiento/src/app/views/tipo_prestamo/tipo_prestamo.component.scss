@@ -1,0 +1,8 @@
+@import '../../../styles.scss';
+
+@include mat-table-columns((
+    idTipoPrestamo: (width: 4rem, color: gray),
+    nombreTipoPrestamo: (width: 10rem),
+    acciones: (width: 10rem)
+));
+

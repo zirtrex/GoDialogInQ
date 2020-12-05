@@ -42,6 +42,10 @@ span.red {
   color: #fff;
 }
 
+mat-cell, mat-header-cell, mat-footer-cell {
+  padding: 10px;
+}
+
 @media screen and (max-width: 960px) {
   .mat-table {
     border: 0;
@@ -68,6 +72,13 @@ span.red {
     border-bottom: 5px solid #ddd;
     display: block;
     height:auto !important;
+  }
+  .mat-row {
+    padding: 0 24px;
+  }
+
+  .mat-row::after {
+    content: none;
   }
   /*
   .mat-table .mat-row:nth-child(even) {background: #CCC}
@@ -99,5 +110,48 @@ span.red {
   }
   .mat-table .mat-cell:first-child {
     margin-top: 4%;
+    padding-left: 0;
   }
+}
+
+@mixin mat-table-columns($columns)
+{
+    .mat-column-
+    {
+        @each $colName, $props in $columns {
+
+            $width: map-get($props, 'width');
+
+            &#{$colName} 
+            {
+                flex: $width;
+                max-width: $width;
+
+                @if map-has-key($props, 'color') 
+                {
+                    color: map-get($props, 'color');
+                }
+            }  
+        }
+    }
+    @media screen and (max-width: 960px) {
+      .mat-column-
+      {
+        @each $colName, $props in $columns {
+
+          $width: map-get($props, 'width');
+
+          &#{$colName} 
+          {
+              flex: 100%;
+              max-width: 100%;
+
+              @if map-has-key($props, 'color') 
+              {
+                  color: map-get($props, 'color');
+              }
+          }  
+        } 
+      } 
+    }
 }

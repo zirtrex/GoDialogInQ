@@ -15,21 +15,26 @@ import { Label, Color } from 'ng2-charts';
 
 
 @Component({
-  templateUrl: 'dashboard.component.html'
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.scss']
 })
 export class DashboardComponent {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   public usuariosCalificados: number;
   public usuariosNoCalificados: number;
+  public label: Array<string> = [];
+  public califica: Array<number> = [];
+  public noCalifica: Array<number> = [];
+  public total: Array<number> = [];
 
   lineChartData: ChartDataSets[] = [
-    { data: [15, 30, 18, 75, 77, 75], label: 'Califican' },
-    { data: [14, 45, 38, 75, 27, 75], label: 'No Califican' },
-    { data: [29, 75, 56, 150, 104, 150], label: 'Total' },
+    { data: this.califica, label: 'Califican' },
+    { data: this.noCalifica, label: 'No Califican' },
+    { data: this.total, label: 'Total' },
   ];
 
-  lineChartLabels: Label[] = ['01/12/2020', '02/12/2020', '03/12/2020', '04/12/2020', '05/12/2020', '06/12/2020'];
+  lineChartLabels: Label[] = this.label;
 
   lineChartOptions = {
     responsive: true,
@@ -61,7 +66,7 @@ export class DashboardComponent {
  
   ngOnInit() {    
     this.getCalificaciones();
-    this.getTraficoCalificaciones();   
+    this.getTraficoCalificaciones();
   }
 
   getCalificaciones() {
@@ -84,11 +89,17 @@ export class DashboardComponent {
     this.prestamoClienteService.getTraficoCalificaciones().pipe(takeUntil(this.destroy$)).subscribe(
       (res) => {
         console.log(res);
-        
+        this.label.push(...res.result.fecha);
+        this.califica.push(...res.result.califica);
+        this.noCalifica.push(...res.result.noCalifica);
+        this.total.push(...res.result.total);
       },
       (error) => {
         console.log(error);
-        
+        this.label.push(...error.result.fecha);
+        this.califica.push(...error.result.califica);
+        this.noCalifica.push(...error.result.noCalifica);
+        this.total.push(...error.result.total);
       },
 
     );

@@ -1,55 +1,30 @@
-<div class="container mt-2">
-  <div class="col-md-12">
-    <div class="well well bs-component">
-      <form *ngIf="action == 0 || action == 1" novalidate class="form-horizontal" (ngSubmit)="getAction(PrestamoClienteForm.value)" #PrestamoClienteForm="ngForm">
-        <fieldset>
-          <legend>{{ textForm }} Prestamo Cliente</legend>
+<div class="">
+  <mat-card>
+    <mat-card-title>Escribir a {{ textForm }}</mat-card-title>
+    <mat-card-content>      
+      <form novalidate class="form-horizontal" (ngSubmit)="enviarMensaje(mensajeForm.value)" [formGroup]='mensajeForm'>
 
-          <input type="hidden" id="idPrestamoCliente" name="idPrestamoCliente" [(ngModel)]="prestamoCliente.idPrestamoCliente" #idPrestamoCliente="ngModel"/>
+          <mat-form-field>
+            <textarea type="text" matInput formControlName="mensaje" placeholder="Mensaje" cdkAutosizeMaxRows="5"></textarea>
+            
+            <mat-error *ngIf="mensajeForm.get('mensaje').hasError('required')">
+              El campo es obligatorio
+            </mat-error>
 
-          <div class="form-group">
-            <label for="apellidos" class="control-label">Apellidos</label>
-            <div class="col-lg-12">
-              <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Apellidos" [(ngModel)]="prestamoCliente.montoNecesitado" #apellidos="ngModel" required minlength="2"/>
-              <div *ngIf="apellidos.errors?.required && apellidos.touched" class="alert alert-danger mt-2">
-                Campo obligatorio
-              </div>
-              <div *ngIf="apellidos.errors?.minlength && apellidos.touched" class="alert alert-danger mt-2">
-                Minimo 2 caracteres
-              </div>
-            </div>
-          </div>          
+            <mat-error *ngIf="mensajeForm.get('mensaje').hasError('pattern')">
+              Solo se aceptan textos y números.
+            </mat-error>
+          </mat-form-field>
 
-          <div class="form-group">
-            <div class="col-lg-12 col-lg-offset-2">
-              <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
-              &nbsp;
-              <button type="submit" class="btn btn-primary" [disabled]="PrestamoClienteForm.invalid">{{ textForm }}</button>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-
-      <form *ngIf="action == 2" novalidate class="form-horizontal" (ngSubmit)="getAction(PrestamoClienteForm.value)" #PrestamoClienteForm="ngForm">
-        <fieldset>
-          <legend>¿Eliminar: {{ prestamoCliente.montoNecesitado }} {{ prestamoCliente.montoNecesitado }} ?</legend>
-          <div class="form-group">
-            <label class="control-label">Id: {{prestamoCliente.idPrestamoCliente}}</label>
-          </div>
-
-          <input type="hidden" id="idPrestamoCliente" name="idPrestamoCliente" [(ngModel)]="prestamoCliente.idPrestamoCliente" #idPrestamoCliente="ngModel"/>
-
-          <div class="form-group">
-            <div class="col-lg-12">
-              <a class="btn btn-dark" [routerLink]="" (click)="closeDialog()">Cancelar</a>
-              &nbsp;
-              <button type="submit" class="btn btn-primary">Eliminar</button>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-
-
-    </div>
-  </div>
+          <button mat-raised-button color="primary" [disabled]="mensajeForm.invalid">
+            <mat-icon>chat</mat-icon>Enviar
+          </button>
+          &nbsp;
+          <button mat-raised-button (click)="closeDialog()">Cancelar</button>
+          
+          
+      </form>      
+    </mat-card-content>
+  </mat-card>
 </div>
+

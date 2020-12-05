@@ -7,6 +7,7 @@ import { ExporterService } from '../../services/exporter.service';
 import { PrestamoClienteService } from '../../services/prestamo_cliente.service';
 
 import { PrestamoCliente } from '../../models/prestamo_cliente';
+import { PrestamoClienteFormComponent } from '../prestamo_cliente/prestamo_cliente_form/prestamo_cliente_form.component';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort  } from '@angular/material/sort';
@@ -105,6 +106,16 @@ export class PrestamoClienteComponent implements OnInit {
       },
 
     );
+  }
+
+  enviarMensaje(prestamoCliente) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "auto";
+    dialogConfig.data = {action: 1, prestamoCliente};
+    this.dialog.open(PrestamoClienteFormComponent, dialogConfig)
+      .afterClosed().subscribe(result => this.getData());
   }
 
   filterApply() {
