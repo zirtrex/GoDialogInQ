@@ -69,38 +69,23 @@ CREATE TABLE IF NOT EXISTS `prestamo_cliente` (
   `idCliente` INT NOT NULL,
   `fecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idPrestamoCliente`, `idSession`),
-  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) ,
-  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) ,
-  CONSTRAINT `fk_prestamo_cliente_tipo_prestamo`
-    FOREIGN KEY (`idTipoPrestamo`)
-    REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_prestamo_cliente_cliente1`
-    FOREIGN KEY (`idCliente`)
-    REFERENCES `cliente` (`idCliente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_prestamo_cliente_tipo_prestamo_idx` (`idTipoPrestamo` ASC) VISIBLE,
+  INDEX `fk_prestamo_cliente_cliente1_idx` (`idCliente` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `documentacion_cliente`
+-- Table `mensaje_cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
-  `idDocumentacionCliente` INT NOT NULL AUTO_INCREMENT,
-  `nombreDocumentacion` VARCHAR(100) NULL DEFAULT NULL,
-  `valor` VARCHAR(100) NULL DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `mensaje_cliente` (
+  `idMensaje` INT NOT NULL AUTO_INCREMENT,
+  `mensaje` VARCHAR(1000) NULL DEFAULT NULL,
+  `fecha` TIMESTAMP NULL,
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idPrestamoCliente` INT NOT NULL,
-  PRIMARY KEY (`idDocumentacionCliente`),
-  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC),
-  CONSTRAINT `fk_documentacion_cliente_prestamo_cliente1`
-    FOREIGN KEY (`idPrestamoCliente`)
-    REFERENCES `prestamo_cliente` (`idPrestamoCliente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idMensaje`),
+  INDEX `fk_documentacion_cliente_prestamo_cliente1_idx` (`idPrestamoCliente` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -114,12 +99,7 @@ CREATE TABLE IF NOT EXISTS `requisito` (
   `estado` VARCHAR(1) NULL DEFAULT NULL,
   `idTipoPrestamo` INT NOT NULL,
   PRIMARY KEY (`idRequisito`),
-  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC),
-  CONSTRAINT `fk_requisito_tipo_prestamo1`
-    FOREIGN KEY (`idTipoPrestamo`)
-    REFERENCES `tipo_prestamo` (`idTipoPrestamo`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_requisito_tipo_prestamo1_idx` (`idTipoPrestamo` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -132,8 +112,22 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `correo` VARCHAR(50) NOT NULL,
   `clave` VARCHAR(100) NULL,
   `estado` VARCHAR(1) NULL,
-  UNIQUE INDEX `correo_UNIQUE` (`correo` ASC),
+  UNIQUE INDEX `correo_UNIQUE` (`correo` ASC) VISIBLE,
   PRIMARY KEY (`correo`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `documentacion_cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `documentacion_cliente` (
+  `idDocumentacionCliente` INT NOT NULL AUTO_INCREMENT,
+  `nombreDocumentacion` VARCHAR(100) NULL,
+  `valor` VARCHAR(100) NULL,
+  `estado` VARCHAR(1) NULL,
+  `idPrestamoCliente` INT NOT NULL,
+  PRIMARY KEY (`idDocumentacionCliente`),
+  INDEX `fk_documentacion_cliente_prestamo_cliente2_idx` (`idPrestamoCliente` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
